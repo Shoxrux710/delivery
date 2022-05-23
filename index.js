@@ -41,8 +41,8 @@ app.use(function(errorMessage, req,res, next){
 const PORT = 4000
 
 async function start(){
-    await mongoose.connect("mongodb://localhost:27017,localhost:27018,localhost:27019/delivery", 
-    { useNewUrlParser: true, useUnifiedTopology: true, replicaSet: "myReplicaSet" })
+    await mongoose.connect("mongodb://localhost:27017/delivery", 
+    { useNewUrlParser: true, useUnifiedTopology: true})
     console.log("mongodb online")
     app.listen(PORT, () => console.log(`server running ${PORT}`))
 }
