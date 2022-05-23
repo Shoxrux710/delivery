@@ -39,10 +39,11 @@ const router = Router()
  *      example:
  *           fullname: fullname
  *           login: logoit
- *           password: "logo123"
- *           region: tashkent
+ *           password: logo123
+ *           regionId: tashkent
  *           phone: "7777777"
- *           position: manager 
+ *           position: manager
+ *           worker: [] 
  *                             
  */
 
@@ -71,6 +72,7 @@ const router = Router()
 // register
 router.post('/register', userValidator, async (req, res) => {
 
+    console.log(req.body)
     const errors = validationResult(req);
     if (!errors.isEmpty()){
         return res.status(400).json({errors: errors.array(), errorMessage: `Please fill in`})
@@ -152,8 +154,7 @@ router.post("/login", loginValidator, async (req,res) => {
         id: user._id,
         successMessage: "User Loggedin Succesfully"
     })
-
-
+    
 })
 
 module.exports = router
