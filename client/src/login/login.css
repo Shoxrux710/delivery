@@ -1,0 +1,77 @@
+.login-component {
+    width: 100%;
+    height: 100vh;
+    background-image: url('../img/loginbg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.login-component form {
+    padding: 50px 30px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.4);;
+}
+
+.login-component form h1 {
+    font-family: 'Poppins-Thin';
+    font-weight: 300;
+    font-size: 32px;
+    line-height: 40px;
+    color: #FFFFFF;
+}
+
+.login-component form h1 span {
+    font-weight: 600;
+}
+
+.login-component form .center > div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.login-component form .center > div label {
+    font-family: 'Poppins-Thin';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 1px;
+    color: #FFFFFF;
+}
+
+.login-component form .center > div input {
+    height: 56px;
+    background-color: transparent;
+    outline: none;
+    background: rgba(0, 0, 0, 0.04);
+    border: 0.5px solid #FFFFFF;
+    backdrop-filter: blur(4px);
+    border-radius: 6px;
+    font-family: 'Poppins-Thin';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #D6D7E3;
+    padding-left: 10px;
+}
+
+.login-component form button {
+    width: 100%;
+    height: 56px;
+    background: rgba(119, 167, 255, 0.8);
+    backdrop-filter: blur(4px);
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins-Thin';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+}
