@@ -1,0 +1,461 @@
+.admin-home-component {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+}
+
+.admin-home-component > .top {
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    justify-content: space-between;
+    border-bottom: 1px solid #f3f3f3;
+    background-color: #fff;
+}
+
+.admin-home-component > .top .icon {
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.admin-home-component > .top .bg {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.admin-home-component .user-wrapper {
+    padding: 16px;
+    position: relative;
+    height: 82px;
+}
+
+.admin-home-component .user-wrapper .user-top {
+    width: calc(100% - 32px);
+    height: 66px;
+    border-bottom: 1px solid #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    position: absolute;
+    z-index: 2;
+    background-color: #fff;
+}
+
+.admin-home-component .user-wrapper .user-top .left {
+    display: flex;
+    align-items: center;
+}
+
+.admin-home-component .user-wrapper .user-top .left > div:last-child {
+    width: 220px;
+    margin-left: 10px;
+}
+
+.admin-home-component .user-wrapper .user-top .left h2 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #383838;
+    margin: 0;
+}
+
+.admin-home-component .user-wrapper .user-top .left p {
+    font-family: 'Poppins-Regular';
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    color: #383838;
+    margin: 0;
+}
+
+.admin-home-component .user-wrapper .user-top .left .bg {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.admin-home-component .user-wrapper .user-top .icon {
+    font-size: 28px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.admin-home-component .user-wrapper .user-body {
+    width: calc(100% - 32px);
+    border: 1px solid #F3F3F3;
+    border-radius: 8px;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1;
+    transition: 0.3s;
+    background-color: #fff;
+}
+
+.admin-home-component .user-wrapper .user-body.user-body-active {
+    top: 82px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.admin-home-component .user-wrapper .user-body .qator {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.admin-home-component .user-wrapper .user-body .qator:last-child {
+    margin-bottom: 0;
+}
+
+.admin-home-component .user-wrapper .user-body .qator > div {
+    width: 50%;
+}
+
+.admin-home-component .user-wrapper .user-body .qator > div h4 {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #C3C6CE;
+    margin: 0;
+}
+
+.admin-home-component .user-wrapper .user-body .qator > div h5 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 20px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    color: #383838;
+    margin: 0;
+}
+
+.admin-home-component .wrapper {
+    padding: 16px;
+}
+
+.admin-home-component .wrapper .debt {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.admin-home-component .wrapper .debt .div2 {
+    width: 48px;
+    height: 48px;
+    border: 1px solid #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #77A7FF;
+}
+
+.admin-home-component .wrapper .debt a {
+    width: calc(100% - 64px);
+}
+
+.admin-home-component .wrapper .debt .div1 {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #f3f3f3;
+    border-radius: 8px;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.admin-home-component .wrapper .debt .div1 h5 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #383838;
+    margin: 0;
+}
+
+.admin-home-component .wrapper .debt .div1 h5 span {
+    color: #ED6F6F;
+    margin-left: 10px;
+}
+
+.admin-home-component .wrapper .users-info {
+    width: 100%;
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.admin-home-component .wrapper .lst {
+    margin-bottom: 0;
+}
+
+.admin-home-component .wrapper .users-info h5 {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #383838;
+    transition: 0.3s;
+}
+
+.admin-home-component .wrapper .users-info:hover {
+    background: #77A7FF;
+    border: 1px solid #F3F3F3;
+}
+
+.admin-home-component .wrapper .users-info:hover h5 {
+    color: #ffffff;
+}
+
+.admin-home-component .all-orders-top {
+    width: 100%;
+    padding: 16px;
+    display: flex;
+    overflow-x: scroll;
+}
+
+.admin-home-component .all-orders-top::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.admin-home-component .all-orders-top .square {
+    min-width: 300px;
+    max-width: 260px;
+    height: 132px;
+    border: 1px solid #F3F3F3;
+    border-radius: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.admin-home-component .all-orders-top .square .topp {
+    width: 100%;
+    height: 6px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    background-color: #E9EAF3;
+}
+
+.admin-home-component .all-orders-top .square .type {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.admin-home-component .all-orders-top .square .bg {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: #E9EAF3;
+}
+
+.admin-home-component .all-orders-top .square .bg > div {
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    mask-image: url('../../img/bir.png');
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+
+.admin-home-component .all-orders-top .square .bg > div.ikki {
+    mask-image: url('../../img/ikki.png');
+}
+
+.admin-home-component .all-orders-top .square .bg > div.uch {
+    mask-image: url('../../img/uch.png');
+}
+
+.admin-home-component .all-orders-top .square .bg > div.turt {
+    mask-image: url('../../img/turt.png');
+}
+
+.admin-home-component .all-orders-top .square .type h1 {
+    width: calc(100% - 46px);
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #383838;
+    margin: 0;
+}
+
+.admin-home-component .all-orders-top .square .about {
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin-home-component .all-orders-top .square .about .left {
+    width: 80px;
+}
+
+.admin-home-component .all-orders-top .square .about .right {
+    width: calc(100% - 80px);
+}
+
+.admin-home-component .all-orders-top .square .about h6 {
+    font-family: 'Poppins-Regular';
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 24px;
+    color: #A1A1C5;
+}
+
+.admin-home-component .all-orders-top .square .about h5 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    color: #383838;
+    margin: 0;
+}
+
+.admin-home-component .all-orders-top .square.square-active .topp {
+    background-color: #77A7FF;
+}
+
+.admin-home-component .all-orders-top .square.square-active .bg {
+    background-color: #77A7FF;
+}
+
+.admin-home-component .all-orders-wrapper {
+    width: 100%;
+    padding: 16px;
+}
+
+.admin-home-component .all-orders-wrapper .order {
+    padding: 10px;
+    background: #FFFFFF;
+    border: 0.67px solid #F3F3F3;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.admin-home-component .all-orders-wrapper .order .order-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin-home-component .all-orders-wrapper .order .order-top .left {
+    display: flex;
+}
+
+.admin-home-component .all-orders-wrapper .order .order-top .left h1 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #1D1D1D;
+    margin: 0;
+}
+
+.admin-home-component .all-orders-wrapper .order .order-top .left > div {
+    margin-left: 10px;
+}
+
+.admin-home-component .all-orders-wrapper .order .order-top .left > div h3 {
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: #64B5FF;
+    margin: 0;
+}
+
+.admin-home-component .all-orders-wrapper .order .order-top .left > div p {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    color: #C3C6CE;
+}
+
+.admin-home-component .all-orders-wrapper .order .order-top .right .icon {
+    font-size: 20px;
+    color: #D6D7E3;
+    cursor: pointer;
+}
+
+.admin-home-component .all-orders-wrapper .order .qator {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin-home-component .all-orders-wrapper .order .qator p {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #383838;
+}
+
+.admin-home-component .all-orders-wrapper .order .qator span {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    color: #C3C6CE;
+}
+
+.admin-home-component .all-orders-wrapper .order .qator h6 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    color: #64B5FF;
+}
+
+.admin-home-component .all-orders-wrapper .order .qator h5 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #383838;
+    margin: 0;
+}
