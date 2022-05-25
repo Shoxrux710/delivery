@@ -5,6 +5,7 @@ const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
 const User = require('./models/User')
 const bcrypt = require('bcryptjs')
+const config = require('config')
 const cors = require('cors')
 const app = express()
 
@@ -40,10 +41,10 @@ app.use(function(errorMessage, req,res, next){
 
 
 
-const PORT = 4000
+const PORT = config.get('port') || 4000
 
 async function start(){
-    await mongoose.connect("mongodb://localhost:27017/delivery", 
+    await mongoose.connect(config.get('mongoUrl'), 
     { useNewUrlParser: true, useUnifiedTopology: true})
 
     const admin = await User.findOne()

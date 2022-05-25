@@ -1,15 +1,26 @@
 const {Router} = require('express')
 const {validationResult} = require('express-validator')
 const {userValidator, loginValidator} = require('../utils/validator')
+const isAuthMiddleware = require('../middleware/isAuth');
+const attachUserMiddleware = require('../middleware/attachUser');
+const checkRoleMiddleware = require('../middleware/checkRole');
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const config = require('config')
 const router = Router()
 
 
 /**
  * @swagger
  * components:
+ *  securitySchemes:
+ *    bearerAuth: 
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *  security: 
+ *    - bearerAuth: [] 
  *  schemas:
  *    User:
  *      type: object
@@ -60,6 +71,8 @@ const router = Router()
  *           schema:
  *              type: object
  *              $ref: "#/components/schemas/User"
+ *   security: 
+ *    - bearerAuth: []
  *   responses:
  *      200:
  *         description: response 200
@@ -68,9 +81,8 @@ const router = Router()
  *      500:
  *         description: response 500    
  */
-
 // register
-router.post('/register', userValidator, async (req, res) => {
+router.post('/register', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AB'), userValidator, async (req, res) => {
 
     console.log(req.body)
     const errors = validationResult(req);
@@ -147,14 +159,71 @@ router.post("/login", loginValidator, async (req,res) => {
 
     const payload = {id: user._id}
 
-    const token = jwt.sign(payload, "SDLKMGLSDKMGLSKMOREMGLMLBDFBDLMERB")
+    const token = jwt.sign(payload, config.get('jsonwebtoken'))
     res.status(200).json({
         token,
         position: user.position,
         id: user._id,
         successMessage: "User Loggedin Succesfully"
     })
+
+})
+
+/**
+ * @swagger
+ * /api/user/employee:
+ *  get:
+ *   summary: hodimlarni viloyat bo'yicha saralash
+ *   tags: [User]
+ *   parameters:
+ *     - in: query
+ *       name: pagination
+ *       schema:
+ *         type: object
+ *       required: 
+ *         - attach
+ *         - userId
+ *       properties:
+ *          attach:
+ *            type: string
+ *          userId:
+ *            type: string
+ *       example:
+ *          attach: string
+ *          userId: string
+ *   responses:
+ *        200:
+ *          description: response 200   
+ *        500:
+ *          description: response 500     
+ */
+
+router.get('/employee', async (req,res) => {
     
+    const {attach, userId} = req.query
+
+    const employee = await User.find({position: attach, regionId: userId})
+    res.status(200).json({employee})
+
+})
+
+/**
+ * @swagger
+ * /api/user/all:
+ *  get:
+ *   summary: hodimlarni hammasini chiqarish
+ *   tags: [User]
+ *   responses:
+ *        200:
+ *          description: response 200  
+ *        500:
+ *          description: response 500  
+ */
+
+router.get('/all', async (req, res) => {
+
+    const userAll = await User.find().populate('regionId', 'name')
+    res.status(200).json({userAll})
 })
 
 module.exports = router

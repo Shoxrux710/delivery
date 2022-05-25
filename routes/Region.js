@@ -57,7 +57,7 @@ router.post('/name', (req, res) => {
  */
 router.get('/all', async (req,res) => {
 
-    const region = await Region.find()
+    const region = await Region.find({$rand: {}})
     res.status(200).json({region})
 })
 
