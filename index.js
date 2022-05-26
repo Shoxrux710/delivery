@@ -3,6 +3,7 @@ require('express-async-errors')
 const mongoose = require('mongoose')
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
+const middleware = require('./middleware/file')
 const User = require('./models/User')
 const bcrypt = require('bcryptjs')
 const config = require('config')
@@ -11,6 +12,7 @@ const app = express()
 
 
 const userRouter = require('./routes/User')
+const customerRouter = require('./routes/Customer')
 const regionRouter = require('./routes/Region')
 
 const swaggerOptions = {
@@ -32,8 +34,13 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions)
 
 app.use(express.json({extends: true}))
 app.use(cors())
+app.use(middleware.fields([
+    {name: 'customerImage', maxCount: 1}
+]))
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 app.use('/api/user', userRouter)
+app.use('/api/customer', customerRouter)
 app.use('/api/region', regionRouter)
 app.use(function(errorMessage, req,res, next){
     res.status(400).json(`server ${errorMessage}`)

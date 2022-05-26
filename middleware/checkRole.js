@@ -8,9 +8,8 @@ module.exports = (role) => {
 
         const COUR = position === 'courier'
         const ADMIN = position === 'admin'
+        const AGENT = position === 'agent'
          
-        console.log(ADMIN)
-        console.log(COUR)
         console.log(position)
         const errorMessage = { errorMessage: 'Вам нет доступа на это' };
 
@@ -19,6 +18,10 @@ module.exports = (role) => {
                 if (ADMIN || COUR) next()
                 else res.status(401).json({errorMessage})
                 break 
+            case 'AGENT':
+                if (AGENT) next()
+                else res.status(401).json({errorMessage})
+                break     
             default:
                 res.status(401).json(errorMessage);
         }

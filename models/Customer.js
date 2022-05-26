@@ -18,7 +18,7 @@ const customerSchema = new Schema({
         required: true
     },
     shopNumber: {
-        type: String,
+        type: Number,
         required: true
     },
     phone: { 
@@ -27,7 +27,7 @@ const customerSchema = new Schema({
     },
     phoneTwo: { 
         type: String,
-        required: true
+        default: null
     },
     customerImage: {
         fileName: String
