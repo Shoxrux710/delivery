@@ -1,24 +1,19 @@
 import React from 'react'
-import { CgMenu } from 'react-icons/cg'
 import { HiFilter } from 'react-icons/hi'
 import { IoIosArrowUp } from 'react-icons/io'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
-import logoPng from '../../img/logo.png'
 import userPng from '../../img/user.png'
 import './adminHome.css'
+import Navbar from '../../components/navbar/Navbar'
 
 const AdminHome = (props) => {
 
-    const { userBody, setUserBody, orderType, setOrderType } = props
+    const { userBody, setUserBody, orderType, setOrderType, agentsCount, kuryersCount, managersCount } = props
 
     return (
         <div className='admin-home-component'>
-            <div className='top'>
-                <CgMenu className='icon' />
-                <img src={logoPng} alt='' />
-                <div className='bg' style={{backgroundImage: `url(${userPng})`}}></div>
-            </div>
+            <Navbar />
             <div className='user-wrapper'>
                 <div className='user-top' style={{borderBottom: userBody ? 'none' : '1px solid #f3f3f3'}}>
                     <div className='left'>
@@ -80,22 +75,22 @@ const AdminHome = (props) => {
                     </div>
                 </div>
 
-                <Link to='/'>
+                <Link to='/all-managers'>
                     <div className='users-info'>
-                        <h5>Boshkaruvchilar:</h5>
-                        <h5>100</h5>
+                        <h5>Boshqaruvchilar:</h5>
+                        <h5>{managersCount}</h5>
                     </div>
                 </Link>
-                <Link to='/'>
+                <Link to='/all-agents'>
                     <div className='users-info'>
                         <h5>Agentlar:</h5>
-                        <h5>100</h5>
+                        <h5>{agentsCount}</h5>
                     </div>
                 </Link>
-                <Link to='/'>
+                <Link to='/all-couriers'>
                     <div className='users-info lst'>
                         <h5>Kuryerlar:</h5>
-                        <h5>100</h5>
+                        <h5>{kuryersCount}</h5>
                     </div>
                 </Link>
             </div>
@@ -183,87 +178,6 @@ const AdminHome = (props) => {
             </div>
 
             <div className='all-orders-wrapper'>
-                <div className='order'>
-                    <div className='order-top'>
-                        <div className='left'>
-                            <h1>1</h1>
-                            <div>
-                                <h3>Azizbek Abduxalilov</h3>
-                                <p>Boshqaruvchi</p>
-                            </div>
-                        </div>
-                        <div className='right'>
-                            <BsThreeDotsVertical className='icon' />
-                        </div>
-                    </div>
-                    <div className='qator'>
-                        <p>Faol buyurtmalar</p>
-                        <span>150</span>
-                    </div>
-                    <div className='qator'>
-                        <p>Umumiy narxi</p>
-                        <h6>11 236 540 so’m</h6>
-                    </div>
-                    <div className='qator'>
-                        <h5>Samarqand</h5>
-                        <h5>+998934805885</h5>
-                    </div>
-                </div>
-
-                <div className='order'>
-                    <div className='order-top'>
-                        <div className='left'>
-                            <h1>1</h1>
-                            <div>
-                                <h3>Azizbek Abduxalilov</h3>
-                                <p>Boshqaruvchi</p>
-                            </div>
-                        </div>
-                        <div className='right'>
-                            <BsThreeDotsVertical className='icon' />
-                        </div>
-                    </div>
-                    <div className='qator'>
-                        <p>Faol buyurtmalar</p>
-                        <span>150</span>
-                    </div>
-                    <div className='qator'>
-                        <p>Umumiy narxi</p>
-                        <h6>11 236 540 so’m</h6>
-                    </div>
-                    <div className='qator'>
-                        <h5>Samarqand</h5>
-                        <h5>+998934805885</h5>
-                    </div>
-                </div>
-
-                <div className='order'>
-                    <div className='order-top'>
-                        <div className='left'>
-                            <h1>1</h1>
-                            <div>
-                                <h3>Azizbek Abduxalilov</h3>
-                                <p>Boshqaruvchi</p>
-                            </div>
-                        </div>
-                        <div className='right'>
-                            <BsThreeDotsVertical className='icon' />
-                        </div>
-                    </div>
-                    <div className='qator'>
-                        <p>Faol buyurtmalar</p>
-                        <span>150</span>
-                    </div>
-                    <div className='qator'>
-                        <p>Umumiy narxi</p>
-                        <h6>11 236 540 so’m</h6>
-                    </div>
-                    <div className='qator'>
-                        <h5>Samarqand</h5>
-                        <h5>+998934805885</h5>
-                    </div>
-                </div>
-
                 <div className='order'>
                     <div className='order-top'>
                         <div className='left'>

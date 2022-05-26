@@ -1,0 +1,33 @@
+.navbar-component {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.navbar-component > .top {    
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    justify-content: space-between;
+    border-bottom: 1px solid #f3f3f3;
+    background-color: #fff;
+}
+
+.navbar-component > .top .icon {
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.navbar-component > .top .bg {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}

@@ -7,6 +7,9 @@ import { ToastContainer } from "react-toastify";
 import AgentHomeContainer from './agent/agent-home/AgentHomeContainer'
 import ManagerHomeContainer from './manager/manager-home/ManagerHomeContainer'
 import KuryerHomeContainer from './kuryer/kuryer-home/KuryerHomeContainer'
+import AllManagersContainer from './admin/managers/AllManagersContainer'
+import AllAgentsContainer from './admin/agents/AllAgentsContainer'
+import AllKuryersContainer from './admin/kuryers/AllKuryersContainer'
 
 const App = () => {
 
@@ -30,6 +33,9 @@ const App = () => {
   const adminRoleRoutes = (
     <Routes>
       <Route path='/' element={<AdminHomeContainer />} />
+      <Route path='/all-managers' element={<AllManagersContainer />} />
+      <Route path='/all-agents' element={<AllAgentsContainer />} />
+      <Route path='/all-couriers' element={<AllKuryersContainer />} />
     </Routes>
   )
 
