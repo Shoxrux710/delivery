@@ -209,6 +209,33 @@ router.get('/employee', async (req,res) => {
 
 /**
  * @swagger
+ * /api/user/each:
+ *  get:
+ *   summary: hodimlarni roli bo'yicha chiqarib berish
+ *   tags: [User]
+ *   parameters:
+ *     - in: query
+ *       name: position
+ *       schema: 
+ *          type: string
+ *       required: true
+ *   responses:
+ *        200:
+ *          description: response 200   
+ *        500:
+ *          description: response 500 
+ */
+
+router.get('/each', async (req,res) => {
+
+    const {position} = req.query
+
+    const userEach = await User.find({position: position})
+    res.status(200).json({userEach})
+})
+
+/**
+ * @swagger
  * /api/user/all:
  *  get:
  *   summary: hodimlarni hammasini chiqarish
