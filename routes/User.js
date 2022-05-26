@@ -231,7 +231,11 @@ router.get('/each', async (req,res) => {
     const {position} = req.query
 
     const userEach = await User.find({position: position})
-    res.status(200).json({userEach})
+    const count = await User.find({position: position}).countDocuments()
+    res.status(200).json({
+        userEach,
+        count
+    })
 })
 
 /**
