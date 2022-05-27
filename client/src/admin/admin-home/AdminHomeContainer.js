@@ -41,7 +41,15 @@ const AdminHomeContainer = () => {
     })
 
     return (
-        <AdminHome userBody={userBody} setUserBody={setUserBody} setOrderType={setOrderType} orderType={orderType} agentsCount={agentsCount} kuryersCount={kuryersCount} managersCount={managersCount} />
+        <AdminHome 
+            userBody={userBody} 
+            setUserBody={setUserBody} 
+            setOrderType={setOrderType} 
+            orderType={orderType} 
+            agentsCount={agentsCount} 
+            kuryersCount={kuryersCount} 
+            managersCount={managersCount} 
+        />
     )
 }
 

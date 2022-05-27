@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 
 const AllManagers = (props) => {
 
-    const { setIsModalVisible, isModalVisible, fullname, setFullname, login, setLogin, password, setPassword, phone, setPhone, regionId, setRegionId, regions, loader, radio, setRadio, employeers, attachEmployee, allEmployeers, deleleteAttach, addManager } = props
+    const { setIsModalVisible, isModalVisible, fullname, setFullname, login, setLogin, password, setPassword, phone, setPhone, regionId, setRegionId, regions, loader, radio, setRadio, employeers, attachEmployee, allEmployeers, deleleteAttach, addManager, allManagers } = props
 
     return (
         <div className='all-managers-component'>
@@ -103,15 +103,21 @@ const AllManagers = (props) => {
 
             <div className='wrapper'>
                 {loader}
-                <div className='one'>
-                    <div className='bg'></div>
-                    <div>
-                        <h1>Azizbek Abduxalilov</h1>
-                        <p>Boshqaruvchi</p>
-                    </div>
-                    <BsThreeDotsVertical className='icon' />
-                    <span>20:30</span>
-                </div>
+                {
+                    allManagers && Array.isArray(allManagers) ? allManagers.map((item, index) => {
+                        return (
+                            <div className='one' key={index}>
+                                <div className='bg'></div>
+                                <div>
+                                    <h1>{item.fullname}</h1>
+                                    <p>{item.position}</p>
+                                </div>
+                                <BsThreeDotsVertical className='icon' />
+                                <span>20:30</span>
+                            </div>
+                        )
+                    }):''
+                }
             </div>
         </div>
     )

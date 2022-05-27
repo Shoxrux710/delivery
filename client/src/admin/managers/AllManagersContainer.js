@@ -56,6 +56,17 @@ const AllManagersContainer = () => {
         })
     }
 
+    const [ allManagers, setAllManagers ] = useState([])
+    const getAllManagers = () => {
+        axios.get('/api/user/each?position=manager').then(res => {
+            setAllManagers(res.data.userEach)
+            setLoading(false)
+        }).catch(err => {
+            console.log(err)
+            setLoading(false)
+        })
+    }
+
     const addManager = (e) => {
         e.preventDefault()
 
@@ -77,6 +88,7 @@ const AllManagersContainer = () => {
                 position: toast.POSITION.BOTTOM_RIGHT
             })
             setIsModalVisible(false)
+            getAllManagers()
             setFullname('')
             setLogin('')
             setPassword('')
@@ -91,6 +103,7 @@ const AllManagersContainer = () => {
 
     useEffect(() => {
         getRegions()
+        getAllManagers()
     }, [])
 
     useEffect(() => {
@@ -120,6 +133,7 @@ const AllManagersContainer = () => {
             allEmployeers={allEmployeers}
             deleleteAttach={deleleteAttach}
             addManager={addManager}
+            allManagers={allManagers}
         />
     )
 }
