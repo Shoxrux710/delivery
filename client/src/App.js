@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
+import { useSelector } from 'react-redux'
 import LoginContainer from './login/LoginContainer'
 import AdminHomeContainer from './admin/admin-home/AdminHomeContainer'
 import { ToastContainer } from "react-toastify";
@@ -14,6 +15,7 @@ import AllKuryersContainer from './admin/kuryers/AllKuryersContainer'
 const App = () => {
 
   const [ render, setRender ] = useState(false)
+  const { menu } = useSelector(state => state)
 
   const token = JSON.parse(window.localStorage.getItem('user'))?.token
   const auth = token ? true : false
@@ -73,7 +75,7 @@ const App = () => {
   )
 
   return (
-    <div className='app-component'>
+    <div className={menu ? 'app-component app-component-true' : 'app-component'}>
       <div className='components-wrapper'>
         {
           auth ? authRoutes : loginRoutes

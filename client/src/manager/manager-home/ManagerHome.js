@@ -3,10 +3,9 @@ import { HiFilter } from 'react-icons/hi'
 import { IoIosArrowUp } from 'react-icons/io'
 import { Link } from 'react-router-dom'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import Navbar from '../../components/navbar/Navbar'
 import userPng from '../../img/user.png'
-import cancelPng from '../../img/cancel.png'
 import './managerHome.css'
+import NavbarContainer from '../../components/navbar/NavbarContainer'
 
 const ManagerHome = (props) => {
 
@@ -16,7 +15,7 @@ const ManagerHome = (props) => {
 
     return (
         <div className='manager-home-component'>
-            <Navbar />
+            <NavbarContainer />
             <div className='user-wrapper'>
                 <div className='user-top' style={{borderBottom: userBody ? 'none' : '1px solid #f3f3f3'}}>
                     <div className='left'>

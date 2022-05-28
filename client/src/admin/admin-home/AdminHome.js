@@ -5,7 +5,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import userPng from '../../img/user.png'
 import './adminHome.css'
-import Navbar from '../../components/navbar/Navbar'
+import NavbarContainer from '../../components/navbar/NavbarContainer'
 
 const AdminHome = (props) => {
 
@@ -13,7 +13,7 @@ const AdminHome = (props) => {
 
     return (
         <div className='admin-home-component'>
-            <Navbar />
+            <NavbarContainer />
             <div className='user-wrapper'>
                 <div className='user-top' style={{borderBottom: userBody ? 'none' : '1px solid #f3f3f3'}}>
                     <div className='left'>

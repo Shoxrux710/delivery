@@ -21,6 +21,15 @@
     justify-content: center;
 }
 
+body::-webkit-scrollbar {
+    width: 0;
+}
+
+.app-component.app-component-true {
+    height: 100vh;
+}
+
 .app-component .components-wrapper {
     width: 375px;
+    overflow: hidden;
 }
