@@ -31,6 +31,12 @@ const userSchema = new Schema({
     position: {
         type: String,
         enum: ['admin', 'manager', 'agent', 'courier']
+    },
+    avatar: {
+        fileName: {
+            type: String,
+            default: null
+        }
     }
 })
 

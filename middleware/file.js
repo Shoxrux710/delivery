@@ -6,6 +6,9 @@ const storage = multer.diskStorage({
        if (file.fieldname === 'customerImage'){
            cb(null, `./client/${config.get('imgFolder')}/customer`)
        }
+       if (file.fieldname === 'avatar'){
+           cb(null, `./client/${config.get('imgFolder')}/user`)
+       }
     },
     filename(req, file, cb) {
       cb(null, `${Date.now()}-${file.originalname}`)

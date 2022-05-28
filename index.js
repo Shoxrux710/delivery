@@ -14,6 +14,7 @@ const app = express()
 const userRouter = require('./routes/User')
 const customerRouter = require('./routes/Customer')
 const regionRouter = require('./routes/Region')
+const productRouter = require('./routes/Product')
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -35,13 +36,15 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions)
 app.use(express.json({extends: true}))
 app.use(cors())
 app.use(middleware.fields([
-    {name: 'customerImage', maxCount: 1}
+    {name: 'customerImage', maxCount: 1},
+    {name: 'avatar', maxCount: 1}
 ]))
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 app.use('/api/user', userRouter)
 app.use('/api/customer', customerRouter)
 app.use('/api/region', regionRouter)
+app.use('/api/product', productRouter)
 app.use(function(errorMessage, req,res, next){
     res.status(400).json(`server ${errorMessage}`)
 })

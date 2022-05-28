@@ -20,3 +20,7 @@ exports.loginValidator = [
     body('login').isLength({min: 1}),
     body('password').isLength({min: 1})
 ]
+exports.productValidator = [
+    body('name').isLength({min: 1}),
+    body('price').isLength({min: 1})
+]

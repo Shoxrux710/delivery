@@ -6,9 +6,19 @@ const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
+const fs = require('fs')
+const path = require('path')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const router = Router()
+
+const deleteOldImage = (fileName) => {
+    return new Promise((resolve, rejects) => {
+        fs.unlink(path.join(__dirname, `../client/${config.get('imgFolder')}/avatar/${fileName}`), err => {
+            resolve()
+        })
+    })
+}
 
 
 /**
@@ -37,6 +47,9 @@ const router = Router()
  *           type: string
  *        worker:
  *           type: array
+ *        avatar:
+ *           type: string
+ *           format: binary
  *        position:
  *           type: string
  *           description: (manager, agent, courier) lardan birini kiriting 
@@ -114,7 +127,6 @@ router.post('/register', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
 
 })
 
-
 /**
  * @swagger
  * /api/user/login:
@@ -167,6 +179,82 @@ router.post("/login", loginValidator, async (req,res) => {
         successMessage: "User Loggedin Succesfully"
     })
 
+})
+
+/**
+ * @swagger
+ * /api/user/userId:
+ *  get:
+ *   summary: Har bir foydalanuvchini ma'lumotlarini chiqarib beradi
+ *   tags: [User]
+ *   security: 
+ *    - bearerAuth: []
+ *   responses:
+ *      200:
+ *         description: response 200
+ *      400: 
+ *         description: response 400
+ *      500:
+ *         description: response 500    
+ */
+router.get('/userId', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), (req,res) => {
+    
+    res.status(200).json({user: req.user})
+})
+
+/**
+ * @swagger
+ * /api/user/images/{id}:
+ *  put:
+ *   summary: user profilni yangilash
+ *   tags: [User]
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *         type: string
+ *       required: true
+ *   requestBody:
+ *      required: true
+ *      content:
+ *        multipart/form-data:
+ *           schema:
+ *             properties:
+ *                avatar:
+ *                   type: string
+ *                   format: binary
+ *             required:
+ *                - avatar
+ *   responses:
+ *        200:
+ *          description: response 200
+ *        400:
+ *          description: response 400
+ *        500:
+ *          description: response 500          
+ */
+
+router.put('/images/:id', (req, res) => {
+    const {id} = req.params
+
+    User.findById(id, (err, userOne) => {
+        if (err) return res.status(400).json({errorMessage: 'Xato'})
+
+        const {avatar} = userOne
+        const oldFileName = avatar.fileName
+
+        const filename = req.files.avatar ? req.files.avatar[0] : oldFileName
+
+        userOne.avatar = {
+            fileName: filename
+        }
+
+        userOne.save(async(err) => {
+            if (err) return res.status(400).json({errorMessage: 'Xato'})
+            req.files.avatar ? await deleteOldImage(oldFileName) : null
+            res.status(200).json({successMessage: 'Yangilandi'})
+        })
+    })
 })
 
 /**
