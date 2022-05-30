@@ -348,7 +348,7 @@ router.get('/each', async (req,res) => {
     const filterId = regionId === '' ? {} : {regionId: regionId}
 
     const userEach = await User.find({position: position, ...filterId})
-    const count = await User.find({position: position, regionId: regionId}).countDocuments()
+    const count = await User.find({position: position, ...filterId}).countDocuments()
     res.status(200).json({
         userEach,
         count
