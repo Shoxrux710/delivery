@@ -15,6 +15,7 @@ const userRouter = require('./routes/User')
 const customerRouter = require('./routes/Customer')
 const regionRouter = require('./routes/Region')
 const productRouter = require('./routes/Product')
+const orderRouter = require('./routes/Order')
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -45,6 +46,7 @@ app.use('/api/user', userRouter)
 app.use('/api/customer', customerRouter)
 app.use('/api/region', regionRouter)
 app.use('/api/product', productRouter)
+app.use('/api/order', orderRouter)
 app.use(function(errorMessage, req,res, next){
     res.status(400).json(`server ${errorMessage}`)
 })
@@ -67,7 +69,7 @@ async function start(){
             password: passwordHashed,
             phone: '123456789',
             regionId: null,
-            position: 'admin'
+            position: 'super-admin'
         })
         await user.save()
     }

@@ -30,7 +30,7 @@ const userSchema = new Schema({
     ],
     position: {
         type: String,
-        enum: ['admin', 'manager', 'agent', 'courier']
+        enum: ['super-admin', 'admin', 'manager', 'agent', 'courier']
     },
     avatar: {
         fileName: {

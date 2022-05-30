@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs')
 const fs = require('fs')
 const path = require('path')
 const jwt = require('jsonwebtoken')
-const config = require('config')
+const config = require('config');
 const router = Router()
 
 const deleteOldImage = (fileName) => {
@@ -19,6 +19,20 @@ const deleteOldImage = (fileName) => {
         })
     })
 }
+
+// const customPromise = () => {
+//     return new Promise((resolve, rejected) => {
+//         const random = Math.random();
+//         if (random < 0.7) {
+//             resolve('Тугри ишлади')
+//         } else {
+//             rejected('Хато ишлади')
+//         }
+//     });
+// }
+
+// await customPromise().then((result) => console.log(result))
+//                .catch((err) => console.log(err));
 
 
 /**
@@ -67,7 +81,8 @@ const deleteOldImage = (fileName) => {
  *           regionId: tashkent
  *           phone: "7777777"
  *           position: manager
- *           worker: [] 
+ *           worker: []
+ *           avatar: null  
  *                             
  */
 
@@ -183,12 +198,16 @@ router.post("/login", loginValidator, async (req,res) => {
 
 /**
  * @swagger
- * /api/user/userId:
+ * /api/user/userId/{id}:
  *  get:
  *   summary: Har bir foydalanuvchini ma'lumotlarini chiqarib beradi
  *   tags: [User]
- *   security: 
- *    - bearerAuth: []
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *         type: string
+ *       required: true
  *   responses:
  *      200:
  *         description: response 200
@@ -197,9 +216,11 @@ router.post("/login", loginValidator, async (req,res) => {
  *      500:
  *         description: response 500    
  */
-router.get('/userId', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), (req,res) => {
-    
-    res.status(200).json({user: req.user})
+router.get('/userId/:id', async(req,res) => {
+    const {id} = req.params
+
+    const userId = await User.findOne({_id: id}).populate('regionId', 'name')
+    res.status(200).json({userId})
 })
 
 /**
@@ -222,7 +243,6 @@ router.get('/userId', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlewar
  *             properties:
  *                avatar:
  *                   type: string
- *                   format: binary
  *             required:
  *                - avatar
  *   responses:

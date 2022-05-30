@@ -10,25 +10,26 @@ module.exports = (role) => {
         const ADMIN = position === 'admin'
         const AGENT = position === 'agent'
         const MANAGER = position === 'manager'
+        const SUPER = position === 'super-admin'
          
         console.log(position)
         const errorMessage = { errorMessage: 'Вам нет доступа на это' };
 
         switch(role){
             case 'AB':
-                if (ADMIN || COUR) next()
+                if (SUPER || ADMIN || COUR) next()
                 else res.status(401).json({errorMessage})
                 break 
             case 'AGENT':
                 if (AGENT) next()
                 else res.status(401).json({errorMessage})
                 break
-            case 'AA':
-                    if (ADMIN) next()
+            case 'SA':
+                    if (ADMIN || SUPER) next()
                     else res.status(401).json({errorMessage})
                     break 
             case 'ALL':
-                    if (ADMIN || COUR || AGENT || MANAGER) next()
+                    if (ADMIN || COUR || AGENT || MANAGER || SUPER) next()
                     else res.status(401).json({errorMessage})
                     break          
             default:

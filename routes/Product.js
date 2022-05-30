@@ -50,7 +50,7 @@ const router = Router()
  *      500:
  *         description: response 500 
  */
-router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), productValidator, (req,res) => {
+router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('SA'), productValidator, (req,res) => {
 
     console.log(req.body)
     const errors = validationResult(req)

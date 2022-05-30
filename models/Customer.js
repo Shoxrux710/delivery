@@ -26,8 +26,7 @@ const customerSchema = new Schema({
         required: true
     },
     phoneTwo: { 
-        type: String,
-        default: null
+        type: String
     },
     customerImage: {
         fileName: String

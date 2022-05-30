@@ -22,8 +22,7 @@ const orderSchema = new Schema({
         required: true
     },
     twoPhone: {
-        type: String,
-        required: true
+        type: String
     },
     number: {
         type: Number,
@@ -31,7 +30,21 @@ const orderSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'courier', 'completed', 'rejected']
+        enum: ['active', 'courier', 'completed', 'rejected'],
+        default: 'active'
+    },
+    productId: {
+       type: Schema.Types.ObjectId,
+       ref: 'Product'   
+    },
+    courId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    },
+    randomId: {
+        type: Number,
+        required: true
     }
 
 })

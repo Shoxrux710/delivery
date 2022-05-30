@@ -16,6 +16,15 @@ exports.customerValidator = [
     body('shopNumber').isLength({min: 1}),
     body('phone').isLength({min: 1})
 ] 
+exports.orderValidator = [
+    body('customer').isLength({min: 1}),
+    body('region').isLength({min: 1}),
+    body('fog').isLength({min: 1}),
+    body('address').isLength({min: 1}),
+    body('number').isLength({min: 1}),
+    body('phone').isLength({min: 1}),
+    body('productId').isLength({min: 1})
+]
 exports.loginValidator = [
     body('login').isLength({min: 1}),
     body('password').isLength({min: 1})
