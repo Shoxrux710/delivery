@@ -4,8 +4,20 @@ import AdminHome from './AdminHome'
 
 const AdminHomeContainer = () => {
 
+    const userId = JSON.parse(window.localStorage.getItem('user'))?.id
+    const userRole = JSON.parse(window.localStorage.getItem('user'))?.position
+
     const [ userBody, setUserBody ] = useState(false)
     const [ orderType, setOrderType ] = useState('active')
+
+    const [ adminsCount, setAdminsCount ] = useState('')
+    const getAdminsCount = () => {
+        axios.get('/api/user/each?position=admin').then(res => {
+            setAdminsCount(res.data.count)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
 
     const [ managersCount, setManagersCount ] = useState('')
     const getManagersCount = () => {
@@ -34,11 +46,22 @@ const AdminHomeContainer = () => {
         })
     }
 
+    const [ userData, setUserData ] = useState()
+    const getUserData = () => {
+        axios.get(`/api/user/userId/${userId}`, ).then(res => {
+            setUserData(res.data.userId)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
     useEffect(() => {
         getAgentsCount()
         getKuryersCount()
         getManagersCount()
-    })
+        getUserData()
+        getAdminsCount()
+    }, [])
 
     return (
         <AdminHome 
@@ -48,7 +71,10 @@ const AdminHomeContainer = () => {
             orderType={orderType} 
             agentsCount={agentsCount} 
             kuryersCount={kuryersCount} 
+            adminsCount={adminsCount}
             managersCount={managersCount} 
+            userData={userData}
+            userRole={userRole}
         />
     )
 }

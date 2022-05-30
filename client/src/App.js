@@ -11,6 +11,9 @@ import KuryerHomeContainer from './kuryer/kuryer-home/KuryerHomeContainer'
 import AllManagersContainer from './admin/managers/AllManagersContainer'
 import AllAgentsContainer from './admin/agents/AllAgentsContainer'
 import AllKuryersContainer from './admin/kuryers/AllKuryersContainer'
+import AllAgentsInManegerContainer from './manager/agents/AllAgentsInManegerContainer'
+import AllKuryersInManagerContainer from './manager/kuryers/AllKuryersInManagerContainer'
+import AllAdminsContainer from './admin/all-admins/AllAdminsContainer'
 
 const App = () => {
 
@@ -35,6 +38,11 @@ const App = () => {
   const adminRoleRoutes = (
     <Routes>
       <Route path='/' element={<AdminHomeContainer />} />
+      {
+        role === 'super-admin' ? (
+          <Route path='/all-admins' element={<AllAdminsContainer />} />
+        ) : ''
+      }
       <Route path='/all-managers' element={<AllManagersContainer />} />
       <Route path='/all-agents' element={<AllAgentsContainer />} />
       <Route path='/all-couriers' element={<AllKuryersContainer />} />
@@ -44,6 +52,8 @@ const App = () => {
   const managerRoleRoutes = (
     <Routes>
       <Route path='/' element={<ManagerHomeContainer />} />
+      <Route path='/all-agents' element={<AllAgentsInManegerContainer />} />
+      <Route path='/all-couriers' element={<AllKuryersInManagerContainer />} />
     </Routes>
   )
 
@@ -59,7 +69,7 @@ const App = () => {
     </Routes>
   )
 
-  const isAdminRoleRoutes = role === 'admin' ? adminRoleRoutes : null
+  const isAdminRoleRoutes = role === 'admin' || role === 'super-admin' ? adminRoleRoutes : null
   const isManagerRoleRoutes = role === 'manager' ? managerRoleRoutes : null
   const isAgentRoleRoutes = role === 'agent' ? agentRoleRoutes : null
   const isKuryerRoleRoutes = role === 'courier' ? kuryerRoleRoutes : null

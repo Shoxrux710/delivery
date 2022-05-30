@@ -9,7 +9,7 @@ import NavbarContainer from '../../components/navbar/NavbarContainer'
 
 const AdminHome = (props) => {
 
-    const { userBody, setUserBody, orderType, setOrderType, agentsCount, kuryersCount, managersCount } = props
+    const { userBody, setUserBody, orderType, setOrderType, agentsCount, kuryersCount, managersCount, userData, adminsCount, userRole } = props
 
     return (
         <div className='admin-home-component'>
@@ -19,8 +19,8 @@ const AdminHome = (props) => {
                     <div className='left'>
                         <div className='bg' style={{backgroundImage: `url(${userPng})`}}></div>
                         <div>
-                            <h2>Azizbek Abduxalilov</h2>
-                            <p>Admin</p>
+                            <h2>{userData ? userData.fullname : ''}</h2>
+                            <p>{userData ? userData.position : ''}</p>
                         </div>
                     </div>
                     <IoIosArrowUp 
@@ -33,17 +33,17 @@ const AdminHome = (props) => {
                     <div className='qator'>
                         <div>
                             <h4>Kasbi</h4>
-                            <h5>Admin</h5>
+                            <h5>{userData ? userData.position : ''}</h5>
                         </div>
                         <div>
                             <h4>Ism familiya</h4>
-                            <h5>Azizbek Abduxalilov</h5>
+                            <h5>{userData ? userData.fullname : ''}</h5>
                         </div>
                     </div>
                     <div className='qator'>
                         <div>
                             <h4>Login</h4>
-                            <h5>Abdulaziz</h5>
+                            <h5>{userData ? userData.login : ''}</h5>
                         </div>
                         <div>
                             <h4>Parol</h4>
@@ -53,11 +53,11 @@ const AdminHome = (props) => {
                     <div className='qator'>
                         <div>
                             <h4>Telefon raqam</h4>
-                            <h5>+998934805885</h5>
+                            <h5>{userData ? userData.phone : ''}</h5>
                         </div>
                         <div>
                             <h4>Manzil</h4>
-                            <h5>Namangan</h5>
+                            <h5>{userData && userData.regionId ? userData.regionId.name : ''}</h5>
                         </div>
                     </div>
                 </div>
@@ -75,6 +75,16 @@ const AdminHome = (props) => {
                     </div>
                 </div>
 
+                {
+                    userRole === 'super-admin' ?  (
+                        <Link to='/all-admins'>
+                            <div className='users-info'>
+                                <h5>Admins:</h5>
+                                <h5>{adminsCount}</h5>
+                            </div>
+                        </Link>
+                    ) : ''
+                }
                 <Link to='/all-managers'>
                     <div className='users-info'>
                         <h5>Boshqaruvchilar:</h5>

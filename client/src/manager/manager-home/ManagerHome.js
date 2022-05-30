@@ -9,7 +9,7 @@ import NavbarContainer from '../../components/navbar/NavbarContainer'
 
 const ManagerHome = (props) => {
 
-    const { setUserBody, userBody, setOrderType, orderType } = props
+    const { setUserBody, userBody, setOrderType, orderType, kuryersCount, agentsCount, userData } = props
     const [ orderMenu, setOrderMenu ] = useState(false)
     const [ leftNames, setLeftNames ] = useState(false)
 
@@ -21,8 +21,8 @@ const ManagerHome = (props) => {
                     <div className='left'>
                         <div className='bg' style={{backgroundImage: `url(${userPng})`}}></div>
                         <div>
-                            <h2>Azizbek Abduxalilov</h2>
-                            <p>Boshqaruvchi</p>
+                            <h2>{userData ? userData.fullname : ''}</h2>
+                            <p>{userData ? userData.position : ''}</p>
                         </div>
                     </div>
                     <IoIosArrowUp 
@@ -35,17 +35,17 @@ const ManagerHome = (props) => {
                     <div className='qator'>
                         <div>
                             <h4>Kasbi</h4>
-                            <h5>Admin</h5>
+                            <h5>{userData ? userData.position : ''}</h5>
                         </div>
                         <div>
                             <h4>Ism familiya</h4>
-                            <h5>Azizbek Abduxalilov</h5>
+                            <h5>{userData ? userData.fullname : ''}</h5>
                         </div>
                     </div>
                     <div className='qator'>
                         <div>
                             <h4>Login</h4>
-                            <h5>Abdulaziz</h5>
+                            <h5>{userData ? userData.login : ''}</h5>
                         </div>
                         <div>
                             <h4>Parol</h4>
@@ -55,11 +55,11 @@ const ManagerHome = (props) => {
                     <div className='qator'>
                         <div>
                             <h4>Telefon raqam</h4>
-                            <h5>+998934805885</h5>
+                            <h5>{userData ? userData.phone : ''}</h5>
                         </div>
                         <div>
                             <h4>Manzil</h4>
-                            <h5>Namangan</h5>
+                            <h5>{userData && userData.regionId ? userData.regionId.name : ''}</h5>
                         </div>
                     </div>
                 </div>
@@ -80,13 +80,13 @@ const ManagerHome = (props) => {
                 <Link to='/all-agents'>
                     <div className='users-info'>
                         <h5>Agentlar:</h5>
-                        <h5>100</h5>
+                        <h5>{agentsCount}</h5>
                     </div>
                 </Link>
                 <Link to='/all-couriers'>
                     <div className='users-info lst'>
                         <h5>Kuryerlar:</h5>
-                        <h5>50</h5>
+                        <h5>{kuryersCount}</h5>
                     </div>
                 </Link>
             </div>
