@@ -17,7 +17,7 @@ module.exports = (role) => {
 
         switch(role){
             case 'AB':
-                if (SUPER || ADMIN || COUR) next()
+                if (SUPER || ADMIN || MANAGER) next()
                 else res.status(401).json({errorMessage})
                 break 
             case 'AGENT':
