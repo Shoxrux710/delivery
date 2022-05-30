@@ -4,6 +4,7 @@ const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
 const {orderValidator} = require('../utils/validator')
 const {validationResult} = require('express-validator')
+const nowDate = require('../utils/nowDate')
 const Order = require('../models/Order')
 const router = Router()
 
@@ -76,12 +77,15 @@ const randomNumber = async () => {
     return Promise.resolve(random);
 }
 
+
 router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AGENT'), orderValidator, async (req,res) => {
     
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
-
+    
+    const {id} = req.user
     const random = await randomNumber();
+    const {date} = nowDate()
 
     const {
         customer,
@@ -92,7 +96,7 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         twoPhone,
         number,
         status,
-        productId
+        productId,
     } = req.body
 
     const order = new Order({
@@ -105,6 +109,8 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         number,
         status,
         productId,
+        date,
+        agentId: id,
         randomId: random
     })
 
@@ -173,6 +179,7 @@ router.get('/:id', async (req,res) => {
     const {id} = req.params
 
     const orderId = await Order.findOne({_id: id}).populate('productId', 'name price')
+    .populate({path: 'agentId', select: 'fullname', populate: [{path: 'regionId', select: 'name'}]})
     res.status(200).json({orderId})
 
 })

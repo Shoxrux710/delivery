@@ -220,6 +220,7 @@ router.get('/userId/:id', async(req,res) => {
     const {id} = req.params
 
     const userId = await User.findOne({_id: id}).populate('regionId', 'name')
+    .populate({path: 'worker', select: 'fullname login position', populate: [{path: 'regionId', select: 'name'}]})
     res.status(200).json({userId})
 })
 
@@ -323,10 +324,17 @@ router.get('/employee', async (req,res) => {
  *   tags: [User]
  *   parameters:
  *     - in: query
- *       name: position
+ *       name: pagination
  *       schema: 
- *          type: string
- *       required: true
+ *          type: object
+ *       required:
+ *         - position
+ *         - regionId
+ *       properties:
+ *          position:
+ *             type: string
+ *          regionId:
+ *             type: string 
  *   responses:
  *        200:
  *          description: response 200   
@@ -336,10 +344,10 @@ router.get('/employee', async (req,res) => {
 
 router.get('/each', async (req,res) => {
 
-    const {position} = req.query
+    const {position, regionId} = req.query
 
-    const userEach = await User.find({position: position})
-    const count = await User.find({position: position}).countDocuments()
+    const userEach = await User.find({position: position, regionId: regionId})
+    const count = await User.find({position: position, regionId: regionId}).countDocuments()
     res.status(200).json({
         userEach,
         count

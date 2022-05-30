@@ -37,14 +37,16 @@ const orderSchema = new Schema({
        type: Schema.Types.ObjectId,
        ref: 'Product'   
     },
-    courId: {
+    agentId: {
         type: Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
+        ref: 'User'
     },
     randomId: {
         type: Number,
         required: true
+    },
+    date: {
+        type: Date
     }
 
 })

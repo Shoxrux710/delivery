@@ -7,7 +7,7 @@ module.exports = () => {
     const hours = today.getUTCHours() + 5
     const minutes = today.getUTCMinutes()
     const seconds = today.getUTCSeconds()
-    const miliseconds = today.getMilliseconds() 
+    const miliseconds = today.getUTCMilliseconds() 
 
     return {
         date: new Date(Date.UTC(year, month, day, hours, minutes, seconds, miliseconds))
