@@ -343,11 +343,8 @@ router.get('/employee', async (req,res) => {
 
 router.get('/each', async (req,res) => {
 
-    console.log(req.query)
     const {position, regionId} = req.query
-    console.log(regionId)
     const filterId = regionId ? {regionId: regionId} : {}
-    console.log(filterId)
 
     const userEach = await User.find({position: position, ...filterId})
     const count = await User.find({position: position, ...filterId}).countDocuments()

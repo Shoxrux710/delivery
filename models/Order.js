@@ -41,6 +41,11 @@ const orderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    courId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: null 
+    },
     randomId: {
         type: Number,
         required: true

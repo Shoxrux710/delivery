@@ -184,32 +184,40 @@ router.get('/:id', async (req,res) => {
 
 })
 
-router.put('/update/:id', (req,res) => {
-    const {id} = req.params
+/**
+ * @swagger
+ * /api/order/courier:
+ *  put:
+ *   summary: kuryer buyurtmaga o'tkazish
+ *   tags: [Order]
+ *   parameters:
+ *     - in: query
+ *       name: pagination
+ *       schema:
+ *          type: object
+ *       required:
+ *          - courierId
+ *          - id 
+ *   responses:
+ *       200:
+ *         description: response 200   
+ *       400:
+ *         description: response 400
+ *       500:
+ *         description: response 500 
+ */
 
-    const {
-        customer,
-        region,
-        fog,
-        address,
-        phone,
-        twoPhone,
-        number,
-        productId
-    } = req.body
+router.put('/courier', (req,res) => {
+    const {courierId, id} = req.query
 
     Order.findById(id, (err, orderOne) => {
         if (err) return res.status(400).json({errorMessage: 'Xato'})
-        orderOne.customer = customer
-        orderOne.region = region
-        orderOne.fog = fog
-        orderOne.address = address
-        orderOne.phone = phone
-        orderOne.twoPhone = twoPhone
-        orderOne.number = number
+        orderOne.courId = courierId
+        orderOne.status = 'courier'
+      
         orderOne.save(err => {
             if (err) return res.status(400).json({errorMessage: 'Xato'})
-            res.status(200).json({successMessage: 'Yangilandi'})
+            res.status(200).json({successMessage: `kuryerga o'tkazildi`})
         })
     })
 })

@@ -7,6 +7,7 @@ const middleware = require('./middleware/file')
 const User = require('./models/User')
 const bcrypt = require('bcryptjs')
 const config = require('config')
+const path = require('path')
 const cors = require('cors')
 const app = express()
 
@@ -41,7 +42,9 @@ app.use(middleware.fields([
     {name: 'avatar', maxCount: 1}
 ]))
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
+if (process.env.NODE_ENV !== 'production')
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 app.use('/api/user', userRouter)
 app.use('/api/customer', customerRouter)
 app.use('/api/region', regionRouter)
@@ -54,6 +57,15 @@ app.use(function(errorMessage, req,res, next){
 
 
 const PORT = config.get('port') || 4000
+
+
+if (process.env.NODE_ENV === 'production'){
+    app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+
+    app.get('*', (req,res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
 
 async function start(){
     await mongoose.connect(config.get('mongoUrl'), 
