@@ -61,6 +61,7 @@ const AdminHomeContainer = () => {
         getManagersCount()
         getUserData()
         getAdminsCount()
+        //eslint-disable-next-line
     }, [])
 
     return (
