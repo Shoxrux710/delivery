@@ -37,6 +37,7 @@ const ManagerHomeContainer = () => {
 
     useEffect(() => {
         getUserData()
+        //eslint-disable-next-line
     }, [])
 
     return (

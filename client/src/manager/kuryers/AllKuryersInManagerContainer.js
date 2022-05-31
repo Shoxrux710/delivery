@@ -71,6 +71,7 @@ const AllKuryersInManagerContainer = () => {
 
     useEffect(() => {
         getUserData()
+        //eslint-disable-next-line
     }, [])
 
     return (

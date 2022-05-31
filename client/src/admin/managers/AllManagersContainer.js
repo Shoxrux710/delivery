@@ -108,6 +108,7 @@ const AllManagersContainer = () => {
 
     useEffect(() => {
         getEmployee()
+        //eslint-disable-next-line
     }, [ radio, regionId ])
 
     return (
