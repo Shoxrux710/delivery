@@ -2,16 +2,18 @@ import React from 'react'
 import NavbarContainer from '../../components/navbar/NavbarContainer'
 import ReactInputMask from 'react-input-mask'
 import './agentHome.css'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import AddCustomerContainer from '../add-customer/AddCustomerContainer'
 
 const AgentHome = (props) => {
 
-    const { setH2, h2 } = props
+    const { setH2, h2, isModalVisible, setIsModalVisible } = props
 
     const order = (
         <form>
             <div className='inp-lab'>
                 <label>Mijoz</label>
-                <input type='text' placeholder='Fullname' />
+                <input type='text' placeholder="Ism familiya / address / do'kon raqami" />
             </div>
             <div className='inp-lab'>
                 <label>Viloyat</label>
@@ -43,7 +45,7 @@ const AgentHome = (props) => {
             </div>
             <button className='add-btn'>Qo'shish</button>
             <div className='inp-lab'>
-                <input type='number' value='100 000 000' />
+                <input type='number' />
             </div>
             <button className='order-btn'>Buyurtma berish</button>
         </form>
@@ -52,7 +54,19 @@ const AgentHome = (props) => {
     const client = (
         <div className='clients-wrap'>
             <div className='btn-wrap'>
-                <button>Mijoz qo'shish +</button>
+                <button onClick={() => setIsModalVisible(true)}>Mijoz qo'shish +</button>
+            </div>
+
+            <div className='all-clients'>
+                <div className='one'>
+                    <div className='bg'></div>
+                    <div>
+                        <h1>Azizbek Abduxalilov</h1>
+                        <p>Kuryer</p>
+                    </div>
+                    <BsThreeDotsVertical className='icon' />
+                    <span>20:30</span>
+                </div>
             </div>
         </div>
     )
@@ -63,6 +77,7 @@ const AgentHome = (props) => {
     return (
         <div className='agent-home-component'>
             <NavbarContainer />
+            <AddCustomerContainer isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
             <div className='top'>
                 <div className={h2 === 'order' ? 'h2-wrap h2-wrap-act' : 'h2-wrap'} onClick={() => setH2('order')}>
                     <h2>Buyurtma berish</h2>

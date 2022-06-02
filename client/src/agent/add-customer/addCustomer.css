@@ -1,0 +1,42 @@
+.add-customer .bg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.add-customer .bg input {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    opacity: 0;
+    z-index: 1;
+}
+
+.add-customer .bg .add {
+    width: 100%;
+    height: 30px;
+    position: absolute;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+.add-customer .bg .add p {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 8px;
+    line-height: 12px;
+    color: #64B5FF;
+    margin: 0;
+}

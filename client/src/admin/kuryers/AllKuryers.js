@@ -23,7 +23,7 @@ const AllKuryers = (props) => {
                 <form onSubmit={addKuryer}>
                     <div>
                         <label>Lavozim</label>
-                        <input type='text' value='Agent' readOnly />
+                        <input type='text' value='Kuryer' readOnly />
                     </div>
                     <div>
                         <label>Ism familiya</label>
