@@ -50,7 +50,7 @@ const router = Router()
  *      500:
  *         description: response 500 
  */
-router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('SA'), productValidator, (req,res) => {
+router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('SA'), productValidator, async (req,res) => {
 
     console.log(req.body)
     const errors = validationResult(req)
@@ -58,10 +58,8 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
     const {name, price} = req.body
     const product = new Product({name, price})
-    product.save(err => {
-        if (err) return res.status(400).json({errorMessage: 'Xato'})
-        res.status(200).json({successMessage: 'Mahsulot kiritildi'})
-    })
+    await product.save()
+    res.status(200).json({successMessage: 'Mahsulot kiritildi'})
 })
 
 /**
@@ -109,14 +107,57 @@ router.get('/', async (req,res) => {
  *         description: response 500 
  */
 
-router.delete('/delete/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), (req,res) => {
+router.delete('/delete/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('SA'), async (req,res) => {
     const {id} = req.params
 
-    Product.deleteOne({_id: id}, err => {
-        if (err) return res.status(400).json({errorMessage: 'Xato'})
-        res.status(200).json({successMessage: 'Delete'})
-    })
+    await Product.deleteOne({_id: id})
+    res.status(200).json({successMessage: 'Delete'})
 
+})
+
+/**
+ * @swagger
+ * /api/product/update/{id}:
+ *  put:
+ *   summary: mahsulotlarni id bo'yicha yangilash
+ *   tags: [Product]
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *          type: string
+ *       required: true
+ *   requestBody:
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *            type: object
+ *            $ref: "#/components/schemas/Product"
+ *   security:
+ *     - bearerAuth: []
+ *   responses:
+ *      200:
+ *         description: response 200
+ *      400: 
+ *         description: response 400
+ *      500:
+ *         description: response 500 
+ */
+
+router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('SA'), (req,res) => {
+
+    const {id} = req.params
+    const {name, price} = req.body
+
+    Product.findById(id, async (err, productOne) => {
+        if (err) return res.status(400).json({errorMessage: 'Xato'})
+        productOne.name = name
+        productOne.price = price
+
+        await productOne.save()
+        res.status(200).json({successMessage: 'Yangilandi'})
+    })
 })
 
 module.exports = router

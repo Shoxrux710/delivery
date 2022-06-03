@@ -31,16 +31,13 @@ const router = Router()
  *         description: response 500 
  */
 
-router.post('/name', (req, res) => {
+router.post('/name', async (req, res) => {
     
     console.log(req.body)
 
     const newRegion = new Region(req.body)
-    
-    newRegion.save(async(err) => {
-        if (err) return res.status(400).json({errorMessage: "Xato"})
-        res.status(200).json({successMessage: "yuborildi"})
-    })
+    await newRegion.save()
+    res.status(200).json({successMessage: "yuborildi"})
 })
 
 /**
@@ -81,14 +78,12 @@ router.get('/all', async (req,res) => {
  *   
  */ 
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
 
     const {id} = req.params
 
-    Region.deleteOne({_id: id}, (err) => {
-        if (err) return res.status(400).json({errorMessage: "Xato"})
-        res.status(200).json({successMessage: "Delete"})
-    })
+    await Region.deleteOne({_id: id})
+    res.status(200).json({successMessage: "Delete"})
 
 })
 

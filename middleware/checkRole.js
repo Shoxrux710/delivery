@@ -16,8 +16,12 @@ module.exports = (role) => {
         const errorMessage = { errorMessage: 'Вам нет доступа на это' };
 
         switch(role){
-            case 'AB':
-                if (SUPER || ADMIN || MANAGER) next()
+            case 'AA':
+                if (SUPER || ADMIN) next()
+                else res.status(401).json({errorMessage})
+                break 
+            case 'BB':
+                if (MANAGER) next()
                 else res.status(401).json({errorMessage})
                 break 
             case 'AGENT':

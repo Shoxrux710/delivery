@@ -75,7 +75,7 @@ const deleteOldImage = (fileName) => {
  *         description: response 500   
  */
 
-router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AGENT'), customerValidator, (req, res) => {
+router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AGENT'), customerValidator, async (req, res) => {
 
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
@@ -96,10 +96,8 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         }
     })
 
-    customer.save(err => {
-        if (err) return res.status(400).json({ errorMessage: 'Xato' })
-        res.status(200).json({ successMessage: 'Mijozlar kiritildi' })
-    })
+    await customer.save()
+    res.status(200).json({ successMessage: 'Mijozlar kiritildi' })
 })
 
 /**
@@ -152,8 +150,7 @@ router.delete('/delete/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMi
         const { customerImage } = customerOne
         const oldFileName = customerImage.fileName
 
-        Customer.deleteOne({ _id: id }, async (err) => {
-            if (err) return res.status(400).json({ errorMessage: "Xato" })
+        Customer.deleteOne({ _id: id }, async () => {
             await deleteOldImage(oldFileName)
             res.status(200).json({ successMessage: 'Delete' })
         })
@@ -223,7 +220,7 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
         phoneTwo
     } = req.body
 
-    Customer.findById(id, (err, customerOne) => {
+    Customer.findById(id, async (err, customerOne) => {
         if (err) return res.status(400).json({ errorMessage: "Xato" })
         customerOne.fullname = fullname
         customerOne.region = region
@@ -233,10 +230,9 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
         customerOne.phone = phone
         customerOne.phoneTwo = phoneTwo
 
-        customerOne.save(err => {
-            if (err) return res.status(400).json({ errorMessage: "Xato" })
-            res.status(200).json({successMessage: 'Yangilandi'})
-        })
+        await customerOne.save()
+        res.status(200).json({successMessage: 'Yangilandi'})
+        
     })
 })
 

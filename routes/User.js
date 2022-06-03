@@ -1,6 +1,6 @@
-const {Router} = require('express')
-const {validationResult} = require('express-validator')
-const {userValidator, loginValidator} = require('../utils/validator')
+const { Router } = require('express')
+const { validationResult } = require('express-validator')
+const { userValidator, loginValidator } = require('../utils/validator')
 const isAuthMiddleware = require('../middleware/isAuth');
 const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
@@ -8,6 +8,7 @@ const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const fs = require('fs')
 const path = require('path')
+const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const config = require('config');
 const router = Router()
@@ -82,7 +83,6 @@ const deleteOldImage = (fileName) => {
  *           phone: "7777777"
  *           position: manager
  *           worker: []
- *           avatar: null  
  *                             
  */
 
@@ -110,19 +110,17 @@ const deleteOldImage = (fileName) => {
  *         description: response 500    
  */
 // register
-router.post('/register', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AB'), userValidator, async (req, res) => {
+router.post('/register', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), userValidator, async (req, res) => {
 
     console.log(req.body)
     const errors = validationResult(req);
-    if (!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array(), errorMessage: `Please fill in`})
-    }
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
 
-    const {fullname, login, password, regionId, phone, position, worker} = req.body
+    const { fullname, login, password, regionId, phone, position, worker } = req.body
 
-    const user = await User.findOne({login})
-    
-    if (user){return res.status(400).json({errorMessage: 'User already'})}
+    const user = await User.findOne({ login })
+
+    if (user) return res.status(400).json({ errorMessage: 'User already' })
     const passwordHashed = await bcrypt.hash(password, 12)
 
     const newUser = new User({
@@ -134,11 +132,76 @@ router.post('/register', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
         position,
         password: passwordHashed
     })
+    await newUser.save()
+    res.status(200).json({ successMessage: "Register success" })
 
-    await newUser.save((err) => {
-        if (err) return res.status(400).json({errorMessage: "Xato"})
-        res.status(200).json({successMessage: "Register success"})
-    })
+})
+
+/**
+ * @swagger
+ * /api/user/manager:
+ *  post:
+ *   summary: hodimlarni ro'yxatdan o'tkazish
+ *   tags: [User]
+ *   requestBody:
+ *     required: true
+ *     content:
+ *        application/json:
+ *           schema:
+ *              type: object
+ *              $ref: "#/components/schemas/User"
+ *   security: 
+ *    - bearerAuth: []
+ *   responses:
+ *      200:
+ *         description: response 200
+ *      400: 
+ *         description: response 400
+ *      500:
+ *         description: response 500    
+ */
+
+router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BB'), userValidator, async (req, res) => {
+
+    console.log(req.body)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
+
+    const session = await mongoose.startSession()
+
+    session.startTransaction()
+    try {
+        const { id } = req.user
+        const { fullname, login, password, regionId, phone, position } = req.body
+
+        const condedate = await User.findOne({ login })
+        if (condedate) return res.status(400).json({ errorMessage: 'User already' })
+
+        const passwordHashed = await bcrypt.hash(password, 12)
+
+        const newUser = new User({
+            fullname,
+            login,
+            password: passwordHashed,
+            regionId,
+            phone,
+            position
+        })
+
+        const { _id: newUserId } = await newUser.save({ session })
+
+        const user = await User.findOne({ _id: id })
+        user.worker = [...user.worker, newUserId]
+        await user.save({ session })
+        await session.commitTransaction()
+
+        res.status(200).json({ successMessage: "Register success" })
+    } catch (err) {
+        await session.abortTransaction()
+        res.status(500).json({ errorMessage: "server error" })
+    }
+     
+    session.endSession()
 
 })
 
@@ -170,21 +233,21 @@ router.post('/register', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
  *         description: response 500 
  */
 //login
-router.post("/login", loginValidator, async (req,res) => {
+router.post("/login", loginValidator, async (req, res) => {
 
     const errors = validationResult(req)
-    if (!errors.isEmpty()){return res.status(400).json({errors: errors.array(), errorMessage: `Please fill in`})}
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
 
-    const {login, password} = req.body
+    const { login, password } = req.body
 
-    const user = await User.findOne({login})
+    const user = await User.findOne({ login })
 
-    if (!user){return res.status(400).json({errorMessage: "Please login..."}) }
+    if (!user) return res.status(400).json({ errorMessage: "Please login..." })
 
     const match = await bcrypt.compare(password, user.password)
-    if (!match){return res.status(400).json({errorMessage: "inCorrect password"})}
+    if (!match) return res.status(400).json({ errorMessage: "inCorrect password" })
 
-    const payload = {id: user._id}
+    const payload = { id: user._id }
 
     const token = jwt.sign(payload, config.get('jsonwebtoken'))
     res.status(200).json({
@@ -216,12 +279,15 @@ router.post("/login", loginValidator, async (req,res) => {
  *      500:
  *         description: response 500    
  */
-router.get('/userId/:id', async(req,res) => {
-    const {id} = req.params
+router.get('/userId/:id', async (req, res) => {
+    const { id } = req.params
 
-    const userId = await User.findOne({_id: id}).populate('regionId', 'name')
-    .populate({path: 'worker', select: 'fullname login position', populate: [{path: 'regionId', select: 'name'}]})
-    res.status(200).json({userId})
+    const userId = await User.findOne({ _id: id }).populate('regionId', 'name')
+        .populate({ path: 'worker', select: 'fullname login position', populate: [{ path: 'regionId', select: 'name' }] })
+      
+    
+    res.status(200).json({ userId })
+
 })
 
 /**
@@ -256,12 +322,12 @@ router.get('/userId/:id', async(req,res) => {
  */
 
 router.put('/images/:id', (req, res) => {
-    const {id} = req.params
+    const { id } = req.params
 
     User.findById(id, (err, userOne) => {
-        if (err) return res.status(400).json({errorMessage: 'Xato'})
+        if (err) return res.status(400).json({ errorMessage: 'Xato' })
 
-        const {avatar} = userOne
+        const { avatar } = userOne
         const oldFileName = avatar.fileName
 
         const filename = req.files.avatar ? req.files.avatar[0] : oldFileName
@@ -270,10 +336,10 @@ router.put('/images/:id', (req, res) => {
             fileName: filename
         }
 
-        userOne.save(async(err) => {
-            if (err) return res.status(400).json({errorMessage: 'Xato'})
+        userOne.save(async (err) => {
+            if (err) return res.status(400).json({ errorMessage: 'Xato' })
             req.files.avatar ? await deleteOldImage(oldFileName) : null
-            res.status(200).json({successMessage: 'Yangilandi'})
+            res.status(200).json({ successMessage: 'Yangilandi' })
         })
     })
 })
@@ -307,12 +373,12 @@ router.put('/images/:id', (req, res) => {
  *          description: response 500     
  */
 
-router.get('/employee', async (req,res) => {
-    
-    const {attach, userId} = req.query
+router.get('/employee', async (req, res) => {
 
-    const employee = await User.find({position: attach, regionId: userId})
-    res.status(200).json({employee})
+    const { attach, userId } = req.query
+
+    const employee = await User.find({ position: attach, regionId: userId })
+    res.status(200).json({ employee })
 
 })
 
@@ -341,36 +407,19 @@ router.get('/employee', async (req,res) => {
  *          description: response 500 
  */
 
-router.get('/each', async (req,res) => {
+router.get('/each', async (req, res) => {
 
-    const {position, regionId} = req.query
-    const filterId = regionId ? {regionId: regionId} : {}
+    const { position, regionId } = req.query
+    const filterId = regionId ? { regionId: regionId } : {}
 
-    const userEach = await User.find({position: position, ...filterId})
-    const count = await User.find({position: position, ...filterId}).countDocuments()
+    const userEach = await User.find({ position: position, ...filterId })
+    const count = await User.find({ position: position, ...filterId }).countDocuments()
     res.status(200).json({
         userEach,
         count
     })
 })
 
-/**
- * @swagger
- * /api/user/all:
- *  get:
- *   summary: hodimlarni hammasini chiqarish
- *   tags: [User]
- *   responses:
- *        200:
- *          description: response 200  
- *        500:
- *          description: response 500  
- */
 
-router.get('/all', async (req, res) => {
-
-    const userAll = await User.find().populate('regionId', 'name')
-    res.status(200).json({userAll})
-})
 
 module.exports = router

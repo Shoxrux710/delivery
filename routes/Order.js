@@ -114,10 +114,8 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         randomId: random
     })
 
-    order.save(err => {
-        if (err) return res.status(400).json({errorMessage: 'Xato'})
-        res.status(200).json({successMessage: 'Buyurtma kiritildi'})
-    })
+    order.save()
+    res.status(200).json({successMessage: 'Buyurtma kiritildi'})
 })
 
 

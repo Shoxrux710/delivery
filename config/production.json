@@ -1,6 +1,6 @@
 {
     "port": 3000,
     "imgFolder": "build",
-    "mongoUrl": "mongodb://localhost:27017/delivery",
+    "mongoUrl": "mongodb://shoxrux:12345678@mongodb0.pbaby.uz:27017,mongodb1.pbaby.uz:27017,mongodb2.pbaby.uz:27017,mongodb0.planbaby.kg/delivery?authSource=delivery",
     "jsonwebtoken": "SDLKMGLSDKMGLSKMOREMGLMLBDF"
 }

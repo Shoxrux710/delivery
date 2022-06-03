@@ -51,7 +51,7 @@ app.use('/api/region', regionRouter)
 app.use('/api/product', productRouter)
 app.use('/api/order', orderRouter)
 app.use(function(errorMessage, req,res, next){
-    res.status(400).json(`server ${errorMessage}`)
+    res.status(400).json(`server errors: ${errorMessage}`)
 })
 
 
@@ -69,7 +69,7 @@ if (process.env.NODE_ENV === 'production'){
 
 async function start(){
     await mongoose.connect(config.get('mongoUrl'), 
-    { useNewUrlParser: true, useUnifiedTopology: true})
+    { useNewUrlParser: true, useUnifiedTopology: true, replicaSet: 'myReplicaSet'})
 
     const admin = await User.findOne()
     const passwordHashed = await bcrypt.hash('logo@123', 12)

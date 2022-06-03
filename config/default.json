@@ -1,6 +1,6 @@
 {
     "port": 4000,
     "imgFolder": "public",
-    "mongoUrl": "mongodb://localhost:27017/delivery",
+    "mongoUrl": "mongodb://localhost:27017,localhost:27018,localhost:27019/delivery",
     "jsonwebtoken": "SDLKMGLSDKMGLSKMOREMGLMLBDF"
 }
