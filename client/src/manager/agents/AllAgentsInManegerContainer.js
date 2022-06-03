@@ -48,7 +48,7 @@ const AllAgentsInManegerContainer = () => {
             phone,
             regionId: userData ? userData._id : ''
         }
-        axios.post('/api/user/register', agentData, {
+        axios.post('/api/user/manager', agentData, {
             headers: {
                 'authorization': `Bearer ${token}`
             }

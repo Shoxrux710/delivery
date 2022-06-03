@@ -65,7 +65,6 @@ const AgentHome = (props) => {
                         <p>Kuryer</p>
                     </div>
                     <BsThreeDotsVertical className='icon' />
-                    <span>20:30</span>
                 </div>
             </div>
         </div>

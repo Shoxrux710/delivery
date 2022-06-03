@@ -31,8 +31,8 @@ const AllManagersContainer = () => {
     const [ employeers, setEmployeers ] = useState([])
     const getEmployee = () => {
         if( regionId ) {
-            axios.get(`/api/user/employee?userId=${regionId}&attach=${radio}`).then(res => {
-                setEmployeers(res.data.employee)
+            axios.get(`/api/user/each?position=${radio}&regionId=${regionId}`).then(res => {
+                setEmployeers(res.data.userEach)
             }).catch(err => {
                 console.log(err)
             })

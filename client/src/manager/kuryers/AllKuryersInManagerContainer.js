@@ -48,7 +48,7 @@ const AllKuryersInManagerContainer = () => {
             phone,
             regionId: userData ? userData._id : ''
         }
-        axios.post('/api/user/register', kuryerData, {
+        axios.post('/api/user/manager', kuryerData, {
             headers: {
                 'authorization': `Bearer ${token}`
             }
