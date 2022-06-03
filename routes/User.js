@@ -90,7 +90,7 @@ const deleteOldImage = (fileName) => {
  * @swagger
  * /api/user/register:
  *  post:
- *   summary: hodimlarni ro'yxatdan o'tkazish
+ *   summary: admin hodimlarni ro'yxatdan o'tkazish
  *   tags: [User]
  *   requestBody:
  *     required: true
@@ -141,7 +141,7 @@ router.post('/register', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
  * @swagger
  * /api/user/manager:
  *  post:
- *   summary: hodimlarni ro'yxatdan o'tkazish
+ *   summary: boshqaruvchi hodimlarni ro'yxatdan o'tkazish
  *   tags: [User]
  *   requestBody:
  *     required: true
@@ -344,43 +344,6 @@ router.put('/images/:id', (req, res) => {
     })
 })
 
-/**
- * @swagger
- * /api/user/employee:
- *  get:
- *   summary: hodimlarni viloyat bo'yicha saralash
- *   tags: [User]
- *   parameters:
- *     - in: query
- *       name: pagination
- *       schema:
- *         type: object
- *       required: 
- *         - attach
- *         - userId
- *       properties:
- *          attach:
- *            type: string
- *          userId:
- *            type: string
- *       example:
- *          attach: string
- *          userId: string
- *   responses:
- *        200:
- *          description: response 200   
- *        500:
- *          description: response 500     
- */
-
-router.get('/employee', async (req, res) => {
-
-    const { attach, userId } = req.query
-
-    const employee = await User.find({ position: attach, regionId: userId })
-    res.status(200).json({ employee })
-
-})
 
 /**
  * @swagger
