@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { HiFilter } from 'react-icons/hi'
 import { IoIosArrowUp } from 'react-icons/io'
 import { Link } from 'react-router-dom'
@@ -9,9 +9,7 @@ import NavbarContainer from '../../components/navbar/NavbarContainer'
 
 const KuryerHome = (props) => {
 
-    const { setUserBody, userBody, setOrderType, orderType, userData } = props
-    const [ orderMenu, setOrderMenu ] = useState(false)
-    const [ leftNames, setLeftNames ] = useState(false)
+    const { setUserBody, userBody, setOrderType, orderType, userData, leftNames, setLeftNames, orderMenu, setOrderMenu } = props
 
     return (
         <div className='manager-home-component'>
@@ -66,10 +64,10 @@ const KuryerHome = (props) => {
             </div>
 
             <div className='wrapper'>
-                <div className='users-info lst'>
+                <Link to='money' className='users-info lst'>
                     <h5>Qo'ldagi pul:</h5>
                     <h5>21 435 230 so'm</h5>
-                </div>
+                </Link>
 
                 <div className='debt'>
                     <Link to='/'>

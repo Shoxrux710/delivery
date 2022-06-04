@@ -1,0 +1,444 @@
+.kuryer-money-component {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #fff;
+}
+
+.kuryer-money-component .kuryer-top {
+    width: calc(100% - 32px);
+    padding: 16px 0;
+    margin: 16px;
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #EFEFEF80;
+}
+
+.kuryer-money-component .kuryer-top div {
+    display: flex;
+    align-items: center;
+}
+
+.kuryer-money-component .kuryer-top .div .icon {
+    font-size: 28px;
+    margin-top: 5px;
+    color: #212121;
+    cursor: pointer;
+}
+
+.kuryer-money-component .kuryer-top h2 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0;
+    margin-left: 20px;
+    color: #000000;
+}
+
+.kuryer-money-component .kuryer-top .iconn {
+    font-size: 36px;
+    color: #4D77FF;
+    margin: 0;
+}
+
+.kuryer-money-component .h2-top {
+    width: calc(100% - 32px);
+    margin: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.kuryer-money-component .h2-top > div {
+    width: 50%;
+    text-align: center;
+    border-bottom: 1px solid #EFEFEF80;
+    cursor: pointer;
+}
+
+.kuryer-money-component .h2-top > div.act-h2 {
+    border-bottom: 2px solid #64B5FF;
+}
+
+.kuryer-money-component .h2-top > div h2 {
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #525252;
+}
+
+.kuryer-money-component .active-money {
+    width: 100%;
+    padding: 16px;
+}
+
+.kuryer-money-component .active-money .top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.kuryer-money-component .active-money .top p {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #C3C6CE;
+    margin: 0;
+}
+
+.kuryer-money-component .active-money .top p:last-child {
+    font-weight: 700;
+    color: #383838;
+}
+
+.kuryer-money-component .active-money .one-order {
+    position: relative;
+} 
+
+@keyframes anim1 {
+    0% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+}
+
+.kuryer-money-component .active-money .one-order .menu {
+    position: absolute;
+    right: 19px;
+    top: 15px;
+    width: 145px;
+    height: 120px;
+    background: #FFFFFF;
+    box-shadow: 2px 4px 16px rgba(217, 158, 226, 0.25), 0px 8px 50px rgba(160, 163, 189, 0.1);
+    border-radius: 4px;
+    display: none;
+    transition: 0.3s;
+    animation: anim1 0.5s linear both;
+    z-index: 2;
+}
+
+
+.kuryer-money-component .active-money .one-order .menu.menu-active {
+    display: block;
+}
+
+.kuryer-money-component .active-money .one-order .menu > div {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.kuryer-money-component .active-money .one-order .menu > div .bg {
+    width: 24px;
+    height: 24px;
+    background-color: #fff;
+}
+
+.kuryer-money-component .active-money .one-order .menu > div .bg > div {
+    width: 24px;
+    height: 24px;
+    background-color: #E9EAF3;
+    mask-image: url('../../img/edit.png');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    transition: 0.3s;
+}
+
+.kuryer-money-component .active-money .one-order .menu > div .bg2 > div {
+    mask-image: url('../../img/kuryer.png');
+}
+
+.kuryer-money-component .active-money .one-order .menu > div .bg3 > div {
+    mask-image: url('../../img/cancel.png');
+}
+
+.kuryer-money-component .active-money .one-order .menu > div h6 {
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    color: #1D1D1D;
+    margin: 0;
+    margin-left: 5px;
+    transition: 0.3s;
+}
+
+.kuryer-money-component .active-money .one-order .menu > div:hover .bg > div {
+    background-color: #64B5FF;
+}
+
+.kuryer-money-component .active-money .one-order .menu > div:hover h6 {
+    color: #64B5FF;
+}
+
+.kuryer-money-component .active-money .one-order .left-names {
+    width: 90%;
+    height: 105px;
+    position: absolute;
+    left: 5%;
+    top: 35px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    z-index: 1;
+    display: none;
+    transition: 0.3s;
+    animation: anim1 0.5s linear both;
+}
+
+.kuryer-money-component .active-money .one-order .left-names.left-names-active {
+    display: block;
+}
+
+.kuryer-money-component .active-money .one-order .left-names > div {
+    width: 100%;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    border-bottom:  0.5px solid #F3F3F3;
+}
+
+.kuryer-money-component .active-money .one-order .left-names .last {
+    border-bottom: none;
+}
+
+.kuryer-money-component .active-money .one-order .left-names > div p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: #383838;
+}
+
+.kuryer-money-component .active-money .one-order .left-names > div span {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 21px;
+    color: #383838;
+}
+
+.kuryer-money-component .active-money .one-order .icon {
+    position: absolute;
+    right: 11px;
+    top: 11px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #D6D7E3;
+}
+
+.kuryer-money-component .active-money .one-order h2 {
+    position: absolute;
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    margin: 0;
+    top: 11px;
+    left: 40px;
+    color: #64B5FF;
+    cursor: pointer;
+}
+
+
+.kuryer-money-component .active-money .order {
+    padding: 10px;
+    background: #FFFFFF;
+    border: 0.67px solid #F3F3F3;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.kuryer-money-component .active-money .order .topp {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kuryer-money-component .active-money .order .topp > div {
+    display: flex;
+    align-items: center;
+}
+
+.kuryer-money-component .active-money .order .topp h1 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #1D1D1D;
+    margin: 0;
+}
+
+.kuryer-money-component .active-money .order .order-address {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.kuryer-money-component .active-money .order .order-address .left {
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.kuryer-money-component .active-money .order .order-address .left .circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #E3E9FA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kuryer-money-component .active-money .order .order-address .left .circle > div {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #AFC6FF;
+}
+
+.kuryer-money-component .active-money .order .order-address .left .line {
+    width: 2px;
+    min-height: 48px;
+    background-color: #E3E9FA;
+}
+
+.kuryer-money-component .active-money .order .order-address .right {
+    width: calc(100% - 35px);
+}
+
+.kuryer-money-component .active-money .order .order-address .right > div {
+    margin-bottom: 10px;
+}
+
+.kuryer-money-component .active-money .order .order-address .right > div span {
+    font-family: 'Poppins-Thin';
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 12px;
+    line-height: 12px;
+    color: #C3C6CE;
+    margin: 0;
+}
+
+.kuryer-money-component .active-money .order .order-address .right > div p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    color: #464646;
+}
+
+.kuryer-money-component .active-money .order .qator {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.kuryer-money-component .active-money .order .qator p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #C3C6CE;
+}
+
+.kuryer-money-component .active-money .order .qator span {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #C3C6CE;
+}
+
+.kuryer-money-component .active-money .order .qator h4 {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    color: #64B5FF;
+}
+
+.kuryer-money-component .active-money .order .qator h5 {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    color: #30C862;
+}
+
+.kuryer-money-component .active-money .order .lst {
+    padding-bottom: 10px;
+    border-bottom: 0.5px dashed #ABAAB9;
+    margin-bottom: 10px;
+}
+
+.kuryer-money-component .active-money .order .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kuryer-money-component .active-money .order .bottom h3 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #383838;
+    margin: 0;
+}
+
+.kuryer-money-component .active-money .order .bottom p {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    color: #C3C6CE;
+    margin: 0;
+}
+
+.kuryer-money-component .active-money button {
+    width: 100%;
+    height: 48px;
+    background: #64B5FF;
+    border-radius: 6px;
+    border: none;
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #FFFFFF;
+}

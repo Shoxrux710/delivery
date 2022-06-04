@@ -14,6 +14,7 @@ import AllKuryersContainer from './admin/kuryers/AllKuryersContainer'
 import AllAgentsInManegerContainer from './manager/agents/AllAgentsInManegerContainer'
 import AllKuryersInManagerContainer from './manager/kuryers/AllKuryersInManagerContainer'
 import AllAdminsContainer from './admin/all-admins/AllAdminsContainer'
+import KuryerMoneyContainer from './kuryer/kuryer-money/KuryerMoneyContainer'
 
 const App = () => {
 
@@ -66,6 +67,7 @@ const App = () => {
   const kuryerRoleRoutes = (
     <Routes>
       <Route path='/' element={<KuryerHomeContainer />} />
+      <Route path='/money' element={<KuryerMoneyContainer />} />
     </Routes>
   )
 

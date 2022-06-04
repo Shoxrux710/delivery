@@ -8,6 +8,8 @@ const KuryerHomeContainer = () => {
 
     const [ userBody, setUserBody ] = useState(false)
     const [ orderType, setOrderType ] = useState('active')
+    const [ orderMenu, setOrderMenu ] = useState(false)
+    const [ leftNames, setLeftNames ] = useState(false)
 
     const [ userData, setUserData ] = useState()
     const getUserData = () => {
@@ -30,6 +32,10 @@ const KuryerHomeContainer = () => {
             setOrderType={setOrderType} 
             orderType={orderType}
             userData={userData}
+            leftNames={leftNames}
+            setLeftNames={setLeftNames}
+            orderMenu={orderMenu}
+            setOrderMenu={setOrderMenu}
         />
     )
 }
