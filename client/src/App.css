@@ -33,3 +33,10 @@ body::-webkit-scrollbar {
     width: 375px;
     overflow: hidden;
 }
+
+@media (max-width: 576px) {
+    .app-component .components-wrapper {
+        width: 100%;
+        overflow: hidden;
+    }   
+}

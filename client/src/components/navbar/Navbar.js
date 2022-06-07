@@ -6,6 +6,7 @@ import { RiLogoutBoxRLine } from 'react-icons/ri'
 import { showNavbar } from '../redux/actions/Actions'
 import './navbar.css'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Navbar = (props) => {
 
@@ -17,7 +18,9 @@ const Navbar = (props) => {
             <div className='top'>
                 <CgMenu className='icon' onClick={() => dispatch(showNavbar(true))} />
                 <img src={logoPng} alt='' />
-                <div className='bg' style={{backgroundImage: `url(${userPng})`}}></div>
+                <Link to='/profile'>
+                    <div className='bg' style={{backgroundImage: `url(${userPng})`}}></div>
+                </Link>
             </div>
             
             <div className={menu ? 'navbar-menu navbar-menu-active' : 'navbar-menu'}>

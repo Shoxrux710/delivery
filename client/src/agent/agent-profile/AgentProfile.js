@@ -4,15 +4,15 @@ import { IoIosArrowUp } from 'react-icons/io'
 import { Link } from 'react-router-dom'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import userPng from '../../img/user.png'
-import './kuryerHome.css'
+import './agentProfile.css'
 import NavbarContainer from '../../components/navbar/NavbarContainer'
 
-const KuryerHome = (props) => {
+const AgentProfile = (props) => {
 
     const { setUserBody, userBody, setOrderType, orderType, userData, leftNames, setLeftNames, orderMenu, setOrderMenu } = props
 
     return (
-        <div className='manager-home-component'>
+        <div className='agent-profile-component'>
             <NavbarContainer />
             <div className='user-wrapper'>
                 <div className='user-top' style={{borderBottom: userBody ? 'none' : '1px solid #f3f3f3'}}>
@@ -64,11 +64,6 @@ const KuryerHome = (props) => {
             </div>
 
             <div className='wrapper'>
-                <Link to='money' className='users-info lst'>
-                    <h5>Qo'ldagi pul:</h5>
-                    <h5>21 435 230 so'm</h5>
-                </Link>
-
                 <div className='debt'>
                     <Link to='/'>
                         <div className='div1'>
@@ -204,7 +199,7 @@ const KuryerHome = (props) => {
                         </div>
                     </div>
 
-                    <Link to='/order/id'>
+                    <Link to='order/id'>
                         <div className='order' onClick={() => {setOrderMenu(false); setLeftNames(false)}}>
                             <div className='topp'>
                                 <div>
@@ -263,4 +258,4 @@ const KuryerHome = (props) => {
     )
 }
 
-export default KuryerHome
+export default AgentProfile

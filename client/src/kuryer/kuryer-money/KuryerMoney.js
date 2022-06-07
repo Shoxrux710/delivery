@@ -64,38 +64,13 @@ export const KuryerMoney = (props) => {
                         </div>
                         <div></div>
                     </div>
-                    <div className='order-address'>
-                        <div className='left'>
-                            <div className='circle'>
-                                <div></div>
-                            </div>
-                            <div className='line'></div>
-                            <div className='circle'>
-                                <div></div>
-                            </div>
-                        </div>
-                        <div className='right'>
-                            <div>
-                                <span>Jo'natish manzili</span>
-                                <p>Namangan v, Pop tuman, Pungon sh</p>
-                            </div>
-                            <div>
-                                <span>Yetkazish manzili</span>
-                                <p>Namangan v, Pop tuman, Pungon sh</p>
-                            </div>
-                        </div>
-                    </div>
                     <div className='qator'>
                         <p>ID 1942497</p>
                         <span>23 Fevral 15:00</span>
                     </div>
-                    <div className='qator'>
-                        <p>Umumiy narxi</p>
-                        <h4>11 236 540 so’m</h4>
-                    </div>
                     <div className='qator lst'>
-                        <p>To’landi</p>
-                        <h5>236 540 so’m</h5>
+                        <p>Qo'ldagi pul</p>
+                        <h4>11 236 540 so’m</h4>
                     </div>
                     <div className='bottom'>
                         <div className='ust'>
@@ -112,6 +87,34 @@ export const KuryerMoney = (props) => {
 
             <button>Boshqaruvchiga berish</button>
             
+        </div>
+    )
+
+    const archive = (
+        <div className='active-money archive-money'>
+            <div className='top'>
+                <p>Qo’ldagi pul</p>
+                <p>100 000 000 so’m</p>
+            </div>
+
+            <div className='archive-prod'>
+                <div className='qator'>
+                    <h5>30.04.2022 10:35</h5>
+                    <h5>30.04.2022 10:30</h5>
+                </div>
+                <div className='qator bb'>
+                    <span>Berilgan vaqt</span>
+                    <span>Qabul qilingan vaqt</span>
+                </div>
+                <div className='qator'>
+                    <p>Umumiy summa</p>
+                    <p>100 000 000 so’m</p>
+                </div>
+                <div className='qator'>
+                    <p>Zakazlar soni</p>
+                    <p>120</p>
+                </div>
+            </div>
         </div>
     )
 
@@ -137,7 +140,7 @@ export const KuryerMoney = (props) => {
                 </div>
             </div>
 
-            {active}
+            {h2 === 'active' ? active : archive }
         </div>
     )
 }

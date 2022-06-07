@@ -442,3 +442,55 @@
     line-height: 21px;
     color: #FFFFFF;
 }
+
+.kuryer-money-component .archive-money .archive-prod {
+    padding: 10px;
+    background: #FFFFFF;
+    border: 0.67px solid #F3F3F3;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.kuryer-money-component .archive-money .archive-prod .qator {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kuryer-money-component .archive-money .archive-prod .qator h5 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #383838;
+    margin: 0;
+}
+
+.kuryer-money-component .archive-money .archive-prod .qator span {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #C3C6CE;
+}
+
+.kuryer-money-component .archive-money .archive-prod .bb {
+    border-bottom: 0.5px dashed #ABAAB9;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.kuryer-money-component .archive-money .archive-prod .qator p {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #C3C6CE;
+    margin: 0;
+}
+
+.kuryer-money-component .archive-money .archive-prod .qator p:last-child {
+    font-weight: 600;
+    color: #64B5FF;
+}
