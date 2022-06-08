@@ -1,11 +1,14 @@
-import { Collapse } from 'antd'
+import { Collapse, Modal } from 'antd'
 import React from 'react'
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
+import ReactInputMask from 'react-input-mask'
 import { Link } from 'react-router-dom'
 import './innerOrder.css'
 
-const InnerOrder = () => {
+const InnerOrder = (props) => {
+
+    const { setIsModalVisible, isModalVisible } = props
 
     const { Panel } = Collapse
 
@@ -128,9 +131,62 @@ const InnerOrder = () => {
 
                 <div className='btn-wrap'>
                     <button>Rad etish</button>
-                    <button>Yakunlash</button>
+                    <button onClick={() => setIsModalVisible(true)}>Yakunlash</button>
                 </div>
             </div>
+            <Modal 
+                header={null}
+                visible={isModalVisible} 
+                onCancel={() => setIsModalVisible(false)}
+                footer={null}
+                className='add-modal'
+            >
+                <form>
+                    <div className='qator'>
+                        <div>
+                            <span>Operator</span>
+                            <p>Azizbek Abduxalilov</p>
+                        </div>
+                        <div>
+                            <span>Kuryer</span>
+                            <p>Azizbek abduxalilov</p>
+                        </div>
+                    </div>
+                    <div className='qator'>
+                        <div>
+                            <span>ID</span>
+                            <p>5461611</p>
+                        </div>
+                        <div>
+                            <span>Narxi</span>
+                            <p>100 000 000</p>
+                        </div>
+                    </div>
+                    <div className='qator last'>
+                        <div>
+                            <span>Adress</span>
+                            <p>mahalla, ko’cha , uy raqami</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Naqt pul</label>
+                        <input type='number' />
+                    </div>
+                    <div>
+                        <label>Perechisleniya</label>
+                        <input type='number' />
+                    </div>
+                    <div>
+                        <label>Qarz</label>
+                        <input type='number' />
+                    </div>
+                    <div>
+                        <label>Izoh</label>
+                        <textarea></textarea>
+                    </div>
+                    <button type='submit'>Buyurtmani yakunlash</button>
+                </form>
+            </Modal>
         </div>
     )
 }

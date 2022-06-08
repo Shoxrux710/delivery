@@ -65,7 +65,7 @@ const AgentProfile = (props) => {
 
             <div className='wrapper'>
                 <div className='debt'>
-                    <Link to='/'>
+                    <Link to='debt'>
                         <div className='div1'>
                             <h5>Qarz: <span>21 485 230 so’m</span></h5>
                         </div>

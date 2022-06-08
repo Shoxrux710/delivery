@@ -183,6 +183,7 @@
 .inner-order-component .order-wrap .btn-wrap button {
     width: 48%;
     height: 40px;
+    cursor: pointer;
 }
 
 .inner-order-component .order-wrap .btn-wrap button:first-child {
@@ -205,4 +206,57 @@
     font-size: 16px;
     line-height: 24px;
     color: #FFFFFF;
+}
+
+.add-modal .qator {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 0.5px dashed #BFBFBF
+}
+
+.add-modal .qator > div {
+    width: 50%;
+}
+
+.add-modal .qator > div span {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    color: #383838;
+}
+
+.add-modal .qator > div p {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #BFBFBF;
+    margin-bottom: 5px;
+}
+
+.add-modal .qator.last {
+    border-bottom: none;
+    flex-direction: column;
+}
+
+.add-modal .qator.last > div {
+    width: 100%;
+}
+
+.add-modal textarea {
+    width: 100%;
+    height: 96px;
+    background: #FAFAFA;
+    border: 0.5px solid #C8C8C8;
+    border-radius: 6px;
+    outline: none;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #000000;
+    padding: 10px;
 }

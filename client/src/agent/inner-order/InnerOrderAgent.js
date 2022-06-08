@@ -13,7 +13,7 @@ const InnerOrderAgent = () => {
         <div className='inner-order-component'>
             <div className='kuryer-top'>
                 <div className='div'>
-                    <Link to='/'>
+                    <Link to='/profile'>
                         <MdArrowBack className='icon' />
                     </Link>
                     <h2>Buyurtma ma’lumotlari</h2>

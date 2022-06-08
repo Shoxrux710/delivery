@@ -18,6 +18,7 @@ import KuryerMoneyContainer from './kuryer/kuryer-money/KuryerMoneyContainer'
 import InnerOrderContainer from './kuryer/inner-order/InnerOrderContainer'
 import AgentProfileContainer from './agent/agent-profile/AgentProfileContainer'
 import InnerOrderAgentContainer from './agent/inner-order/InnerOrderAgentContainer'
+import AgentDebtContainer from './agent/agent-debt/AgentDebtContainer'
 
 const App = () => {
 
@@ -66,6 +67,7 @@ const App = () => {
       <Route path='/' element={<AgentHomeContainer />} />
       <Route path='/profile' element={<AgentProfileContainer />} />
       <Route path='/profile/order/:id' element={<InnerOrderAgentContainer />} />
+      <Route path='/profile/debt' element={<AgentDebtContainer />} />
     </Routes>
   )
 

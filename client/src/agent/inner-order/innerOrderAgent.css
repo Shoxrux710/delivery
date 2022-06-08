@@ -159,6 +159,12 @@
     border: none;
     outline: none;
     border-radius: 8px;
+    padding: 10px;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    color: #383838;
 }
 
 .inner-order-component .order-wrap .ant-collapse-header {

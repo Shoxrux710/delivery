@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import InnerOrder from './InnerOrder'
 
 const InnerOrderContainer = () => {
+
+    const [ isModalVisible, setIsModalVisible ] = useState(false)
+
     return (
-        <InnerOrder />
+        <InnerOrder
+            isModalVisible={isModalVisible} 
+            setIsModalVisible={setIsModalVisible} 
+        />
     )
 }
 
