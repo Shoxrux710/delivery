@@ -21,9 +21,8 @@ exports.orderValidator = [
     body('region').isLength({min: 1}),
     body('fog').isLength({min: 1}),
     body('address').isLength({min: 1}),
-    body('number').isLength({min: 1}),
     body('phone').isLength({min: 1}),
-    body('productId').isLength({min: 1})
+    body('productArray').isLength({min: 1})
 ]
 exports.loginValidator = [
     body('login').isLength({min: 1}),

@@ -239,14 +239,15 @@ router.post("/login", loginValidator, async (req, res) => {
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
 
     const { login, password } = req.body
-
     const user = await User.findOne({ login })
-
+    
     if (!user) return res.status(400).json({ errorMessage: "Please login..." })
 
     const match = await bcrypt.compare(password, user.password)
     if (!match) return res.status(400).json({ errorMessage: "inCorrect password" })
 
+    const {active} = user
+    if (!active) return res.status(400).json({errorMessage: "There is no such user"})
     const payload = { id: user._id }
 
     const token = jwt.sign(payload, config.get('jsonwebtoken'))
@@ -284,7 +285,7 @@ router.get('/userId/:id', async (req, res) => {
 
     const userId = await User.findOne({ _id: id }).populate('regionId', 'name')
         .populate({ path: 'worker', select: 'fullname login position', populate: [{ path: 'regionId', select: 'name' }] })
-      
+    console.log(userId)     
     
     res.status(200).json({ userId })
 
@@ -336,8 +337,7 @@ router.put('/images/:id', (req, res) => {
             fileName: filename
         }
 
-        userOne.save(async (err) => {
-            if (err) return res.status(400).json({ errorMessage: 'Xato' })
+        userOne.save(async () => {
             req.files.avatar ? await deleteOldImage(oldFileName) : null
             res.status(200).json({ successMessage: 'Yangilandi' })
         })
@@ -375,14 +375,46 @@ router.get('/each', async (req, res) => {
     const { position, regionId } = req.query
     const filterId = regionId ? { regionId: regionId } : {}
 
-    const userEach = await User.find({ position: position, ...filterId })
-    const count = await User.find({ position: position, ...filterId }).countDocuments()
+    const userEach = await User.find({ position: position, active: true, ...filterId })
+    const count = await User.find({ position: position, active: true, ...filterId }).countDocuments()
     res.status(200).json({
         userEach,
         count
     })
 })
 
+/**
+ * @swagger
+ * /api/user/delete/{id}:
+ *  put:
+ *   summary: user active false qilib quyish
+ *   tags: [User]
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       schema: 
+ *         type: string
+ *       required: true
+ *   responses:
+ *        200:
+ *          description: response 200   
+ *        500:
+ *          description: response 500 
+ *    
+ */
+
+router.put('/delete/:id', (req,res) => {
+
+    const {id} = req.params
+
+    User.findById(id, async (err, userOne) => {
+        if (err) return res.status(400).json({ errorMessage: 'Xato' })
+        userOne.active = false
+
+        await userOne.save()
+        res.status(200).json({successMessage: "Delete"})
+    })
+})
 
 
 module.exports = router

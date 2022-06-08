@@ -1,42 +1,47 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const orderSchema = new Schema({
-    customer:{
+    customer: {
         type: String,
         required: true
     },
     region: {
         type: String,
-        required: true 
+        required: true
     },
     fog: {
         type: String,
-        required: true 
+        required: true
     },
     address: {
         type: String,
         required: true
     },
-    phone:{
+    phone: {
         type: String,
         required: true
     },
     twoPhone: {
-        type: String
-    },
-    number: {
-        type: Number,
-        required: true
+        type: String,
+        default: null
     },
     status: {
         type: String,
         enum: ['active', 'courier', 'completed', 'rejected'],
         default: 'active'
     },
-    productId: {
-       type: Schema.Types.ObjectId,
-       ref: 'Product'   
-    },
+    productArray: [
+        {
+            productId: {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+            },
+            number: {
+                type: Number,
+                required: true
+            },
+        }
+    ],
     agentId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -44,7 +49,7 @@ const orderSchema = new Schema({
     courId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        default: null 
+        default: null
     },
     randomId: {
         type: Number,
