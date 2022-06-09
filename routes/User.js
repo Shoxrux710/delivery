@@ -250,6 +250,7 @@ router.post("/login", loginValidator, async (req, res) => {
     if (!active) return res.status(400).json({errorMessage: "There is no such user"})
     const payload = { id: user._id }
 
+    
     const token = jwt.sign(payload, config.get('jsonwebtoken'))
     res.status(200).json({
         token,

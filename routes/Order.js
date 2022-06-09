@@ -239,6 +239,7 @@ router.get('/:id', async (req, res) => {
 
     const orderId = await Order.findOne({ _id: id }).populate({ path: 'productArray', select: 'number', populate: [{ path: 'productId', select: 'name price' }] })
         .populate({ path: 'agentId', select: 'fullname', populate: [{ path: 'regionId', select: 'name' }] })
+        .populate('courId', 'fullname')
     res.status(200).json({ orderId })
 
 })
