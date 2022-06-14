@@ -5,6 +5,8 @@ import Navbar from './Navbar'
 
 const NavbarContainer = () => {
 
+    const role = JSON.parse(window.localStorage.getItem('user'))?.position
+
     const { menu } = useSelector(state => state)
     const dispatch = useDispatch()
 
@@ -14,7 +16,11 @@ const NavbarContainer = () => {
     }
 
     return (
-        <Navbar logout={logout} menu={menu} />
+        <Navbar 
+            logout={logout} 
+            menu={menu} 
+            role={role}
+        />
     )
 }
 

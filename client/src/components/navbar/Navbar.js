@@ -7,10 +7,12 @@ import { showNavbar } from '../redux/actions/Actions'
 import './navbar.css'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { BsGlobe, BsPlusLg } from 'react-icons/bs'
+import { BiDollarCircle } from 'react-icons/bi'
 
 const Navbar = (props) => {
 
-    const { logout, menu } = props
+    const { logout, menu, role } = props
     const dispatch = useDispatch()
 
     return (
@@ -30,6 +32,31 @@ const Navbar = (props) => {
                         <h2>Azizbek Abduxalilov</h2>
                         <p>Admin</p>
                     </div>
+                </div>
+
+                <div className='menus'>
+                    {
+                        role === 'admin' || role === 'super-admin' ? (
+                            <Link to='/add-product' className='qator' onClick={() => dispatch(showNavbar(false))}>
+                                <BsPlusLg className='icon' />
+                                <h3>Mahsulot qo’shish</h3>
+                            </Link>
+                        ) : null
+                    }
+
+                    {
+                        role === 'admin' || role === 'super-admin' || role === 'manager' ? (
+                            <Link to='/all-money' className='qator last' onClick={() => dispatch(showNavbar(false))}>
+                                <BiDollarCircle className='icon' style={{fontSize: '20px'}} />
+                                <h3>Qo'ldagi pullar</h3>
+                            </Link>
+                        ) : null
+                    }
+
+                    <Link to='/' className='qator' onClick={() => dispatch(showNavbar(false))}>
+                        <BsGlobe className='icon' style={{fontSize: '20px'}} />
+                        <h3>Til</h3>
+                    </Link>
                 </div>
 
                 <div className='links-wrapper'>

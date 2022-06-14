@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { useSelector } from 'react-redux'
+import { ToastContainer } from "react-toastify";
 import LoginContainer from './login/LoginContainer'
 import AdminHomeContainer from './admin/admin-home/AdminHomeContainer'
-import { ToastContainer } from "react-toastify";
 import AgentHomeContainer from './agent/agent-home/AgentHomeContainer'
 import ManagerHomeContainer from './manager/manager-home/ManagerHomeContainer'
 import KuryerHomeContainer from './kuryer/kuryer-home/KuryerHomeContainer'
@@ -19,6 +19,9 @@ import InnerOrderContainer from './kuryer/inner-order/InnerOrderContainer'
 import AgentProfileContainer from './agent/agent-profile/AgentProfileContainer'
 import InnerOrderAgentContainer from './agent/inner-order/InnerOrderAgentContainer'
 import AgentDebtContainer from './agent/agent-debt/AgentDebtContainer'
+import ManagerDebtContainer from './manager/manager-debt/ManagerDebtContainer';
+import InnerDebtContainer from './manager/inner-debt/InnerDebtContainer';
+import AllManagerMoneyContainer from './manager/all-manager-money/AllManagerMoneyContainer';
 
 const App = () => {
 
@@ -59,6 +62,9 @@ const App = () => {
       <Route path='/' element={<ManagerHomeContainer />} />
       <Route path='/all-agents' element={<AllAgentsInManegerContainer />} />
       <Route path='/all-couriers' element={<AllKuryersInManagerContainer />} />
+      <Route path='/all-money' element={<AllManagerMoneyContainer />} />
+      <Route path='/debt' element={<ManagerDebtContainer />} />
+      <Route path='/debt/:id' element={<InnerDebtContainer />} />
     </Routes>
   )
 

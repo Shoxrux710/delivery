@@ -1,0 +1,139 @@
+.manager-debt-component {
+    width: 100%;
+    min-height: 100vh;
+    padding-bottom: 16px;
+    background-color: #fff;
+}
+
+.manager-debt-component .kuryer-top {
+    width: calc(100% - 32px);
+    padding: 16px 0;
+    margin: 16px;
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #EFEFEF80;
+}
+
+.manager-debt-component .kuryer-top div {
+    display: flex;
+    align-items: center;
+}
+
+.manager-debt-component .kuryer-top .div .icon {
+    font-size: 28px;
+    margin-top: 5px;
+    color: #212121;
+    cursor: pointer;
+}
+
+.manager-debt-component .kuryer-top h2 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0;
+    margin-left: 20px;
+    color: #000000;
+}
+
+.manager-debt-component .kuryer-top .iconn {
+    font-size: 36px;
+    color: #4D77FF;
+    margin: 0;
+}
+
+.manager-debt-component .debt {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+}
+
+.manager-debt-component .debt p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 24px;
+    color: #383838;
+}
+
+.manager-debt-component .debt p:last-child {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #ED6F6F;
+}
+
+.manager-debt-component .one {
+    width: 100%;
+    padding: 16px;
+    border-bottom: 1px solid #f3f3f3;
+    background-color: #fff;
+    transition: 0.3s;
+}
+
+.manager-debt-component .wrapper .one:first-child {
+    border-top: 1px solid #f3f3f3;
+}
+
+.manager-debt-component .one .qator {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.manager-debt-component .one .qator:first-child {
+    margin-bottom: 10px;
+}
+
+.manager-debt-component .one .qator > div {
+    width: 50%;
+}
+
+.manager-debt-component .one .qator > div span {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #C3C6CE;
+    transition: 0.3s;
+}
+
+.manager-debt-component .one .qator > div p {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #383838;
+    transition: 0.3s;
+    margin: 0;
+}
+
+.manager-debt-component .one .qator .last {
+    margin-top: auto;
+}
+
+.manager-debt-component .one .qator .last p {
+    color: #ED6F6F;
+    transition: 0.3s;
+}
+
+.manager-debt-component .one:hover {
+    background-color: #64B4FF;
+}
+
+.manager-debt-component .one:hover .qator > div span {
+    color: #fff;
+}
+
+.manager-debt-component .one:hover .qator > div p {
+    color: #fff;
+}
+
+.manager-debt-component .one:hover .last p {
+    color: #fff;
+}

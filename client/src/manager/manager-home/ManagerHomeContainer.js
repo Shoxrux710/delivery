@@ -11,6 +11,7 @@ const ManagerHomeContainer = () => {
 
     const [ agentsCount, setAgentsCount ] = useState('')
     const [ kuryersCount, setKuryersCount ] = useState('')
+    const [ isModalVisible, setIsModalVisible ] = useState(false)
     
     const [ userData, setUserData ] = useState()
     const getUserData = () => {
@@ -49,6 +50,8 @@ const ManagerHomeContainer = () => {
             agentsCount={agentsCount}
             kuryersCount={kuryersCount}
             userData={userData}
+            isModalVisible={isModalVisible}
+            setIsModalVisible={setIsModalVisible}
         />
     )
 }

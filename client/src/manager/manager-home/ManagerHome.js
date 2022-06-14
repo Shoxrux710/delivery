@@ -6,10 +6,11 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import userPng from '../../img/user.png'
 import './managerHome.css'
 import NavbarContainer from '../../components/navbar/NavbarContainer'
+import { Modal } from 'antd'
 
 const ManagerHome = (props) => {
 
-    const { setUserBody, userBody, setOrderType, orderType, kuryersCount, agentsCount, userData } = props
+    const { setUserBody, userBody, setOrderType, orderType, kuryersCount, agentsCount, userData, isModalVisible, setIsModalVisible } = props
     const [ orderMenu, setOrderMenu ] = useState(false)
     const [ leftNames, setLeftNames ] = useState(false)
 
@@ -67,7 +68,7 @@ const ManagerHome = (props) => {
 
             <div className='wrapper'>
                 <div className='debt'>
-                    <Link to='/'>
+                    <Link to='/debt'>
                         <div className='div1'>
                             <h5>Qarz: <span>21 485 230 so’m</span></h5>
                         </div>
@@ -174,6 +175,49 @@ const ManagerHome = (props) => {
             </div>
 
             <div className='all-orders-wrapper'>
+            <Modal 
+                title={null} 
+                visible={isModalVisible} 
+                onCancel={() => {setIsModalVisible(false); setLeftNames(false); setOrderMenu(false)}}
+                footer={null}
+                className='add-modal'
+                centered
+            >
+                <div className='buyurtma'>
+                    <h2>Buyurtma</h2>
+                    <div className='select-input-wrap'>
+                        <div className='left'>
+                            <label>Kuryer</label>
+                            <select>
+                                <option>Temur</option>
+                                <option>Shoxrux</option>
+                            </select>
+                        </div>
+                        <div className='right'>
+                            <label>Id</label>
+                            <input type='number' />
+                        </div>
+                    </div>
+                    <div className='inp-w'>
+                        <label>Narxi</label>
+                        <input type='text' />
+                    </div>
+                    <div className='inp-w'>
+                        <label>Viloyat</label>
+                        <select>
+                            <option>Toshkent</option>
+                            <option>Samarqand</option>
+                        </select>
+                    </div>
+                    <div className='bottom'>
+                        <div>
+                            <p>Agent</p>
+                            <h5>Abror Askarov</h5>
+                        </div>
+                        <button>Yuborish</button>
+                    </div>
+                </div>
+            </Modal>
                 <div className='one-order'>
                     <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
                     <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>Коляска-автокресло Doona S1 Grey</h2>
@@ -185,7 +229,7 @@ const ManagerHome = (props) => {
                             </div>
                             <h6>Taxrirlash</h6>
                         </div>
-                        <div>
+                        <div onClick={() => setIsModalVisible(true)}>
                             <div className='bg bg2'>
                                 <div></div>
                             </div>

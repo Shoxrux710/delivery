@@ -158,6 +158,7 @@
     padding-left: 10px;
     display: flex;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .manager-home-component .wrapper .debt .div1 h5 {
@@ -668,4 +669,174 @@
     line-height: 14px;
     color: #C3C6CE;
     margin: 0;
+}
+
+.add-modal .buyurtma {
+    width: 100%;
+}
+
+.add-modal .buyurtma h2 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #1D1D1D;
+    margin-bottom: 20px;
+}
+
+
+.add-modal .buyurtma .select-input-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-modal .buyurtma .select-input-wrap .left {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-modal .buyurtma .select-input-wrap .left label {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #1D1D1D;
+    margin-bottom: 5px;
+}
+
+.add-modal .buyurtma .select-input-wrap .left select {
+    height: 48px;
+    background: #FAFAFA;
+    border: 0.5px solid #C8C8C8;
+    border-radius: 6px;
+    padding: 0 5px;
+    font-family: 'Poppins-Regular';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #1D1D1D;
+    outline: none;
+}
+
+.add-modal .buyurtma .select-input-wrap .right {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-modal .buyurtma .select-input-wrap .right label {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #D6D7E3;
+    margin-bottom: 5px;
+}
+
+.add-modal .buyurtma .select-input-wrap .right input {
+    height: 48px;
+    background: #FAFAFA;
+    border: 0.5px solid #C8C8C8;
+    border-radius: 6px;
+    padding: 0 5px;
+    font-family: 'Poppins-Regular';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #D6D7E3;
+    outline: none;
+}
+
+.add-modal .buyurtma .inp-w {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+
+.add-modal .buyurtma .inp-w label {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #D6D7E3;
+    margin-bottom: 5px;
+}
+
+.add-modal .buyurtma .inp-w input {
+    height: 48px;
+    background: #FAFAFA;
+    border: 0.5px solid #C8C8C8;
+    border-radius: 6px;
+    padding: 0 5px;
+    font-family: 'Poppins-Regular';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #D6D7E3;
+    outline: none;
+}
+
+.add-modal .buyurtma .inp-w select {
+    height: 48px;
+    background: #FAFAFA;
+    border: 0.5px solid #C8C8C8;
+    border-radius: 6px;
+    padding: 0 5px;
+    font-family: 'Poppins-Regular';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #D6D7E3;
+    outline: none;
+}
+
+.add-modal .buyurtma .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.add-modal .buyurtma .bottom > div {
+    width: 50%;
+}
+
+.add-modal .buyurtma .bottom > div p {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    color: #D6D7E3;
+    margin-bottom: 0px;
+}
+
+.add-modal .buyurtma .bottom > div h5 {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #D6D7E3;
+    margin: 0;
+}
+
+.add-modal .buyurtma .bottom button {
+    width: 50%;
+    background: #64B5FF;
+    border-radius: 8px;
+    border: none;
+    height: 48px;
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    color: #FFFFFF;
+    cursor: pointer;
 }

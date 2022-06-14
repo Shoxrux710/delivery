@@ -123,3 +123,35 @@
     font-size: 24px;
     cursor: pointer;
 }
+
+.navbar-component .navbar-menu .menus {
+    margin-top: 20px;
+}
+
+.navbar-component .navbar-menu .menus .qator {
+    display: flex;
+    width: 100%;
+    padding: 0 16px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.navbar-component .navbar-menu .menus .qator .icon {
+    color: #383838;
+    font-size: 16px;
+}
+
+.navbar-component .navbar-menu .menus .qator h3 {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #383838;
+    margin-left: 20px;
+}
+
+.navbar-component .navbar-menu .menus .qator.last {
+    border-bottom: 1px solid #DDDDDD;
+    padding-bottom: 20px;
+}

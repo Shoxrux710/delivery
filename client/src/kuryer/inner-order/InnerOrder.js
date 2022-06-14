@@ -2,7 +2,6 @@ import { Collapse, Modal } from 'antd'
 import React from 'react'
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
-import ReactInputMask from 'react-input-mask'
 import { Link } from 'react-router-dom'
 import './innerOrder.css'
 
