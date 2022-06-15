@@ -147,18 +147,18 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
  *       500:
  *         description: response 500 
  */
-router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'),  async (req, res) => {
+router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
 
-    const {position, worker, id} = req.user
+    const { position, worker, id } = req.user
     console.log(position)
     const { status } = req.query
     const statusActive = 'active'
     const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
     const objectCour = worker.map((c) => mongoose.Types.ObjectId(c))
-    const objectStatus = statusActive === 'active' ? {agentId: {$in: objectIdWorker}} : {courId: {$in: objectCour}}
+    const objectStatus = statusActive === 'active' ? { agentId: { $in: objectIdWorker } } : { courId: { $in: objectCour } }
 
-    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} : 
-    (position === 'manager' ? {...objectStatus} : (position === 'courier' ? {courId: mongoose.Types.ObjectId(id)} : {agentId: mongoose.Types.ObjectId(id)}))
+    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
+        (position === 'manager' ? { ...objectStatus } : (position === 'courier' ? { courId: mongoose.Types.ObjectId(id) } : { agentId: mongoose.Types.ObjectId(id) }))
 
 
     const orderStatus = await Order.find({ status: status, ...filterAgent })
@@ -169,7 +169,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         [{
             $match: {
                 status: status,
-                ...filterAgent 
+                ...filterAgent
             }
         }, {
             $unwind: {
@@ -258,6 +258,8 @@ router.get('/:id', async (req, res) => {
  *       required:
  *          - courierId
  *          - id 
+ *   security:
+ *     - bearerAuth: []
  *   responses:
  *       200:
  *         description: response 200   
@@ -267,19 +269,110 @@ router.get('/:id', async (req, res) => {
  *         description: response 500 
  */
 
-router.put('/courier', (req, res) => {      
+router.put('/courier', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BC'), (req, res) => {
+
     const { courierId, id } = req.query
 
-    Order.findById(id, (err, orderOne) => {
+    Order.findById(id, async (err, orderOne) => {
         if (err) return res.status(400).json({ errorMessage: 'Xato' })
-        orderOne.courId = courierId
-        orderOne.status = 'courier'
 
-        orderOne.save(err => {
-            if (err) return res.status(400).json({ errorMessage: 'Xato' })
-            res.status(200).json({ successMessage: `kuryerga o'tkazildi` })
-        })
+        if (courierId) {
+            orderOne.courId = courierId
+            orderOne.status = 'courier'
+        } else {
+            orderOne.status = 'rejected'
+        }
+
+        await orderOne.save()
+        res.status(200).json({ successMessage: `Bajarildi` })
     })
+})
+
+/**
+ * @swagger
+ * /api/order/completed:
+ *  put:
+ *   summary: tugatilgan buyurtmaga o'tkazish
+ *   tags: [Order]
+ *   parameters:
+ *     - in: query
+ *       name: id
+ *       schame:
+ *         type: string
+ *       required: true
+ *   requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *             properties:
+ *               cash:
+ *                 type: number
+ *               plastic:
+ *                 type: number
+ *               debt:
+ *                 type: number
+ *               comment:
+ *                 type: string  
+ *   security:
+ *     - bearerAuth: []
+ *   responses:
+ *       200:
+ *         description: response 200   
+ *       400:
+ *         description: response 400
+ *       500:
+ *         description: response 500 
+ */
+
+router.put('/completed', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), (req, res) => {
+
+    const { id } = req.query
+    const {
+        comment,
+        cash,
+        plastic,
+        debt
+    } = req.body
+
+    Order.findById(id, async (err, orderOne) => {
+        if (err) return res.status(400).json({ errorMessage: 'Xato' })
+
+        orderOne.cash = cash
+        orderOne.plastic = plastic
+        orderOne.debt = debt
+        orderOne.comment = comment
+        orderOne.status = 'completed'
+        await orderOne.save()
+        res.status(200).json({ successMessage: `Bajarildi` })
+    })
+})
+
+router.get('/money', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
+
+    const {id} = req.user
+
+    const orderMoney = await Order.aggregate(
+        [{
+            $match: {
+                status: 'completed'
+            }
+        }, {
+            $group: {
+                _id: 'static',
+                countCash: {
+                    $sum: '$cash'
+                },
+                count1Debt: {
+                    $sum: '$debt'
+                }
+            }
+        }]
+    )
+
+    delete orderMoney[0]._id
+
+    res.status(200).json({orderMoney})
 })
 
 module.exports = router

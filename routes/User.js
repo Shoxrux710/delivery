@@ -246,10 +246,7 @@ router.post("/login", loginValidator, async (req, res) => {
     const match = await bcrypt.compare(password, user.password)
     if (!match) return res.status(400).json({ errorMessage: "inCorrect password" })
 
-    const {active} = user
-    if (!active) return res.status(400).json({errorMessage: "There is no such user"})
     const payload = { id: user._id }
-
     
     const token = jwt.sign(payload, config.get('jsonwebtoken'))
     res.status(200).json({
@@ -376,8 +373,8 @@ router.get('/each', async (req, res) => {
     const { position, regionId } = req.query
     const filterId = regionId ? { regionId: regionId } : {}
 
-    const userEach = await User.find({ position: position, active: true, ...filterId })
-    const count = await User.find({ position: position, active: true, ...filterId }).countDocuments()
+    const userEach = await User.find({ position: position, ...filterId })
+    const count = await User.find({ position: position, ...filterId }).countDocuments()
     res.status(200).json({
         userEach,
         count

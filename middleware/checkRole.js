@@ -24,18 +24,26 @@ module.exports = (role) => {
                 if (MANAGER) next()
                 else res.status(401).json({errorMessage})
                 break 
+            case 'BC':
+                if (MANAGER || COUR) next()
+                else res.status(401).json({errorMessage})
+                break 
             case 'AGENT':
                 if (AGENT) next()
                 else res.status(401).json({errorMessage})
                 break
+            case 'COUR':
+                if (COUR) next()
+                else res.status(401).json({errorMessage})
+                break
             case 'SA':
-                    if (ADMIN || SUPER) next()
-                    else res.status(401).json({errorMessage})
-                    break 
+                if (ADMIN || SUPER) next()
+                else res.status(401).json({errorMessage})
+                break 
             case 'ALL':
-                    if (ADMIN || COUR || AGENT || MANAGER || SUPER) next()
-                    else res.status(401).json({errorMessage})
-                    break          
+                if (ADMIN || COUR || AGENT || MANAGER || SUPER) next()
+                else res.status(401).json({errorMessage})
+                break          
             default:
                 res.status(401).json(errorMessage);
         }

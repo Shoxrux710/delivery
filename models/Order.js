@@ -55,6 +55,22 @@ const orderSchema = new Schema({
         type: Number,
         required: true
     },
+    comment: {
+        type: String,
+        default: null
+    },
+    cash: {
+        type: Number,
+        default: null
+    },
+    plastic: {
+        type: Number,
+        default: null
+    },
+    debt: {
+        type: Number,
+        default: null
+    },
     date: {
         type: Date
     }
