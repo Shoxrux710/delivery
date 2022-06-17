@@ -69,7 +69,7 @@ if (process.env.NODE_ENV === 'production'){
 
 async function start(){
     await mongoose.connect(config.get('mongoUrl'), 
-    { useNewUrlParser: true, useUnifiedTopology: true, replicaSet: 'mainReplySet'})
+    { useNewUrlParser: true, useUnifiedTopology: true, replicaSet: 'atlas-13p58z-shard-0'})
 
     const admin = await User.findOne()
     const passwordHashed = await bcrypt.hash('logo@123', 12)

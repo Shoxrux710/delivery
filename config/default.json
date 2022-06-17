@@ -1,6 +1,6 @@
 {
     "port": 4000,
     "imgFolder": "public",
-    "mongoUrl": "mongodb://localhost:27018,localhost:27019,localhost:27020/test",
+    "mongoUrl": "mongodb+srv://qudrat:qudratLogo@cluster0.x7z1g.mongodb.net/delivery",
     "jsonwebtoken": "SDLKMGLSDKMGLSKMOREMGLMLBDF"
 }
