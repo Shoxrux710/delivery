@@ -244,6 +244,12 @@ router.get('/:id', async (req, res) => {
 
 })
 
+router.get('/money', async (req, res) => {
+
+    const orderMoney = await Order.find()
+    res.status(200).json({orderMoney})
+})
+
 /**
  * @swagger
  * /api/order/courier:
@@ -348,31 +354,8 @@ router.put('/completed', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
     })
 })
 
-router.get('/money', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
 
-    const {id} = req.user
 
-    const orderMoney = await Order.aggregate(
-        [{
-            $match: {
-                status: 'completed'
-            }
-        }, {
-            $group: {
-                _id: 'static',
-                countCash: {
-                    $sum: '$cash'
-                },
-                count1Debt: {
-                    $sum: '$debt'
-                }
-            }
-        }]
-    )
 
-    delete orderMoney[0]._id
-
-    res.status(200).json({orderMoney})
-})
 
 module.exports = router
