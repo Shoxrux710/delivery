@@ -27,7 +27,7 @@ const orderSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'courier', 'completed', 'rejected'],
+        enum: ['active', 'courier', 'delivered', 'completed', 'rejected'],
         default: 'active'
     },
     productArray: [
@@ -72,7 +72,8 @@ const orderSchema = new Schema({
         default: null
     },
     date: {
-        type: Date
+        type: Date,
+        required: true
     }
 
 })

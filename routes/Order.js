@@ -213,6 +213,40 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 })
 
+
+router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
+
+    const {position, worker, id} = req.user
+
+    const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
+    const objectCour = worker.map((c) => mongoose.Types.ObjectId(c))
+    const objectStatus = position === 'agent' ? { agentId: { $in: objectIdWorker } } : { courId: { $in: objectCour } }
+
+    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
+        (position === 'manager' ? { ...objectStatus } : (position === 'courier' ? { courId: mongoose.Types.ObjectId(id) } : { agentId: mongoose.Types.ObjectId(id) }))
+
+
+    const orderMoney = await Order.aggregate(
+        [{
+            $match: {
+                status: 'completed',
+                ...filterAgent
+            }
+        }, {
+            $group: {
+                _id: 'static',
+                countCash: {
+                    $sum: '$cash'
+                },
+                countDebt: {
+                    $sum: '$debt'
+                }
+            }
+        }]
+    )
+    res.status(200).json({ orderMoney })
+})
+
 /**
  * @swagger
  * /api/order/{id}:
@@ -244,11 +278,7 @@ router.get('/:id', async (req, res) => {
 
 })
 
-router.get('/money', async (req, res) => {
 
-    const orderMoney = await Order.find()
-    res.status(200).json({orderMoney})
-})
 
 /**
  * @swagger
