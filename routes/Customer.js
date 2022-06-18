@@ -76,8 +76,11 @@ const deleteOldImage = (fileName) => {
  */
 
 router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AGENT'), customerValidator, async (req, res) => {
+<<<<<<< Updated upstream
 
     console.log(req.body)
+=======
+>>>>>>> Stashed changes
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
 

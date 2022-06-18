@@ -57,7 +57,7 @@ app.use(function(errorMessage, req,res, next){
 
 
 const PORT = config.get('port') || 4000
-
+app.use('/', express.static(path.join(__dirname, 'uploads')));
 
 if (process.env.NODE_ENV === 'production'){
     app.use('/', express.static(path.join(__dirname, 'client', 'build')))

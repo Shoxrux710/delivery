@@ -7,7 +7,7 @@ import AddCustomerContainer from '../add-customer/AddCustomerContainer'
 
 const AgentHome = (props) => {
 
-    const { setH2, h2, isModalVisible, setIsModalVisible } = props
+    const { setH2, h2, isModalVisible, setIsModalVisible, allCustomer, getAllCustomer } = props
 
     const order = (
         <form>
@@ -58,14 +58,20 @@ const AgentHome = (props) => {
             </div>
 
             <div className='all-clients'>
-                <div className='one'>
-                    <div className='bg'></div>
-                    <div>
-                        <h1>Azizbek Abduxalilov</h1>
-                        <p>Kuryer</p>
-                    </div>
-                    <BsThreeDotsVertical className='icon' />
-                </div>
+                {
+                    allCustomer && Array.isArray(allCustomer) ? allCustomer.map((item, index) => {
+                        return (
+                            <div className='one' key={index}>
+                                <div className='bg' style={{backgroundImage: `url(/customer/${item.customerImage.fileName})`}}></div>
+                                <div>
+                                    <h1>{item.fullname}</h1>
+                                    <p>Mijoz</p>
+                                </div>
+                                <BsThreeDotsVertical className='icon' />
+                            </div>
+                        )
+                    }):''
+                }
             </div>
         </div>
     )
@@ -76,7 +82,7 @@ const AgentHome = (props) => {
     return (
         <div className='agent-home-component'>
             <NavbarContainer />
-            <AddCustomerContainer isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+            <AddCustomerContainer isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} getAllCustomer={getAllCustomer} />
             <div className='top'>
                 <div className={h2 === 'order' ? 'h2-wrap h2-wrap-act' : 'h2-wrap'} onClick={() => setH2('order')}>
                     <h2>Buyurtma berish</h2>

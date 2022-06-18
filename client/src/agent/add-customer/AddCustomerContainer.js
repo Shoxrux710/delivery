@@ -7,7 +7,7 @@ const AddCustomerContainer = (props) => {
 
     const token = JSON.parse(window.localStorage.getItem('user'))?.token
 
-    const { setIsModalVisible, isModalVisible } = props
+    const { setIsModalVisible, isModalVisible, getAllCustomer } = props
     const [ image, setImage ] = useState(null)
     const [ imageFileUrl, setImageFileUrl ] = useState()
 
@@ -49,6 +49,9 @@ const AddCustomerContainer = (props) => {
                 position: toast.POSITION.BOTTOM_RIGHT
             })
             setIsModalVisible(false)
+            getAllCustomer()
+            setImage(null)
+            setImageFileUrl()
             setFullname('')
             setRegion('')
             setFog('')
