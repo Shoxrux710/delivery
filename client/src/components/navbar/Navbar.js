@@ -20,7 +20,7 @@ const Navbar = (props) => {
             <div className='top'>
                 <CgMenu className='icon' onClick={() => dispatch(showNavbar(true))} />
                 <img src={logoPng} alt='' />
-                <Link to='/profile'>
+                <Link to={role === 'agent' ? '/profile' : '/'}>
                     <div className='bg' style={{backgroundImage: `url(${userPng})`}}></div>
                 </Link>
             </div>
@@ -59,11 +59,11 @@ const Navbar = (props) => {
                     </Link>
                 </div>
 
-                <div className='links-wrapper'>
-                    <div className='logout'>
-                        <RiLogoutBoxRLine className='icon' onClick={logout} />
-                    </div>
+                <div className='logout' onClick={logout}>
+                    <RiLogoutBoxRLine className='icon' />
+                    <h3>Chiqish</h3>
                 </div>
+                
             </div>
             <div className={menu ? 'navbar-menu-right navbar-menu-right-active' : 'navbar-menu-right'} onClick={() => dispatch(showNavbar(false))}></div>
         </div>

@@ -22,6 +22,8 @@ import AgentDebtContainer from './agent/agent-debt/AgentDebtContainer'
 import ManagerDebtContainer from './manager/manager-debt/ManagerDebtContainer';
 import InnerDebtContainer from './manager/inner-debt/InnerDebtContainer';
 import AllManagerMoneyContainer from './manager/all-manager-money/AllManagerMoneyContainer';
+import AllAdminMoneyContainer from './admin/all-admin-money/AllAdminMoneyContainer';
+import AddProductContainer from './admin/add-product/AddProductContainer';
 
 const App = () => {
 
@@ -54,6 +56,8 @@ const App = () => {
       <Route path='/all-managers' element={<AllManagersContainer />} />
       <Route path='/all-agents' element={<AllAgentsContainer />} />
       <Route path='/all-couriers' element={<AllKuryersContainer />} />
+      <Route path='/all-money' element={<AllAdminMoneyContainer />} />
+      <Route path='/add-product' element={<AddProductContainer />} />
     </Routes>
   )
 

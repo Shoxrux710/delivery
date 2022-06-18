@@ -106,22 +106,29 @@
     margin: 0;
 }
 
-.navbar-component .navbar-menu .links-wrapper {
-    width: 100%;
-    height: calc(100% - 130px);
-    padding: 16px;
-    position: relative;
-}
-
-.navbar-component .navbar-menu .links-wrapper .logout {
-    position: absolute;
-    bottom: 16px;
+.navbar-component .navbar-menu .logout {
     width: calc(100% - 32px);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
 }
 
-.navbar-component .navbar-menu .links-wrapper .logout .icon {
-    font-size: 24px;
-    cursor: pointer;
+.navbar-component .navbar-menu .logout .icon {
+    font-size: 20px;
+}
+
+.navbar-component .navbar-menu .logout h3 {
+    margin: 0;
+    margin-left: 10px;
+    font-family: 'Poppins-Regular';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    color: #8A92A6;
 }
 
 .navbar-component .navbar-menu .menus {

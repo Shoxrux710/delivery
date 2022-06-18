@@ -1,0 +1,272 @@
+.all-manager-money-component {
+    width: 100%;
+    min-height: 100vh;
+    padding-bottom: 16px;
+    background-color: #fff;
+}
+
+.all-manager-money-component .kuryer-top {
+    width: calc(100% - 32px);
+    padding: 16px 0;
+    margin: 16px;
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #EFEFEF80;
+}
+
+.all-manager-money-component .kuryer-top div {
+    display: flex;
+    align-items: center;
+}
+
+.all-manager-money-component .kuryer-top .div .icon {
+    font-size: 28px;
+    margin-top: 5px;
+    color: #212121;
+    cursor: pointer;
+}
+
+.all-manager-money-component .kuryer-top h2 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0;
+    margin-left: 20px;
+    color: #000000;
+}
+
+.all-manager-money-component .kuryer-top .iconn {
+    font-size: 36px;
+    color: #4D77FF;
+    margin: 0;
+}
+
+.all-manager-money-component .h2-wrap {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+.all-manager-money-component .h2-wrap h2 {
+    width: calc(100% / 3);
+    border-bottom: 1px solid #bfbfbf;
+    text-align: center;
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #525252;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.all-manager-money-component .h2-wrap h2.act-h2 {
+    border-bottom: 2px solid #64B5FF;
+}
+
+.all-manager-money-component .confirm-datas .money {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    padding-top: 0px;
+}
+
+.all-manager-money-component .confirm-datas .money p {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #C3C6CE;
+    margin: 0;
+}
+
+.all-manager-money-component .confirm-datas .money p:last-child {
+    color: #383838;
+    font-weight: 700;
+}
+
+.all-manager-money-component .confirm-datas .one {
+    width: calc(100% - 32px);
+    margin: 16px;
+    margin-top: 0;
+    padding: 16px;
+    background: #FFFFFF;
+    border: 0.67px solid #F3F3F3;
+    border-radius: 8px;
+}
+
+.all-manager-money-component .confirm-datas .one .top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.all-manager-money-component .confirm-datas .one .top h3 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #1D1D1D;
+    margin: 0;
+}
+
+.all-manager-money-component .confirm-datas .one .top h3 span {
+    color: #64B5FF;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.all-manager-money-component .confirm-datas .one .top .icon {
+    font-size: 18px;
+    color: #1D1D1D;
+    cursor: pointer;
+}
+
+.all-manager-money-component .confirm-datas .one .qator {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.all-manager-money-component .confirm-datas .one .qator p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #C3C6CE;
+}
+
+.all-manager-money-component .confirm-datas .one .qator span {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #383838;
+}
+
+.all-manager-money-component .confirm-datas .one .btns-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.all-manager-money-component .confirm-datas .one .btns-wrap button {
+    width: 48%;
+    height: 48px;
+    font-family: 'Poppins-Regular';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+}
+
+.all-manager-money-component .confirm-datas .one .btns-wrap button:first-child {
+    background: #FAFAFA;
+    border: 0.5px solid #C8C8C8;
+    border-radius: 6px;
+    color: #383838;
+}
+
+.all-manager-money-component .confirm-datas .one .btns-wrap button:last-child {
+    background: #64B5FF;
+    border-radius: 6px;
+    border: 0.5px solid #64B5FF;
+    color: #ffffff;
+} 
+
+.all-manager-money-component .confirm-datas > button {
+    width: calc(100% - 32px);
+    margin: 16px;
+    height: 48px;
+    background: #64B5FF;
+    border-radius: 6px;
+    border: none;
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.all-manager-money-component .archive-datas .archived {
+    width: calc(100% - 32px);
+    margin: 16px;
+    margin-top: 0;
+    padding: 16px;
+    background: #FFFFFF;
+    border: 0.67px solid #F3F3F3;
+    border-radius: 8px;
+}
+
+.all-manager-money-component .archive-datas .archived .qator1 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.all-manager-money-component .archive-datas .archived .qator1 > div {
+    width: 50%;
+}
+
+.all-manager-money-component .archive-datas .archived .qator1 > div p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    color: #383838;
+}
+
+.all-manager-money-component .archive-datas .archived .qator1 > div span {
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #C3C6CE;
+}
+
+.all-manager-money-component .archive-datas .archived .qator1.last {
+    border-bottom: 0.5px dashed #ABAAB9;
+    padding-bottom: 10px;
+}
+
+.all-manager-money-component .archive-datas .archived .qator2 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.all-manager-money-component .archive-datas .archived .qator2:last-child {
+    margin-bottom: 0;
+}
+
+.all-manager-money-component .archive-datas .archived .qator2 p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #C3C6CE;
+}
+
+.all-manager-money-component .archive-datas .archived .qator2 span {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #64B5FF;
+}
