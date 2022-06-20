@@ -179,9 +179,14 @@
     color: #1D1D1D;
 }
 
+.add-modal form {
+    width: 100%;
+}
+
 .add-modal .input-text {
     width: 100%;
     display: flex;
+    flex-direction: row;
     background: #FAFAFA;
     border: 0.5px solid #C8C8C8;
     border-radius: 6px;
@@ -217,24 +222,37 @@
 .add-modal .buttons-wrap {
     width: 100%;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+}
+
+.add-modal .add-pruduct-form .buttons-wrap .p {
+    width: 45%;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    border: 1px solid #F3F3F3;
+    border-radius: 8px;
+}
+
+.add-modal .add-pruduct-form .buttons-wrap .p p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 14px;
+    color: #BFBFBF;
 }
 
 .add-modal .buttons-wrap button {
     width: 45%;
     height: 48px;
     cursor: pointer;
-}
-
-.add-modal .buttons-wrap button:first-child {
-    background: #FFFFFF;
-    border: 1px solid #F3F3F3;
-    border-radius: 8px;
-    font-family: 'Poppins-Regular';
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 21px;
-    color: #BFBFBF;
+    margin: 0;
 }
 
 .add-modal .buttons-wrap button:last-child {

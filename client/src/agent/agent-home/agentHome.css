@@ -129,6 +129,7 @@
     align-items: center;
     border-bottom: 1px solid #f3f3f3;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 .agent-home-component .clients-wrap .all-clients .one:first-child {
@@ -206,4 +207,30 @@
 
 .agent-home-component .clients-wrap .all-clients .one:hover .icon {
     color: #ffffff;
+}
+
+.add-modal .one-customer h6 {
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    color: #383838;
+}
+
+.add-modal .one-customer input {
+    width: 90%;
+    height: 36px;
+    border: none;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #BFBFBF;
+    background-color: transparent;
+    padding: 0;
+}
+
+.add-modal .one-customer .buttons-wrap {
+    display: flex;
+    flex-direction: row;
 }

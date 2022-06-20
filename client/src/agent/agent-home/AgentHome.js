@@ -2,12 +2,12 @@ import React from 'react'
 import NavbarContainer from '../../components/navbar/NavbarContainer'
 import ReactInputMask from 'react-input-mask'
 import './agentHome.css'
-import { BsThreeDotsVertical } from 'react-icons/bs'
 import AddCustomerContainer from '../add-customer/AddCustomerContainer'
+import OneCustomerContainer from './OneCustomerContainer'
 
 const AgentHome = (props) => {
 
-    const { setH2, h2, isModalVisible, setIsModalVisible, allCustomer, getAllCustomer } = props
+    const { setH2, h2, isModalVisible, setIsModalVisible, allCustomer, getAllCustomer, loader } = props
 
     const order = (
         <form>
@@ -58,17 +58,11 @@ const AgentHome = (props) => {
             </div>
 
             <div className='all-clients'>
+                {loader}
                 {
                     allCustomer && Array.isArray(allCustomer) ? allCustomer.map((item, index) => {
                         return (
-                            <div className='one' key={index}>
-                                <div className='bg' style={{backgroundImage: `url(/customer/${item.customerImage.fileName})`}}></div>
-                                <div>
-                                    <h1>{item.fullname}</h1>
-                                    <p>Mijoz</p>
-                                </div>
-                                <BsThreeDotsVertical className='icon' />
-                            </div>
+                            <OneCustomerContainer key={index} item={item} />
                         )
                     }):''
                 }

@@ -160,4 +160,34 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
     })
 })
 
+/**
+ * @swagger
+ * /api/product/{id}:
+ *  get:
+ *   summary: mahsulotlarni id bo'yicha chiqarib beradi
+ *   tags: [Product]
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *          type: string
+ *       required: true
+ *   responses:
+ *      200:
+ *         description: response 200
+ *      400: 
+ *         description: response 400
+ *      500:
+ *         description: response 500 
+ */
+
+
+router.get('/:id', async (req,res) => {
+    const {id} = req.params
+
+    const produuctId = await Product.findOne({_id: id})
+
+    res.status(200).json(produuctId)
+})
+
 module.exports = router

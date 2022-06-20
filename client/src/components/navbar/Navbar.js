@@ -12,14 +12,16 @@ import { BiDollarCircle } from 'react-icons/bi'
 
 const Navbar = (props) => {
 
-    const { logout, menu, role } = props
+    const { logout, menu, role, userData } = props
     const dispatch = useDispatch()
 
     return (
         <div className='navbar-component'>
             <div className='top'>
                 <CgMenu className='icon' onClick={() => dispatch(showNavbar(true))} />
-                <img src={logoPng} alt='' />
+                <Link to='/'>
+                    <img src={logoPng} alt='' />
+                </Link>
                 <Link to={role === 'agent' ? '/profile' : '/'}>
                     <div className='bg' style={{backgroundImage: `url(${userPng})`}}></div>
                 </Link>
@@ -29,8 +31,8 @@ const Navbar = (props) => {
                 <div className='menu-top'>
                     <div className='bg'></div>
                     <div className='wrap'>
-                        <h2>Azizbek Abduxalilov</h2>
-                        <p>Admin</p>
+                        <h2>{userData ? userData.fullname : ''}</h2>
+                        <p>{userData ? userData.position : ''}</p>
                     </div>
                 </div>
 
