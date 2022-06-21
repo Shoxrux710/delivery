@@ -4,8 +4,8 @@ const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
 const { orderValidator } = require('../utils/validator')
 const { validationResult } = require('express-validator')
-const nowDate = require('../utils/nowDate')
 const mongoose = require('mongoose')
+const nowDate = require('../utils/nowDate')
 const Order = require('../models/Order')
 const router = Router()
 
@@ -90,7 +90,7 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         code: random
     })
 
-    order.save()
+    await order.save()
     res.status(200).json({ successMessage: 'Buyurtma kiritildi' })
 })
 
@@ -123,13 +123,11 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const { position, worker, id } = req.user
     const { status } = req.query
     console.log(status)
-    const statusActive = 'active'
     const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
-    const objectCour = worker.map((c) => mongoose.Types.ObjectId(c))
-    const objectStatus = statusActive === 'active' ? { agentId: { $in: objectIdWorker } } : { courId: { $in: objectCour } }
+    const objectStatus =  { agentId: { $in: objectIdWorker } }
 
     const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
-        (position === 'manager' ? { ...objectStatus } : (position === 'courier' ? { courId: mongoose.Types.ObjectId(id) } : { agentId: mongoose.Types.ObjectId(id) }))
+        (position === 'manager' ? { ...objectStatus } : { agentId: mongoose.Types.ObjectId(id) })
 
 
     const orderStatus = await Order.find({ status: status, ...filterAgent })
@@ -143,7 +141,8 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 status: status,
                 ...filterAgent
             }
-        }, {
+        }, 
+        {
             $unwind: {
                 path: '$products'   
             }

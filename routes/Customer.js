@@ -108,6 +108,12 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
  *  get:
  *   summary: Mijozlarni hammasini chiqarib beradi
  *   tags: [Customer]
+ *   parameters:
+ *     - in: query
+ *       name: regionId
+ *       schema:
+ *         type: string
+ *       required: true
  *   responses:
  *    200:
  *     description: response 200
@@ -117,7 +123,9 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 router.get('/', async (req, res) => {
 
-    const customer = await Customer.find()
+    const {regionId} = req.query
+
+    const customer = await Customer.find({regionId: regionId})
     res.status(200).json({ customer })
 })
 
@@ -257,6 +265,7 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
  *     description: response 500 
  * 
  */
+
 
 router.get('/:id', async (req,res) => {
     const {id} = req.params
