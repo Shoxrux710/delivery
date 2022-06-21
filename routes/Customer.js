@@ -261,7 +261,7 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
 router.get('/:id', async (req,res) => {
     const {id} = req.params
 
-    const customerId = await Customer.findOne({_id: id})
+    const customerId = await Customer.findOne({_id: id}).populate('regionId', 'name')
     res.status(200).json({customerId})
 
 })
