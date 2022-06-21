@@ -7,8 +7,9 @@ import './addCustomer.css'
 const AddCustomer = (props) => {
 
     const { setIsModalVisible, isModalVisible, imageFileUrl, image, getUrl, 
-        fullname, setFullname, region, setRegion, fog, setFog, address, setAddress,
-        shopNumber, setShopNumber, phone, setPhone, phoneTwo, setPhoneTwo, addCustomerr 
+        fullname, setFullname, fog, setFog, address, setAddress,
+        shopNumber, setShopNumber, phone, setPhone, phoneTwo, setPhoneTwo, addCustomerr,
+        regionName 
     } = props
 
     return (
@@ -34,7 +35,7 @@ const AddCustomer = (props) => {
                 </div>
                 <div>
                     <label>Viloyat</label>
-                    <input type='text' placeholder='Viloyat' value={region} onChange={(e) => setRegion(e.target.value)} required />
+                    <input type='text' placeholder={regionName} readOnly />
                 </div>
                 <div>
                     <label>Tuman</label>

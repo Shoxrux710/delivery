@@ -62,7 +62,7 @@ const AgentHome = (props) => {
                 {
                     allCustomer && Array.isArray(allCustomer) ? allCustomer.map((item, index) => {
                         return (
-                            <OneCustomerContainer key={index} item={item} />
+                            <OneCustomerContainer key={index} item={item} getAllCustomer={getAllCustomer} />
                         )
                     }):''
                 }

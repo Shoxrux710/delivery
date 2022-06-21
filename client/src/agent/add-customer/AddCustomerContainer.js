@@ -1,11 +1,23 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import AddCustomer from './AddCustomer'
 
 const AddCustomerContainer = (props) => {
 
     const token = JSON.parse(window.localStorage.getItem('user'))?.token
+    const userId = JSON.parse(window.localStorage.getItem('user'))?.id
+
+    const [ regionId, setRegionId ] = useState('')
+    const [ regionName, setRegionName ] = useState('')
+    const getUserData = () => {
+        axios.get(`/api/user/userId/${userId}`).then(res => {
+            setRegionId(res.data.userId.regionId._id)
+            setRegionName(res.data.userId.regionId.name)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
 
     const { setIsModalVisible, isModalVisible, getAllCustomer } = props
     const [ image, setImage ] = useState(null)
@@ -18,7 +30,6 @@ const AddCustomerContainer = (props) => {
     }
 
     const [ fullname, setFullname ] = useState('')
-    const [ region, setRegion ] = useState('')
     const [ fog, setFog ] = useState('')
     const [ address, setAddress ] = useState('')
     const [ shopNumber, setShopNumber ] = useState('')
@@ -32,7 +43,7 @@ const AddCustomerContainer = (props) => {
         const formData =  new FormData()
         formData.append('customerImage', image[0])
         formData.append('fullname', fullname)
-        formData.append('region', region)
+        formData.append('regionId', regionId)
         formData.append('fog', fog)
         formData.append('address', address)
         formData.append('shopNumber', shopNumber)
@@ -53,7 +64,6 @@ const AddCustomerContainer = (props) => {
             setImage(null)
             setImageFileUrl()
             setFullname('')
-            setRegion('')
             setFog('')
             setAddress('')
             setShopNumber('')
@@ -66,6 +76,11 @@ const AddCustomerContainer = (props) => {
         })
     } 
 
+    useEffect(() => {
+        getUserData()
+        //eslint-disable-next-line
+    }, [])
+
     return (
         <AddCustomer 
             isModalVisible={isModalVisible} 
@@ -75,8 +90,6 @@ const AddCustomerContainer = (props) => {
             getUrl={getUrl}
             fullname={fullname}
             setFullname={setFullname}
-            region={region}
-            setRegion={setRegion}
             fog={fog}
             setFog={setFog}
             address={address}
@@ -88,6 +101,7 @@ const AddCustomerContainer = (props) => {
             phoneTwo={phoneTwo}
             setPhoneTwo={setPhoneTwo}
             addCustomerr={addCustomerr}
+            regionName={regionName}
         />
     )
 }

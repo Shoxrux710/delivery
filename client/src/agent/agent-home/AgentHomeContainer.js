@@ -5,6 +5,17 @@ import AgentHome from './AgentHome'
 
 const AgentHomeContainer = () => {
 
+    const userId = JSON.parse(window.localStorage.getItem('user'))?.id
+
+    const [ regionId, setRegionId ] = useState('')
+    const getUserData = () => {
+        axios.get(`/api/user/userId/${userId}`).then(res => {
+            setRegionId(res.data.userId.regionId._id)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
     const [ loading, setLoading ] = useState(true)
     const loader = loading ? <Loader /> : ''
 
@@ -13,19 +24,27 @@ const AgentHomeContainer = () => {
 
     const [ allCustomer, setAllCustomer ] = useState([])
     const getAllCustomer = () => {
-        axios.get('/api/customer').then(res => {
-            setAllCustomer(res.data.customer)
-            setLoading(false)
-        }).catch(err => {
-            console.log(err)
-            setLoading(false)
-        })
+        if( regionId ) {
+            axios.get(`/api/customer?regionId=${regionId}`).then(res => {
+                setAllCustomer(res.data.customer)
+                setLoading(false)
+            }).catch(err => {
+                console.log(err)
+                setLoading(false)
+            })
+        }
     }
 
     useEffect(() => {
         getAllCustomer()
+        getUserData()
         //eslint-disable-next-line
     }, [])
+
+    useEffect(() => {
+        getAllCustomer()
+        //eslint-disable-next-line
+    }, [ regionId ])
 
     return (
         <AgentHome 
