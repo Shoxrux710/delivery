@@ -7,7 +7,7 @@ const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
 const config = require('config');
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs');
 const router = Router()
 
 const deleteOldImage = (fileName) => {
@@ -27,7 +27,7 @@ const deleteOldImage = (fileName) => {
  *    properties:
  *      fullname:
  *         type: string
- *      region:
+ *      regionId:
  *         type: string
  *      fog:
  *         type: string
@@ -44,7 +44,7 @@ const deleteOldImage = (fileName) => {
  *         format: binary 
  *    required: 
  *      - fullname
- *      - region
+ *      - regionId
  *      - fog
  *      - address
  *      - shopNumber
@@ -76,16 +76,18 @@ const deleteOldImage = (fileName) => {
  */
 
 router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AGENT'), customerValidator, async (req, res) => {
-    
+
+    console.log(req.body)
+    console.log(req.files)
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
 
-    const { fullname, region, fog, address, shopNumber, phone, phoneTwo } = req.body
+    const { fullname, regionId, fog, address, shopNumber, phone, phoneTwo } = req.body
     const { filename } = req.files.customerImage[0]
 
     const customer = new Customer({
         fullname,
-        region,
+        regionId,
         fog,
         address,
         shopNumber,
@@ -177,7 +179,7 @@ router.delete('/delete/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMi
  *            properties:
  *               fullname:
  *                  type: string
- *               region:
+ *               regionId:
  *                  type: string
  *               fog:
  *                  type: string
@@ -191,7 +193,7 @@ router.delete('/delete/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMi
  *                  type: string
  *            required: 
  *                  - fullname
- *                  - region
+ *                  - regionId
  *                  - fog
  *                  - address
  *                  - shopNumber
@@ -212,7 +214,7 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
 
     const {
         fullname,
-        region,
+        regionId,
         fog,
         address,
         shopNumber,
@@ -223,7 +225,7 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
     Customer.findById(id, async (err, customerOne) => {
         if (err) return res.status(400).json({ errorMessage: "Xato" })
         customerOne.fullname = fullname
-        customerOne.region = region
+        customerOne.regionId = regionId
         customerOne.fog = fog
         customerOne.address = address
         customerOne.shopNumber = shopNumber
@@ -234,6 +236,34 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
         res.status(200).json({successMessage: 'Yangilandi'})
         
     })
+})
+
+/**
+ * @swagger
+ * /api/customer/{id}:
+ *  get:
+ *   summary: Xaridorlarni id bo'yicha chiqarib beradi
+ *   tags: [Customer]
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *         type: string
+ *       required: true
+ *   responses:
+ *    200:
+ *     description: response 200
+ *    500:
+ *     description: response 500 
+ * 
+ */
+
+router.get('/:id', async (req,res) => {
+    const {id} = req.params
+
+    const customerId = await Customer.findOne({_id: id})
+    res.status(200).json({customerId})
+
 })
 
 module.exports = router

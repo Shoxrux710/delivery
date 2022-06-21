@@ -16,37 +16,20 @@ const router = Router()
  *     Order:
  *       type: object
  *       properties: 
- *           customer:
+ *           customerId:
  *             type: string
- *           region:
- *             type: string
- *           fog:
- *             type: string
- *           address:
- *             type: string
- *           phone: 
- *             type: string
- *           twoPhone:
- *             type: string
- *           status:
- *             type: string
- *           productArray:
+ *           products:
  *             type: array
  *             items: 
  *               type: object
  *               properties: 
  *                 productId:
  *                    type: string
- *                 number:
+ *                 count:
  *                    type: number
  *       required:
- *          - customer
- *          - region
- *          - fog
- *          - address
- *          - phone
- *          - agentId
- *          - productArray
+ *          - customerId
+ *          - products
  */
 
 /**
@@ -76,7 +59,7 @@ const router = Router()
 const randomNumber = async () => {
     const random = Math.floor(Math.random() * 999999);
     console.log(random);
-    const order = await Order.findOne({ randomId: random });
+    const order = await Order.findOne({ code: random });
     if (order)
         return randomNumber();
 
@@ -95,28 +78,16 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const { date } = nowDate()
 
     const {
-        customer,
-        region,
-        fog,
-        address,
-        phone,
-        twoPhone,
-        status,
-        productArray,
+        customerId,
+        products,
     } = req.body
 
     const order = new Order({
-        customer,
-        region,
-        fog,
-        address,
-        phone,
-        twoPhone,
-        status,
+        customerId,
         date,
-        productArray,
+        products,
         agentId: id,
-        randomId: random
+        code: random
     })
 
     order.save()
@@ -150,8 +121,8 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
 
     const { position, worker, id } = req.user
-    console.log(position)
     const { status } = req.query
+    console.log(status)
     const statusActive = 'active'
     const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
     const objectCour = worker.map((c) => mongoose.Types.ObjectId(c))
@@ -162,7 +133,8 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 
     const orderStatus = await Order.find({ status: status, ...filterAgent })
-        .populate({ path: 'productArray', select: 'number', populate: [{ path: 'productId', select: 'name price' }] })
+        .populate('customerId', 'fullname fog address shopNumber phone phoneTwo')
+        .populate({ path: 'products', select: 'count', populate: [{ path: 'productId', select: 'name price' }] })
         .populate({ path: 'agentId', select: 'fullname', populate: [{ path: 'regionId', select: 'name' }] })
 
     const orderCount = await Order.aggregate(
@@ -173,18 +145,18 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }
         }, {
             $unwind: {
-                path: '$productArray'
+                path: '$products'   
             }
         }, {
             $lookup: {
                 from: 'products',
-                localField: 'productArray.productId',
+                localField: 'products.productId',
                 foreignField: '_id',
-                as: 'productArray.productId'
+                as: 'products.productId'
             }
         }, {
             $unwind: {
-                path: '$productArray.productId'
+                path: '$products.productId'
             }
         }, {
             $group: {
@@ -192,13 +164,13 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 totalPrice: {
                     $sum: {
                         $multiply: [
-                            '$productArray.number',
-                            '$productArray.productId.price'
+                            '$products.count',
+                            '$products.productId.price'
                         ]
                     }
                 },
                 count: {
-                    $sum: '$productArray.number'
+                    $sum: '$products.count'
                 }
             }
         }]
@@ -214,38 +186,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 })
 
 
-router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
 
-    const {position, worker, id} = req.user
-
-    const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
-    const objectCour = worker.map((c) => mongoose.Types.ObjectId(c))
-    const objectStatus = position === 'agent' ? { agentId: { $in: objectIdWorker } } : { courId: { $in: objectCour } }
-
-    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
-        (position === 'manager' ? { ...objectStatus } : (position === 'courier' ? { courId: mongoose.Types.ObjectId(id) } : { agentId: mongoose.Types.ObjectId(id) }))
-
-
-    const orderMoney = await Order.aggregate(
-        [{
-            $match: {
-                status: 'completed',
-                ...filterAgent
-            }
-        }, {
-            $group: {
-                _id: 'static',
-                countCash: {
-                    $sum: '$cash'
-                },
-                countDebt: {
-                    $sum: '$debt'
-                }
-            }
-        }]
-    )
-    res.status(200).json({ orderMoney })
-})
 
 /**
  * @swagger
@@ -271,121 +212,13 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 router.get('/:id', async (req, res) => {
     const { id } = req.params
 
-    const orderId = await Order.findOne({ _id: id }).populate({ path: 'productArray', select: 'number', populate: [{ path: 'productId', select: 'name price' }] })
+    const orderId = await Order.findOne({ _id: id })
+        .populate('customerId', 'fullname fog address shopNumber phone phoneTwo')
+        .populate({ path: 'products', select: 'count', populate: [{ path: 'productId', select: 'name price' }] })
         .populate({ path: 'agentId', select: 'fullname', populate: [{ path: 'regionId', select: 'name' }] })
-        .populate('courId', 'fullname')
     res.status(200).json({ orderId })
 
 })
-
-
-
-/**
- * @swagger
- * /api/order/courier:
- *  put:
- *   summary: kuryer buyurtmaga o'tkazish
- *   tags: [Order]
- *   parameters:
- *     - in: query
- *       name: pagination
- *       schema:
- *          type: object
- *       required:
- *          - courierId
- *          - id 
- *   security:
- *     - bearerAuth: []
- *   responses:
- *       200:
- *         description: response 200   
- *       400:
- *         description: response 400
- *       500:
- *         description: response 500 
- */
-
-router.put('/courier', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BC'), (req, res) => {
-
-    const { courierId, id } = req.query
-
-    Order.findById(id, async (err, orderOne) => {
-        if (err) return res.status(400).json({ errorMessage: 'Xato' })
-
-        if (courierId) {
-            orderOne.courId = courierId
-            orderOne.status = 'courier'
-        } else {
-            orderOne.status = 'rejected'
-        }
-
-        await orderOne.save()
-        res.status(200).json({ successMessage: `Bajarildi` })
-    })
-})
-
-/**
- * @swagger
- * /api/order/completed:
- *  put:
- *   summary: tugatilgan buyurtmaga o'tkazish
- *   tags: [Order]
- *   parameters:
- *     - in: query
- *       name: id
- *       schame:
- *         type: string
- *       required: true
- *   requestBody:
- *      required: true
- *      content:
- *        application/json:
- *           schema:
- *             properties:
- *               cash:
- *                 type: number
- *               plastic:
- *                 type: number
- *               debt:
- *                 type: number
- *               comment:
- *                 type: string  
- *   security:
- *     - bearerAuth: []
- *   responses:
- *       200:
- *         description: response 200   
- *       400:
- *         description: response 400
- *       500:
- *         description: response 500 
- */
-
-router.put('/completed', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), (req, res) => {
-
-    const { id } = req.query
-    const {
-        comment,
-        cash,
-        plastic,
-        debt
-    } = req.body
-
-    Order.findById(id, async (err, orderOne) => {
-        if (err) return res.status(400).json({ errorMessage: 'Xato' })
-
-        orderOne.cash = cash
-        orderOne.plastic = plastic
-        orderOne.debt = debt
-        orderOne.comment = comment
-        orderOne.status = 'completed'
-        await orderOne.save()
-        res.status(200).json({ successMessage: `Bajarildi` })
-    })
-})
-
-
-
 
 
 module.exports = router

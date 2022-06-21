@@ -10,19 +10,15 @@ exports.userValidator = [
 ]   
 exports.customerValidator = [
     body('fullname').isLength({min: 1}),
-    body('region').isLength({min: 1}),
+    body('regionId').isLength({min: 1}),
     body('fog').isLength({min: 1}),
     body('address').isLength({min: 1}),
     body('shopNumber').isLength({min: 1}),
     body('phone').isLength({min: 1})
 ] 
 exports.orderValidator = [
-    body('customer').isLength({min: 1}),
-    body('region').isLength({min: 1}),
-    body('fog').isLength({min: 1}),
-    body('address').isLength({min: 1}),
-    body('phone').isLength({min: 1}),
-    body('productArray').isLength({min: 1})
+    body('customerId').isLength({min: 1}),
+    body('products').isLength({min: 1})
 ]
 exports.loginValidator = [
     body('login').isLength({min: 1}),

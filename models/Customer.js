@@ -1,12 +1,13 @@
-const {Schema, model} = require('mongoose')
+const {Schema, model, Types} = require('mongoose')
 
 const customerSchema = new Schema({
     fullname: {
         type: String,
         required: true
     },
-    region: {
-        type: String,
+    regionId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Region',
         required: true
     },
     fog: {
