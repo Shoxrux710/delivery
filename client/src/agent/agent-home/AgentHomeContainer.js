@@ -35,9 +35,69 @@ const AgentHomeContainer = () => {
         }
     }
 
+    const [ allProducts, setAllProducts ] = useState([])
+    const getAllProducts = () => {
+        axios.get('/api/product').then(res => {
+            setAllProducts(res.data.product)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    const [ product, setProduct ] = useState('')
+    const [ count, setCount ] = useState('')
+
+    const [ allAddedProducts, setAllAddedProducts ] = useState([])
+    const addProductArray = () => {
+        if( product.length > 0 && count > 0 ) {
+            const [ id, name ] = product.split('/')
+            const data = allAddedProducts.filter(item => item.id !== id)
+            setAllAddedProducts([...data, {id, name, count}])
+            setProduct('')
+            setCount('')
+        }
+    }
+
+    const deleteAddedProduct = (id) => {
+        const data = allAddedProducts.filter(item => item.id !== id)
+        setAllAddedProducts(data)
+    }
+
+    const [ allSearchs, setAllSearchs ] = useState([])
+    const [ fullname, setFullname ] = useState('')
+    const searchCustomer = () => {
+        axios.get(`/api/customer/filter?regionId=${regionId}&filter=${fullname}`).then(res => {
+            setAllSearchs(res.data.customersFilter)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    const [ region, setRegion ] = useState('')
+    const [ fog, setFog ] = useState('')
+    const [ address, setAddress ] = useState('')
+    const [ shop, setShop ] = useState('')
+    const [ phone, setPhone ] = useState('')
+    const [ phoneTwo, setPhoneTwo ] = useState('')
+    const getUserById = (id) => {
+        axios.get(`/api/customer/${id}`).then(res => {
+            setFullname(res.data.customerId.fullname)
+            setRegion(res.data.customerId.regionId.name)
+            setFog(res.data.customerId.fog)
+            setAddress(res.data.customerId.address)
+            setShop(res.data.customerId.shopNumber)
+            setPhone(res.data.customerId.phone)
+            setPhoneTwo(res.data.customerId.phoneTwo)
+            setAllSearchs([])
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
     useEffect(() => {
         getAllCustomer()
         getUserData()
+        getAllProducts()
         //eslint-disable-next-line
     }, [])
 
@@ -55,6 +115,31 @@ const AgentHomeContainer = () => {
             allCustomer={allCustomer}
             getAllCustomer={getAllCustomer}
             loader={loader}
+            allProducts={allProducts}
+            product={product}
+            setProduct={setProduct}
+            count={count}
+            setCount={setCount}
+            allAddedProducts={allAddedProducts}
+            addProductArray={addProductArray}
+            deleteAddedProduct={deleteAddedProduct}
+            setFullname={setFullname}
+            fullname={fullname}
+            searchCustomer={searchCustomer}
+            allSearchs={allSearchs}
+            getUserById={getUserById}
+            region={region}
+            setRegion={setRegion}
+            fog={fog}
+            setFog={setFog}
+            address={address}
+            setAddress={setAddress}
+            shop={shop}
+            setShop={setShop}
+            phone={phone}
+            setPhone={setPhone}
+            phoneTwo={phoneTwo}
+            setPhoneTwo={setPhoneTwo}
         />
     )
 }

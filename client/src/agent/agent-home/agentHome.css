@@ -68,6 +68,20 @@
     color: #000000;
 }
 
+.agent-home-component form select {
+    height: 48px;
+    padding-left: 10px;
+    background: #FAFAFA;
+    border: 0.5px solid #C8C8C8;
+    border-radius: 6px;
+    outline: none;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #000000;
+}
+
 .agent-home-component form button {
     width: 100%;
     height: 48px;
@@ -86,6 +100,19 @@
     margin-top: 10px;
     margin-bottom: 20px;
     background: #62DE85;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins-Regular';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    cursor: pointer;
+
 }
 
 .agent-home-component form .order-btn {
@@ -113,6 +140,66 @@
     line-height: 18px;
     letter-spacing: 1px;
     color: #64B5FF;
+}
+
+.agent-home-component form .all-added-products {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.agent-home-component form .all-added-products .one {
+    width: 110px;
+    height: 28px;
+    background: rgba(98, 222, 133, 0.25);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #62DE85;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.agent-home-component form .top-inp-lab {
+    position: relative;
+}
+
+.agent-home-component form .searched-users {
+    position: absolute;
+    width: 100%;
+    top: 75px;
+    border: 1px solid rgba(128, 128, 128, 0.4);
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.agent-home-component form .searched-users.searched-users-false {
+    border: none;
+}
+
+.agent-home-component form .searched-users > div {
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+.agent-home-component form .searched-users > div p {
+    margin: 0;
+    font-family: 'Poppins-Regular';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #00000080;
+    transition: 0.3s;
+}
+
+.agent-home-component form .searched-users > div:hover p {
+    color: #000000;
 }
 
 .agent-home-component .clients-wrap .all-clients {

@@ -7,43 +7,82 @@ import OneCustomerContainer from './OneCustomerContainer'
 
 const AgentHome = (props) => {
 
-    const { setH2, h2, isModalVisible, setIsModalVisible, allCustomer, getAllCustomer, loader } = props
+    const { setH2, h2, isModalVisible, setIsModalVisible, allCustomer, getAllCustomer, 
+        loader, allProducts, product, setProduct, count, setCount, addProductArray, allAddedProducts,
+        deleteAddedProduct, fullname, setFullname, searchCustomer, allSearchs, getUserById, region, setRegion,
+        fog, setFog, address, setAddress, shop, setShop, phone, setPhone, phoneTwo, setPhoneTwo
+    } = props
 
     const order = (
         <form>
-            <div className='inp-lab'>
-                <label>Mijoz</label>
-                <input type='text' placeholder="Ism familiya / address / do'kon raqami" />
+            <div className='inp-lab top-inp-lab'>
+                <label>Ism familiya</label>
+                <input type='text' placeholder="Ism familiya" value={fullname} onChange={(e) => {setFullname(e.target.value); searchCustomer()}} />
+
+                <div className={allSearchs.length > 0 ? 'searched-users' : 'searched-users-false'}>
+                    {
+                        allSearchs && Array.isArray(allSearchs) ? allSearchs.map((item, index) => {
+                            return (
+                                <div key={index} onClick={() => getUserById(item._id)}>
+                                    <p>{item.fullname} / {item.address} / {item.shopNumber}</p>
+                                </div>
+                            )
+                        }) : ''
+                    }
+                </div>
             </div>
+
             <div className='inp-lab'>
                 <label>Viloyat</label>
-                <input type='text' placeholder='Viloyat' />
+                <input type='text' placeholder='Viloyat' value={region} onChange={(e) => setRegion(e.target.value)} required />
             </div>
             <div className='inp-lab'>
                 <label>Tuman</label>
-                <input type='text' placeholder='Tuman' />
+                <input type='text' placeholder='Tuman' value={fog} onChange={(e) => setFog(e.target.value)} required />
             </div>
             <div className='inp-lab'>
                 <label>Adress</label>
-                <input type='text' placeholder="Mahalla, ko'cha, uy raqami" />
+                <input type='text' placeholder="Mahalla, ko'cha, uy raqami" value={address} onChange={(e) => setAddress(e.target.value)} required />
+            </div>
+            <div className='inp-lab'>
+                <label>Do'kon raqami</label>
+                <input type='number' value={shop} onChange={(e) => setShop(e.target.value)} required />
             </div>
             <div className='inp-lab'>
                 <label>Telefon</label>
-                <ReactInputMask type="text"  mask="+\9\9\8999999999" placeholder='+998' />
+                <ReactInputMask type="text"  mask="+\9\9\8999999999" placeholder='+998' value={phone} onChange={(e) => setPhone(e.target.value)} required />
             </div>
             <div className='inp-lab'>
                 <label>Qo’shimcha telefon</label>
-                <ReactInputMask type="text"  mask="+\9\9\8999999999" placeholder='+998' />
+                <ReactInputMask type="text"  mask="+\9\9\8999999999" placeholder='+998' value={phoneTwo} onChange={(e) => setPhoneTwo(e.target.value)} />
             </div>
             <div className='inp-lab'>
                 <label>Mahsulot</label>
-                <input type='text' placeholder='Mahsulotni tanlang' />
+                <select value={product} onChange={(e) => setProduct(e.target.value)}>
+                    <option hidden>Tanlanmagan</option>
+                    {
+                        allProducts && Array.isArray(allProducts) ? allProducts.map((item, index) => {
+                            return (
+                                <option key={index} value={`${item._id}/${item.name}`}>{item.name}</option>
+                            )
+                        }) : ''
+                    }
+                </select>
             </div>
             <div className='inp-lab'>
                 <label>Soni</label>
-                <input type='number' placeholder='Mahsulot sonini kiriting' />
+                <input type='number' value={count} onChange={(e) => setCount(e.target.value)} placeholder='Mahsulot sonini kiriting' />
             </div>
-            <button className='add-btn'>Qo'shish</button>
+            <div className='all-added-products'>
+                {
+                    allAddedProducts && Array.isArray(allAddedProducts) ? allAddedProducts.map((item, index) => {
+                        return (
+                            <div className='one' key={index} onClick={() => deleteAddedProduct(item.id)}>{item.name} {item.count}</div>
+                        )
+                    }) : ''
+                }
+            </div>
+            <p className='add-btn' onClick={addProductArray}>Qo'shish</p>
             <div className='inp-lab'>
                 <input type='number' />
             </div>
