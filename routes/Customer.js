@@ -248,6 +248,41 @@ router.put('/update/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddl
 
 /**
  * @swagger
+ * /api/customer/filter:
+ *  get:
+ *   summary: fullname bo'yicha filter qilish
+ *   tags: [Customer]
+ *   parameters:
+ *     - in: query
+ *       name: pagination
+ *       schema:
+ *         type: object
+ *         required: 
+ *            - filter
+ *            - regionId
+ *         properties:
+ *           filter:
+ *              type: string
+ *           regionId:
+ *              type: string  
+ *   responses:
+ *    200:
+ *     description: response 200
+ *    500:
+ *     description: response 500 
+ */
+
+ router.get('/filter', async (req,res) => {
+    
+    const {filter, regionId} = req.query
+
+    const customersFilter = await Customer.find({fullname: {$regex: `${filter}`}, regionId: regionId})
+    res.status(200).json({customersFilter})
+
+})
+
+/**
+ * @swagger
  * /api/customer/{id}:
  *  get:
  *   summary: Xaridorlarni id bo'yicha chiqarib beradi
@@ -274,5 +309,6 @@ router.get('/:id', async (req,res) => {
     res.status(200).json({customerId})
 
 })
+
 
 module.exports = router
