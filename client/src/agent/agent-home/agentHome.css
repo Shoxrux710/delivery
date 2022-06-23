@@ -150,7 +150,7 @@
 
 .agent-home-component form .all-added-products .one {
     width: 110px;
-    height: 28px;
+    height: 42px;
     background: rgba(98, 222, 133, 0.25);
     border-radius: 8px;
     display: flex;
@@ -164,6 +164,7 @@
     cursor: pointer;
     margin-right: 10px;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .agent-home-component form .top-inp-lab {

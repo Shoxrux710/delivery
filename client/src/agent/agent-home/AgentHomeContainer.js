@@ -1,10 +1,12 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import Loader from '../../components/loader/Loader'
 import AgentHome from './AgentHome'
 
 const AgentHomeContainer = () => {
 
+    const token = JSON.parse(window.localStorage.getItem('user'))?.token
     const userId = JSON.parse(window.localStorage.getItem('user'))?.id
 
     const [ regionId, setRegionId ] = useState('')
@@ -50,16 +52,16 @@ const AgentHomeContainer = () => {
     const [ allAddedProducts, setAllAddedProducts ] = useState([])
     const addProductArray = () => {
         if( product.length > 0 && count > 0 ) {
-            const [ id, name ] = product.split('/')
-            const data = allAddedProducts.filter(item => item.id !== id)
-            setAllAddedProducts([...data, {id, name, count}])
+            const [ productId, name, price ] = product.split('/')
+            const data = allAddedProducts.filter(item => item.productId !== productId)
+            setAllAddedProducts([...data, { productId, name, count, price }])
             setProduct('')
             setCount('')
         }
     }
 
     const deleteAddedProduct = (id) => {
-        const data = allAddedProducts.filter(item => item.id !== id)
+        const data = allAddedProducts.filter(item => item.productId !== id)
         setAllAddedProducts(data)
     }
 
@@ -79,6 +81,7 @@ const AgentHomeContainer = () => {
     const [ shop, setShop ] = useState('')
     const [ phone, setPhone ] = useState('')
     const [ phoneTwo, setPhoneTwo ] = useState('')
+    const [ customerId, setCustomerId ] = useState('')
     const getUserById = (id) => {
         axios.get(`/api/customer/${id}`).then(res => {
             setFullname(res.data.customerId.fullname)
@@ -88,9 +91,28 @@ const AgentHomeContainer = () => {
             setShop(res.data.customerId.shopNumber)
             setPhone(res.data.customerId.phone)
             setPhoneTwo(res.data.customerId.phoneTwo)
+            setCustomerId(res.data.customerId._id)
             setAllSearchs([])
         }).catch(err => {
             console.log(err)
+        })
+    }
+
+    const submitHandler = (e) => {
+        e.preventDefault()
+
+        axios.post('/api/order/add', { customerId, products: allAddedProducts }, {
+            headers: {
+                'authorization': `Bearer ${token}`
+            }
+        }).then(res => {
+            toast.success("Muvaffaqqiyatli qo'shildi!", {
+                position: toast.POSITION.BOTTOM_RIGHT
+            })
+        }).catch(err => {
+            toast.error("Error!", {
+                position: toast.POSITION.BOTTOM_RIGHT
+            })
         })
     }
 
@@ -140,6 +162,7 @@ const AgentHomeContainer = () => {
             setPhone={setPhone}
             phoneTwo={phoneTwo}
             setPhoneTwo={setPhoneTwo}
+            submitHandler={submitHandler}
         />
     )
 }

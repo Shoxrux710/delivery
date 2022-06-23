@@ -10,11 +10,11 @@ const AgentHome = (props) => {
     const { setH2, h2, isModalVisible, setIsModalVisible, allCustomer, getAllCustomer, 
         loader, allProducts, product, setProduct, count, setCount, addProductArray, allAddedProducts,
         deleteAddedProduct, fullname, setFullname, searchCustomer, allSearchs, getUserById, region, setRegion,
-        fog, setFog, address, setAddress, shop, setShop, phone, setPhone, phoneTwo, setPhoneTwo
+        fog, setFog, address, setAddress, shop, setShop, phone, setPhone, phoneTwo, setPhoneTwo, submitHandler
     } = props
 
     const order = (
-        <form>
+        <form onSubmit={submitHandler}>
             <div className='inp-lab top-inp-lab'>
                 <label>Ism familiya</label>
                 <input type='text' placeholder="Ism familiya" value={fullname} onChange={(e) => {setFullname(e.target.value); searchCustomer()}} />
@@ -63,7 +63,7 @@ const AgentHome = (props) => {
                     {
                         allProducts && Array.isArray(allProducts) ? allProducts.map((item, index) => {
                             return (
-                                <option key={index} value={`${item._id}/${item.name}`}>{item.name}</option>
+                                <option key={index} value={`${item._id}/${item.name}/${item.price}`}>{item.name}</option>
                             )
                         }) : ''
                     }
@@ -77,16 +77,16 @@ const AgentHome = (props) => {
                 {
                     allAddedProducts && Array.isArray(allAddedProducts) ? allAddedProducts.map((item, index) => {
                         return (
-                            <div className='one' key={index} onClick={() => deleteAddedProduct(item.id)}>{item.name} {item.count}</div>
+                            <div className='one' key={index} onClick={() => deleteAddedProduct(item.productId)}>{item.name} {item.count} <br /> {item.count * item.price} so'm</div>
                         )
                     }) : ''
                 }
             </div>
             <p className='add-btn' onClick={addProductArray}>Qo'shish</p>
-            <div className='inp-lab'>
+            {/* <div className='inp-lab'>
                 <input type='number' />
-            </div>
-            <button className='order-btn'>Buyurtma berish</button>
+            </div> */}
+            <button className='order-btn' type='submit'>Buyurtma berish</button>
         </form>
     )
 
