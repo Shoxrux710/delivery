@@ -124,7 +124,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const { status } = req.query
     // console.log(status)
     const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
-    const objectStatus =  { agentId: { $in: objectIdWorker } }
+    const objectStatus = { agentId: { $in: objectIdWorker } }
 
     const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
         (position === 'manager' ? { ...objectStatus } : { agentId: mongoose.Types.ObjectId(id) })
@@ -135,17 +135,18 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         .populate({ path: 'products', select: 'count', populate: [{ path: 'productId', select: 'name price' }] })
         .populate({ path: 'agentId', select: 'fullname', populate: [{ path: 'regionId', select: 'name' }] })
 
-        console.log("1",orderStatus)
+    console.log("1", orderStatus)
+
     const orderCount = await Order.aggregate(
         [{
             $match: {
                 status: status,
                 ...filterAgent
             }
-        }, 
+        },
         {
             $unwind: {
-                path: '$products'   
+                path: '$products'
             }
         }, {
             $lookup: {
@@ -160,7 +161,10 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }
         }, {
             $group: {
-                _id: 'static',
+                _id: '$status',
+                count: {
+                    $sum: 1
+                },
                 totalPrice: {
                     $sum: {
                         $multiply: [
@@ -168,15 +172,12 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                             '$products.productId.price'
                         ]
                     }
-                },
-                count: {
-                    $sum: '$products.count'
                 }
             }
         }]
     )
 
-    console.log("2",orderCount)
+    console.log("2", orderCount)
     // delete orderCount[0]._id
 
     res.status(200).json({
@@ -244,19 +245,19 @@ router.get('/:id', async (req, res) => {
  *         description: response 500 
  */
 
-router.put('/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BC'), (req,res) => {
+router.put('/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BC'), (req, res) => {
 
-    const {id} = req.params
+    const { id } = req.params
 
     Order.findById(id, async (err, oneOrder) => {
-        if (err) return res.status(200).json({errorMessage: 'error'})
+        if (err) return res.status(200).json({ errorMessage: 'error' })
 
         oneOrder.status = 'rejected'
         await oneOrder.save()
-        res.status(200).json({successMessage: 'Buyurtma rad etildi'})
+        res.status(200).json({ successMessage: 'Buyurtma rad etildi' })
 
     })
-    
+
 })
 
 module.exports = router
