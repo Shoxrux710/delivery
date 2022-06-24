@@ -55,12 +55,28 @@ const AdminHomeContainer = () => {
         })
     }
 
+    const [ orderData, setOrderData ] = useState({})
+    const getEachOrders = (status = "active") => {
+        axios
+            .get(`/api/order/each`, {
+                headers: {
+                    "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token,
+                },
+                params: { status }
+            })
+            .then(({data}) => {
+                setOrderData(data)
+                console.log(data)
+            })
+    }
+
     useEffect(() => {
         getAgentsCount()
         getKuryersCount()
         getManagersCount()
         getUserData()
         getAdminsCount()
+        getEachOrders()
         //eslint-disable-next-line
     }, [])
 
@@ -70,6 +86,8 @@ const AdminHomeContainer = () => {
             setUserBody={setUserBody} 
             setOrderType={setOrderType} 
             orderType={orderType} 
+            orderData={orderData}
+            getEachOrders={getEachOrders}
             agentsCount={agentsCount} 
             kuryersCount={kuryersCount} 
             adminsCount={adminsCount}
