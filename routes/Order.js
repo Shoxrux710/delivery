@@ -122,7 +122,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
     const { position, worker, id } = req.user
     const { status } = req.query
-    console.log(status)
+    // console.log(status)
     const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
     const objectStatus =  { agentId: { $in: objectIdWorker } }
 
@@ -135,6 +135,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         .populate({ path: 'products', select: 'count', populate: [{ path: 'productId', select: 'name price' }] })
         .populate({ path: 'agentId', select: 'fullname', populate: [{ path: 'regionId', select: 'name' }] })
 
+        console.log("1",orderStatus)
     const orderCount = await Order.aggregate(
         [{
             $match: {
@@ -175,11 +176,12 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         }]
     )
 
-    delete orderCount[0]._id
+    console.log("2",orderCount)
+    // delete orderCount[0]._id
 
     res.status(200).json({
         orderStatus,
-        orderCount: orderCount[0]
+        orderCount
     })
 
 })
@@ -219,5 +221,42 @@ router.get('/:id', async (req, res) => {
 
 })
 
+/**
+ * @swagger
+ * /api/order/{id}:
+ *  put:
+ *   summary: buyurtmani rad etish
+ *   tags: [Order]
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *         type: string
+ *       required: true
+ *   security:
+ *     - bearerAuth: [] 
+ *   responses:
+ *       200:
+ *         description: response 200   
+ *       400:
+ *         description: response 400
+ *       500:
+ *         description: response 500 
+ */
+
+router.put('/:id', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BC'), (req,res) => {
+
+    const {id} = req.params
+
+    Order.findById(id, async (err, oneOrder) => {
+        if (err) return res.status(200).json({errorMessage: 'error'})
+
+        oneOrder.status = 'rejected'
+        await oneOrder.save()
+        res.status(200).json({successMessage: 'Buyurtma rad etildi'})
+
+    })
+    
+})
 
 module.exports = router

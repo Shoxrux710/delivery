@@ -79,12 +79,31 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 })
 
+/**
+ * @swagger
+ * /api/deliver/each:
+ *  get:
+ *   summary: user bo'yicha buyurtmalarni chiqarib beradi
+ *   tags: [Delivery]
+ *   security:
+ *     - bearerAuth: [] 
+ *   responses:
+ *    200:
+ *     description: response 200
+ *    500:
+ *     description: response 500 
+ *        
+ */
 
 router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
     const {id} = req.user
 
-    const deliver = await Delivery.aggregate(
+    const deliver = await Delivery.find({courierId: id})
+         .populate({path: 'orderId', select: 'code', 
+         populate:[{path: 'customerId', select: 'fullname fog address shopNumber phone phoneTwo' }, {path: 'products', select: 'count', populate: [{path: 'productId', select: 'name price'}]}]})
+
+    const deliverTotal = await Delivery.aggregate(
         [
             {
                 $match: {
@@ -136,16 +155,38 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }]
     )
 
-    delete deliver[0]._id
+    delete deliverTotal[0]._id
 
-    res.status(200).json({deliver: deliver[0]})
+    res.status(200).json({deliverTotal: deliverTotal[0], deliver})
 })
+
+
+/**
+ * @swagger
+ * /api/deliver/{id}:
+ *  get:
+ *   summary: kuryer buyurtmani id bo'yicha chiqarib beradi
+ *   tags: [Delivery]
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       schema:
+ *         type: string
+ *       required: true
+ *   responses:
+ *    200:
+ *     description: response 200
+ *    500:
+ *     description: response 500 
+ */
+
 
 router.get('/:id', async (req,res) => {
     const {id} = req.params
 
     const deliverId = await Delivery.findOne({_id: id})
-    .populate({path: 'orderId', select: 'code', populate: [{path: 'customerId', select: 'address'}, {path: 'agentId', select: 'fullname'}] })
+    .populate({path: 'orderId', select: 'code', 
+    populate: [{path: 'customerId', select: 'address'}, {path: 'agentId', select: 'fullname'}, {path: 'products', select: 'count', populate: [{path: 'productId', select: 'price'}]}] })
     .populate('courierId', 'fullname')
 
     res.status(200).json({deliverId})
