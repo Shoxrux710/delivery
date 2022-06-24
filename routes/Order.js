@@ -140,7 +140,6 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const orderCount = await Order.aggregate(
         [{
             $match: {
-                status: status,
                 ...filterAgent
             }
         },
