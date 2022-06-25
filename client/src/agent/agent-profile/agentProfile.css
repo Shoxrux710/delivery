@@ -436,7 +436,7 @@
 
 .agent-profile-component .all-orders-wrapper .one-order .left-names {
     width: 90%;
-    height: 105px;
+    height: auto;
     position: absolute;
     left: 5%;
     top: 35px;

@@ -5,9 +5,12 @@ import { MdArrowBack } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import './innerOrderAgent.css'
 
-const InnerOrderAgent = () => {
+const InnerOrderAgent = (props) => {
+
+    const { orderById, orderProducts, price } = props
 
     const { Panel } = Collapse
+    const date = new Date(orderById ? orderById.date : '')
 
     return (
         <div className='inner-order-component'>
@@ -36,28 +39,28 @@ const InnerOrderAgent = () => {
                     <div className='right'>
                         <div>
                             <span>Jo'natish manzili</span>
-                            <p>Namangan v, Pop tuman, Pungon sh</p>
+                            <p>Toshkent shahri, Yunusobod tumani 4-mavze</p>
                         </div>
                         <div>
                             <span>Yetkazish manzili</span>
-                            <p>Namangan v, Pop tuman, Pungon sh</p>
+                            <p>{orderById && orderById.customerId ? orderById.customerId.address : ''}</p>
                         </div>
                     </div>
                 </div>
                 <div className='qator'>
                     <div>
                         <span>Buyurtma berilgan vaqt</span>
-                        <p>23 Fevral 15:00</p>
+                        <p>{date ? date.getDate() : ''}-{date ? date.getMonth() + 1 : ''}-{date ? date.getFullYear() : ''} {date ? date.getHours() : ''}:{date ? date.getMinutes() : ''}</p>
                     </div>
                     <div>
                         <span>Yetkazib berish vaqti</span>
-                        <p>29 Fevral 18:47</p>
+                        <p>{date ? date.getDate() : ''}-{date ? date.getMonth() + 1 : ''}-{date ? date.getFullYear() : ''} {date ? date.getHours() : ''}:{date ? date.getMinutes() : ''}</p>
                     </div>
                 </div>
                 <div className='qator'>
                     <div>
                         <span>Buyurtma ID</span>
-                        <p>1942497</p>
+                        <p>{orderById ? orderById.code : ''}</p>
                     </div>
                     <div>
                         <span>Manba</span>
@@ -67,53 +70,35 @@ const InnerOrderAgent = () => {
                 <div className='qator'>
                     <div>
                         <span>Mijoz</span>
-                        <p>Abduvali Abdusoliyev</p>
+                        <p>{orderById && orderById.customerId ? orderById.customerId.fullname : ''}</p>
                     </div>
                     <div>
                         <span>Telefon raqam</span>
-                        <p>+998934805885</p>
+                        <p>{orderById && orderById.customerId ? orderById.customerId.phone : ''}</p>
                     </div>
                 </div>
                 <div className='qator'>
                     <span>Mahsulot</span>
                 </div>
                 <Collapse accordion expandIconPosition='end' ghost>
-                    <Panel header="Коляска-автокресло Doona S1 Grey" key="1">
-                        <div className='qator'>
-                            <div>
-                                <span>Soni</span>
-                                <p>2ta</p>
-                            </div>
-                            <div>
-                                <span>Narxi</span>
-                                <p>580 000 so‘m</p>
-                            </div>
-                        </div>
-                    </Panel>
-                    <Panel header="Коляска-автокресло Doona S1 Grey" key="2">
-                        <div className='qator'>
-                            <div>
-                                <span>Soni</span>
-                                <p>2ta</p>
-                            </div>
-                            <div>
-                                <span>Narxi</span>
-                                <p>580 000 so‘m</p>
-                            </div>
-                        </div>
-                    </Panel>
-                    <Panel header="Коляска-автокресло Doona S1 Grey" key="3">
-                        <div className='qator'>
-                            <div>
-                                <span>Soni</span>
-                                <p>2ta</p>
-                            </div>
-                            <div>
-                                <span>Narxi</span>
-                                <p>580 000 so‘m</p>
-                            </div>
-                        </div>
-                    </Panel>
+                    {
+                        orderProducts && Array.isArray(orderProducts) ? orderProducts.map((item, index) => {
+                            return (
+                                <Panel key={index} header={item.productId ? item.productId.name : ''}>
+                                    <div className='qator'>
+                                        <div>
+                                            <span>Soni</span>
+                                            <p>{item.count} ta</p>
+                                        </div>
+                                        <div>
+                                            <span>Narxi</span>
+                                            <p>{item.productId ? item.productId.price : ''} so‘m</p>
+                                        </div>
+                                    </div>
+                                </Panel>
+                            )
+                        }) : ''
+                    }
                 </Collapse>
                 <div className='qator'>
                     <div>
@@ -122,7 +107,7 @@ const InnerOrderAgent = () => {
                     </div>
                     <div>
                         <span>Narxi</span>
-                        <p>10 000 000 sum</p>
+                        <p>{price} sum</p>
                     </div>
                 </div>
                 <div className='qator'>

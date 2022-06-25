@@ -83,9 +83,6 @@ const AgentHome = (props) => {
                 }
             </div>
             <p className='add-btn' onClick={addProductArray}>Qo'shish</p>
-            {/* <div className='inp-lab'>
-                <input type='number' />
-            </div> */}
             <button className='order-btn' type='submit'>Buyurtma berish</button>
         </form>
     )
@@ -101,7 +98,11 @@ const AgentHome = (props) => {
                 {
                     allCustomer && Array.isArray(allCustomer) ? allCustomer.map((item, index) => {
                         return (
-                            <OneCustomerContainer key={index} item={item} getAllCustomer={getAllCustomer} />
+                            <OneCustomerContainer 
+                                key={index} 
+                                item={item} 
+                                getAllCustomer={getAllCustomer} 
+                            />
                         )
                     }):''
                 }
@@ -115,7 +116,11 @@ const AgentHome = (props) => {
     return (
         <div className='agent-home-component'>
             <NavbarContainer />
-            <AddCustomerContainer isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} getAllCustomer={getAllCustomer} />
+            <AddCustomerContainer 
+                isModalVisible={isModalVisible} 
+                setIsModalVisible={setIsModalVisible} 
+                getAllCustomer={getAllCustomer} 
+            />
             <div className='top'>
                 <div className={h2 === 'order' ? 'h2-wrap h2-wrap-act' : 'h2-wrap'} onClick={() => setH2('order')}>
                     <h2>Buyurtma berish</h2>
