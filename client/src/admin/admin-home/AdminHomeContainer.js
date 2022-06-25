@@ -79,6 +79,7 @@ const AdminHomeContainer = () => {
 
     useEffect(() => {
         getEachOrders()
+        // eslint-disable-next-line
     }, [orderType])
 
     useEffect(() => {
@@ -87,7 +88,7 @@ const AdminHomeContainer = () => {
         getManagersCount()
         getUserData()
         getAdminsCount()
-        //eslint-disable-next-line
+        // eslint-disable-next-line
     }, [])
 
     return (
