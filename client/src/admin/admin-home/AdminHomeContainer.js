@@ -67,7 +67,6 @@ const AdminHomeContainer = () => {
                 params: { status: orderType }
             })
             .then(({data}) => {
-                console.log(data.orderStatus)
                 setOrders(data.orderStatus)
                 data.orderCount.forEach(order => {
                     order._id === 'active' && setActiveOrders(order)

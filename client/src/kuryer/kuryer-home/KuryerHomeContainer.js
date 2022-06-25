@@ -20,8 +20,19 @@ const KuryerHomeContainer = () => {
         })
     }
 
+    const getEachOrders = () => {
+        axios.get(`/api/order/each`, {
+            headers: { "Authorization":  "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+            params: { status: 'courier' }
+        })
+        .then(({data}) => {
+            console.log(data)
+        })
+    }
+
     useEffect(() => {
         getUserData()
+        getEachOrders()
         //eslint-disable-next-line
     }, [])
 
