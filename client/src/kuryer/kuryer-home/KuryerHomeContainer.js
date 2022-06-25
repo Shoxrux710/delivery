@@ -79,11 +79,6 @@ const KuryerHomeContainer = () => {
         //eslint-disable-next-line
     }, [ orderType ])
 
-    useEffect(() => {
-        getUserData()
-        //eslint-disable-next-line
-    }, [])
-
     return (
         <KuryerHome 
             userBody={userBody}
