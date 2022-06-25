@@ -2,14 +2,16 @@ import React from 'react'
 import { HiFilter } from 'react-icons/hi'
 import { IoIosArrowUp } from 'react-icons/io'
 import { Link } from 'react-router-dom'
-import { BsThreeDotsVertical } from 'react-icons/bs'
 import userPng from '../../img/user.png'
 import './kuryerHome.css'
 import NavbarContainer from '../../components/navbar/NavbarContainer'
+import OneKuryerCard from './OneKuryerCard'
 
 const KuryerHome = (props) => {
 
-    const { setUserBody, userBody, setOrderType, orderType, userData, leftNames, setLeftNames, orderMenu, setOrderMenu } = props
+    const { setUserBody, userBody, setOrderType, orderType, userData, allOrders, loader, activePrice,
+        activeCount, courierCount, courierPrice, completedCount, completedPrice, rejectedCount, rejectedPrice 
+    } = props
 
     return (
         <div className='manager-home-component'>
@@ -93,11 +95,11 @@ const KuryerHome = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>120 ta</h5>
+                            <h5>{activeCount} ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>100 000 000 so'm</h5>
+                            <h5>{activePrice} so'm</h5>
                         </div>
                     </div>
                 </div>
@@ -113,16 +115,16 @@ const KuryerHome = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>120 ta</h5>
+                            <h5>{courierCount} ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>100 000 000 so'm</h5>
+                            <h5>{courierPrice} so'm</h5>
                         </div>
                     </div>
                 </div>
 
-                <div className={orderType === 'finished' ? 'square square-active' : 'square'} onClick={() => setOrderType('finished')}>
+                <div className={orderType === 'completed' ? 'square square-active' : 'square'} onClick={() => setOrderType('completed')}>
                     <div className='topp'></div>
                     <div className='type'>
                         <div className='bg'>
@@ -133,11 +135,11 @@ const KuryerHome = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>120 ta</h5>
+                            <h5>{completedCount} ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>100 000 000 so'm</h5>
+                            <h5>{completedPrice} so'm</h5>
                         </div>
                     </div>
                 </div>
@@ -153,111 +155,26 @@ const KuryerHome = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>120 ta</h5>
+                            <h5>{rejectedCount} ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>100 000 000 so'm</h5>
+                            <h5>{rejectedPrice} so'm</h5>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div className='all-orders-wrapper'>
-                <div className='one-order'>
-                    <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
-                    <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>Коляска-автокресло Doona S1 Grey</h2>
-
-                    <div className={orderMenu ? 'menu-active menu' : 'menu'}>
-                        <div>
-                            <div className='bg'>
-                                <div></div>
-                            </div>
-                            <h6>Taxrirlash</h6>
-                        </div>
-                        <div>
-                            <div className='bg bg2'>
-                                <div></div>
-                            </div>
-                            <h6>Kuryer</h6>
-                        </div>
-                        <div>
-                            <div className='bg bg3'>
-                                <div></div>
-                            </div>
-                            <h6>Bekor qilish</h6>
-                        </div>
-                    </div>
-
-                    <div className={leftNames ? 'left-names left-names-active' : 'left-names'}>
-                        <div>
-                            <p>Коляска-автокресло Doona S1 Grey</p>
-                            <span>2x</span>
-                        </div>
-                        <div>
-                            <p>Коляска-автокресло Doona S1 Grey</p>
-                            <span>5x</span>
-                        </div>
-                        <div className='last'>
-                            <p>Коляска-автокресло Doona S1 Grey</p>
-                            <span>2x</span>
-                        </div>
-                    </div>
-
-                    <Link to='/order/id'>
-                        <div className='order' onClick={() => {setOrderMenu(false); setLeftNames(false)}}>
-                            <div className='topp'>
-                                <div>
-                                    <h1>1</h1>
-                                </div>
-                                <div></div>
-                            </div>
-                            <div className='order-address'>
-                                <div className='left'>
-                                    <div className='circle'>
-                                        <div></div>
-                                    </div>
-                                    <div className='line'></div>
-                                    <div className='circle'>
-                                        <div></div>
-                                    </div>
-                                </div>
-                                <div className='right'>
-                                    <div>
-                                        <span>Jo'natish manzili</span>
-                                        <p>Namangan v, Pop tuman, Pungon sh</p>
-                                    </div>
-                                    <div>
-                                        <span>Yetkazish manzili</span>
-                                        <p>Namangan v, Pop tuman, Pungon sh</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='qator'>
-                                <p>ID 1942497</p>
-                                <span>23 Fevral 15:00</span>
-                            </div>
-                            <div className='qator'>
-                                <p>Umumiy narxi</p>
-                                <h4>11 236 540 so’m</h4>
-                            </div>
-                            <div className='qator lst'>
-                                <p>To’landi</p>
-                                <h5>236 540 so’m</h5>
-                            </div>
-                            <div className='bottom'>
-                                <div className='ust'>
-                                    <h3>Abduvali Abdusoliyev</h3>
-                                    <p>Mijoz</p>
-                                </div>
-                                <div className='ust'>
-                                    <h3>+998934805885</h3>
-                                    <p>Telefon raqam</p>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-                </div>
+                {loader}
+                {
+                    allOrders && Array.isArray(allOrders) ? allOrders.map((item, index) => {
+                        const date = new Date(item.date)
+                        return (
+                            <OneKuryerCard key={index} item={item} products={item.products} index={index} date={date} />
+                        )
+                    }) : ''
+                }
             </div>
         </div>
     )

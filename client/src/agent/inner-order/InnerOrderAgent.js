@@ -110,7 +110,7 @@ const InnerOrderAgent = (props) => {
                         <p>{price} sum</p>
                     </div>
                 </div>
-                <div className='qator'>
+                {/* <div className='qator'>
                     <span>Izoh</span>
                 </div>
                 <textarea></textarea>
@@ -118,7 +118,7 @@ const InnerOrderAgent = (props) => {
                 <div className='btn-wrap'>
                     <button>Tahrirlash</button>
                     <button>O'chirish</button>
-                </div>
+                </div> */}
             </div>
         </div>
     )

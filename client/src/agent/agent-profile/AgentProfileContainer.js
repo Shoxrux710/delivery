@@ -62,10 +62,6 @@ const AgentProfileContainer = () => {
             })
 
             setAllOrders(res.data.orderStatus)
-            // console.log(res.data.orderStatus[2].products)
-            // console.log(res.data.orderStatus[2].products.reduce((price, product) => {
-            //     return price + product.count*product.productId.price
-            // }, 0))
             setLoading(false)
         }).catch(err => {
             console.log(err)
