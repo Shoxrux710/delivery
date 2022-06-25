@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import AdminHome from './AdminHome'
 
 const AdminHomeContainer = () => {
@@ -55,20 +55,29 @@ const AdminHomeContainer = () => {
         })
     }
 
-    const [ orderData, setOrderData ] = useState({})
-    const getEachOrders = (status = "active") => {
+    const [ activeOrders, setActiveOrders ] = useState({ _id: "active", count: 0, totalPrice: 0 })
+    const [ courierOrders, setCourierOrders ] = useState({ _id: "courier", count: 0, totalPrice: 0 })
+    const [ rejectedOrders, setRejectedOrders ] = useState({ _id: "rejected", count: 0, totalPrice: 0 })
+    const [ completedOrders, setCompletedOrders ] = useState({ _id: "completed", count: 0, totalPrice: 0 })
+    const getEachOrders = useCallback(() => {
         axios
             .get(`/api/order/each`, {
-                headers: {
-                    "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token,
-                },
-                params: { status }
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+                params: { status: orderType }
             })
             .then(({data}) => {
-                setOrderData(data)
-                console.log(data)
+                data.orderCount.forEach(order => {
+                    order._id === 'active' && setActiveOrders(order)
+                    order._id === 'courier' && setCourierOrders(order)
+                    order._id === 'rejected' && setRejectedOrders(order)
+                    order._id === 'completed' && setCompletedOrders(order)
+                })
             })
-    }
+    }, [orderType])
+
+    useEffect(() => {
+        getEachOrders()
+    }, [orderType])
 
     useEffect(() => {
         getAgentsCount()
@@ -76,7 +85,6 @@ const AdminHomeContainer = () => {
         getManagersCount()
         getUserData()
         getAdminsCount()
-        getEachOrders()
         //eslint-disable-next-line
     }, [])
 
@@ -86,14 +94,16 @@ const AdminHomeContainer = () => {
             setUserBody={setUserBody} 
             setOrderType={setOrderType} 
             orderType={orderType} 
-            orderData={orderData}
-            getEachOrders={getEachOrders}
             agentsCount={agentsCount} 
             kuryersCount={kuryersCount} 
             adminsCount={adminsCount}
             managersCount={managersCount} 
             userData={userData}
             userRole={userRole}
+            activeOrders={activeOrders}
+            courierOrders={courierOrders}
+            rejectedOrders={rejectedOrders}
+            completedOrders={completedOrders}
         />
     )
 }

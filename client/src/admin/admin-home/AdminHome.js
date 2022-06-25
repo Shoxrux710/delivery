@@ -9,7 +9,7 @@ import NavbarContainer from '../../components/navbar/NavbarContainer'
 
 const AdminHome = (props) => {
 
-    const { userBody, setUserBody, orderType, orderData, setOrderType, getEachOrders, agentsCount, kuryersCount, managersCount, userData, adminsCount, userRole } = props
+    const { userBody, setUserBody, orderType, setOrderType, agentsCount, kuryersCount, managersCount, userData, adminsCount, userRole, activeOrders, courierOrders, rejectedOrders, completedOrders } = props
 
     return (
         <div className='admin-home-component'>
@@ -117,11 +117,11 @@ const AdminHome = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>{ orderData.orderCount?.count} ta</h5>
+                            <h5>{ activeOrders.count } ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>{ orderData.orderCount?.totalPrice} so'm</h5>
+                            <h5>{ activeOrders.totalPrice } so'm</h5>
                         </div>
                     </div>
                 </div>
@@ -137,11 +137,11 @@ const AdminHome = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>120 ta</h5>
+                            <h5>{ courierOrders.count } ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>100 000 000 so'm</h5>
+                            <h5>{ courierOrders.totalPrice } so'm</h5>
                         </div>
                     </div>
                 </div>
@@ -157,11 +157,11 @@ const AdminHome = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>120 ta</h5>
+                            <h5>{ completedOrders.count } ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>100 000 000 so'm</h5>
+                            <h5>{ completedOrders.totalPrice } so'm</h5>
                         </div>
                     </div>
                 </div>
@@ -177,11 +177,11 @@ const AdminHome = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>120 ta</h5>
+                            <h5>{ rejectedOrders.count } ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>100 000 000 so'm</h5>
+                            <h5>{ rejectedOrders.totalPrice } so'm</h5>
                         </div>
                     </div>
                 </div>
