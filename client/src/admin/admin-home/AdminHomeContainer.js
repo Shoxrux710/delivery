@@ -55,6 +55,7 @@ const AdminHomeContainer = () => {
         })
     }
 
+    const [ orders, setOrders ] = useState([])
     const [ activeOrders, setActiveOrders ] = useState({ _id: "active", count: 0, totalPrice: 0 })
     const [ courierOrders, setCourierOrders ] = useState({ _id: "courier", count: 0, totalPrice: 0 })
     const [ rejectedOrders, setRejectedOrders ] = useState({ _id: "rejected", count: 0, totalPrice: 0 })
@@ -66,6 +67,8 @@ const AdminHomeContainer = () => {
                 params: { status: orderType }
             })
             .then(({data}) => {
+                console.log(data.orderStatus)
+                setOrders(data.orderStatus)
                 data.orderCount.forEach(order => {
                     order._id === 'active' && setActiveOrders(order)
                     order._id === 'courier' && setCourierOrders(order)
@@ -100,6 +103,7 @@ const AdminHomeContainer = () => {
             managersCount={managersCount} 
             userData={userData}
             userRole={userRole}
+            orders={orders}
             activeOrders={activeOrders}
             courierOrders={courierOrders}
             rejectedOrders={rejectedOrders}

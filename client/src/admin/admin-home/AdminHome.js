@@ -9,7 +9,7 @@ import NavbarContainer from '../../components/navbar/NavbarContainer'
 
 const AdminHome = (props) => {
 
-    const { userBody, setUserBody, orderType, setOrderType, agentsCount, kuryersCount, managersCount, userData, adminsCount, userRole, activeOrders, courierOrders, rejectedOrders, completedOrders } = props
+    const { userBody, setUserBody, orderType, setOrderType, agentsCount, kuryersCount, managersCount, userData, adminsCount, userRole, orders, activeOrders, courierOrders, rejectedOrders, completedOrders } = props
 
     return (
         <div className='admin-home-component'>
@@ -188,32 +188,42 @@ const AdminHome = (props) => {
             </div>
 
             <div className='all-orders-wrapper'>
-                <div className='order'>
-                    <div className='order-top'>
-                        <div className='left'>
-                            <h1>1</h1>
-                            <div>
-                                <h3>Azizbek Abduxalilov</h3>
-                                <p>Boshqaruvchi</p>
+                {/* 
+                    BU qismi o`ylab ko`rilishi kerak
+                    Boshqaruvchiga agent, kuryer biriktirilgan bo`ladi
+                    agent va kuryerlar ishlagan buyurtmalar soni va summasi bitta boshqaruvchiga biriktirilib chiqadi
+                    uning nomeri va qaysi viloyatga biriktirilgani chiqadi
+                */}
+                {
+                    orders.map((order) => (
+                        <div className='order' key={order._id}>
+                            <div className='order-top'>
+                                <div className='left'>
+                                    <h1>1</h1>
+                                    <div>
+                                        <h3>Azizbek Abduxalilov</h3>
+                                        <p>Samarqand</p>
+                                    </div>
+                                </div>
+                                <div className='right'>
+                                    <BsThreeDotsVertical className='icon' />
+                                </div>
+                            </div>
+                            <div className='qator'>
+                                <p>Faol buyurtmalar</p>
+                                <span>150</span>
+                            </div>
+                            <div className='qator'>
+                                <p>Umumiy narxi</p>
+                                <h6>11 236 540 so’m</h6>
+                            </div>
+                            <div className='qator'>
+                                <h5>Samarqand</h5>
+                                <h5>+998934805885</h5>
                             </div>
                         </div>
-                        <div className='right'>
-                            <BsThreeDotsVertical className='icon' />
-                        </div>
-                    </div>
-                    <div className='qator'>
-                        <p>Faol buyurtmalar</p>
-                        <span>150</span>
-                    </div>
-                    <div className='qator'>
-                        <p>Umumiy narxi</p>
-                        <h6>11 236 540 so’m</h6>
-                    </div>
-                    <div className='qator'>
-                        <h5>Samarqand</h5>
-                        <h5>+998934805885</h5>
-                    </div>
-                </div>
+                    ))
+                }
             </div>
         </div>
     )
