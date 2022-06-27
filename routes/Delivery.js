@@ -38,6 +38,8 @@ const router = Router()
  *          schema:
  *              type: object
  *              $ref: "#/components/schemas/Delivery"
+ *   security:
+ *     - bearerAuth: []
  *   responses:
  *       200:
  *         description: response 200   
@@ -85,6 +87,12 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
  *  get:
  *   summary: user bo'yicha buyurtmalarni chiqarib beradi
  *   tags: [Delivery]
+ *   parameters:
+ *     - in: query
+ *       name: status
+ *       schema:   
+ *          type: string
+ *       required: true
  *   security:
  *     - bearerAuth: [] 
  *   responses:
@@ -98,66 +106,112 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
     const {id} = req.user
+    const {status} = req.query
 
-    const deliver = await Delivery.find({courierId: id})
+    const orderDeliver = (await Order
+        .find({status})
+        .select('_id'))
+        .map((o) => o._id)
+
+        console.log(orderDeliver)
+
+    const deliver = await Delivery.find({courierId: id, orderId: { $in: orderDeliver }})
          .populate({path: 'orderId', select: 'code', 
          populate:[{path: 'customerId', select: 'fullname fog address shopNumber phone phoneTwo' }, {path: 'products', select: 'count', populate: [{path: 'productId', select: 'name price'}]}]})
 
-    const deliverTotal = await Delivery.aggregate(
-        [
-            {
-                $match: {
-                    courierId: mongoose.Types.ObjectId(id)
-                }
-            },
-            {
-                $lookup: {
-                    from: 'orders',
-                    localField: 'orderId',
-                    foreignField: '_id',
-                    as: 'orderId'
-                }
-            },
-            {
-                $unwind: {
-                    path: '$orderId'
-                }
-            }, {
-                $unwind: {
-                    path: '$orderId.products'
-                }
-            }, {
-                $lookup: {
-                    from: 'products',
-                    localField: 'orderId.products.productId',
-                    foreignField: '_id',
-                    as: 'orderId.products.productId'
-                }
-            }, {
-                $unwind: {
-                    path: '$orderId.products.productId'
-                }
-            }, {
-                $group: {
-                    _id: 'static',
-                    totalPrice: {
-                        $sum: {
-                            $multiply: [
-                                '$orderId.products.productId.price',
-                                '$orderId.products.count'
-                            ]
-                        }
-                    },
-                    count: {
-                        $sum: '$orderId.products.count'
+    // const deliverTotal = await Delivery.aggregate(
+    //     [
+    //         {
+    //             $match: {
+    //                 courierId: mongoose.Types.ObjectId(id)
+    //             }
+    //         },
+    //         {
+    //             $lookup: {
+    //                 from: 'orders',
+    //                 localField: 'orderId',
+    //                 foreignField: '_id',
+    //                 as: 'orderId'
+    //             }
+    //         },
+    //         {
+    //             $unwind: {
+    //                 path: '$orderId'
+    //             }
+    //         }, {
+    //             $unwind: {
+    //                 path: '$orderId.products'
+    //             }
+    //         }, {
+    //             $lookup: {
+    //                 from: 'products',
+    //                 localField: 'orderId.products.productId',
+    //                 foreignField: '_id',
+    //                 as: 'orderId.products.productId'
+    //             }
+    //         }, {
+    //             $unwind: {
+    //                 path: '$orderId.products.productId'
+    //             }
+    //         }, {
+    //             $group: {
+    //                 _id: 'static',
+    //                 totalPrice: {
+    //                     $sum: {
+    //                         $multiply: [
+    //                             '$orderId.products.productId.price',
+    //                             '$orderId.products.count'
+    //                         ]
+    //                     }
+    //                 },
+    //                 count: {
+    //                     $sum: '$orderId.products.count'
+    //                 }
+    //             }
+    //         }]
+    // )
+
+    const deliverTotal = await Order.aggregate(
+        [{
+            $match: {
+                courierId: mongoose.Types.ObjectId(id)
+            }
+        },
+        {
+            $unwind: {
+                path: '$products'
+            }
+        }, {
+            $lookup: {
+                from: 'products',
+                localField: 'products.productId',
+                foreignField: '_id',
+                as: 'products.productId'
+            }
+        }, {
+            $unwind: {
+                path: '$products.productId'
+            }
+        }, {
+            $group: {
+                _id: '$status',
+                count: {
+                    $sum: 1
+                },
+                totalPrice: {
+                    $sum: {
+                        $multiply: [
+                            '$products.count',
+                            '$products.productId.price'
+                        ]
                     }
                 }
-            }]
-    )
+            }
+        }]
+    ) 
 
-    delete deliverTotal[0]._id
 
-    res.status(200).json({deliverTotal: deliverTotal[0], deliver})
+    res.status(200).json({deliverTotal, deliver})
 })
 
 

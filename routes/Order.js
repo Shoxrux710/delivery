@@ -7,6 +7,7 @@ const { validationResult } = require('express-validator')
 const mongoose = require('mongoose')
 const nowDate = require('../utils/nowDate')
 const Order = require('../models/Order')
+const User = require('../models/User')
 const router = Router()
 
 /**
@@ -122,20 +123,20 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
     const { position, worker, id } = req.user
     const { status } = req.query
-    // console.log(status)
+    const managerAll = await User.find({position: 'manager'})
+    console.log(managerAll)
+     
     const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
     const objectStatus = { agentId: { $in: objectIdWorker } }
 
-    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
+    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} : 
         (position === 'manager' ? { ...objectStatus } : { agentId: mongoose.Types.ObjectId(id) })
-
 
     const orderStatus = await Order.find({ status: status, ...filterAgent })
         .populate('customerId', 'fullname fog address shopNumber phone phoneTwo')
         .populate({ path: 'products', select: 'count', populate: [{ path: 'productId', select: 'name price' }] })
         .populate({ path: 'agentId', select: 'fullname', populate: [{ path: 'regionId', select: 'name' }] })
 
-    console.log("1", orderStatus)
 
     const orderCount = await Order.aggregate(
         [{
@@ -174,10 +175,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 }
             }
         }]
-    )
-
-    console.log("2", orderCount)
-    // delete orderCount[0]._id
+    )    
 
     res.status(200).json({
         orderStatus,
