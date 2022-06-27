@@ -116,7 +116,7 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const chequeDebt = await Cheque.find({ debt: { $gt: 0 } })
           .populate({path: 'deliveryId', select: '', 
           populate: [{path: 'courierId', select: 'fullname'}, 
-          {path: 'orderId', select: 'code date products', populate: [{path: 'agentId', select: 'fullname'}]}]}) 
+          {path: 'orderId', select: 'code date', populate: [{path: 'agentId', select: 'fullname'}, {path: 'products', select: 'count', populate: [{path: 'productId', select: 'name price'}]}]}]}) 
     const chequeCash = await Cheque.find({ cash: { $gt: 0 } })
 
     // const groupCash = await Cheque.aggregate(
