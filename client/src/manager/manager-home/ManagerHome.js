@@ -12,7 +12,8 @@ const ManagerHome = (props) => {
 
     const { setUserBody, userBody, setOrderType, orderType, kuryersCount, agentsCount, userData, isModalVisible, 
         setIsModalVisible, allOrders, loader, activePrice,
-        activeCount, courierCount, courierPrice, completedCount, completedPrice, rejectedCount, rejectedPrice 
+        activeCount, courierCount, courierPrice, completedCount, completedPrice, rejectedCount, rejectedPrice,
+        curOrder, getCurOrder, couriers, setSelectedCourier, giveOrderToCourier 
     } = props
 
     return (
@@ -189,33 +190,38 @@ const ManagerHome = (props) => {
                     <div className='select-input-wrap'>
                         <div className='left'>
                             <label>Kuryer</label>
-                            <select>
-                                <option>Temur</option>
-                                <option>Shoxrux</option>
+                            <select onChange={(e) => setSelectedCourier(e.target.value)} >
+                                <option value={null}>Tanlang</option>
+                                {
+                                    couriers.map((courier) => (
+                                        <option key={courier._id} value={courier._id}>{ courier.fullname }</option>
+                                    ))
+                                }
                             </select>
                         </div>
-                        <div className='right'>
+                        <div className='right' >
                             <label>Id</label>
-                            <input type='number' />
+                            <input type='text' disabled defaultValue={curOrder ? curOrder.code : "ID"}  />
                         </div>
                     </div>
                     <div className='inp-w'>
                         <label>Narxi</label>
-                        <input type='text' />
+                        <input type='text' disabled defaultValue={curOrder ? curOrder.products.reduce((price, product) => {
+                            return price + product.count * product.productId?.price
+                        }, 0) : "Narxi"} />
                     </div>
                     <div className='inp-w'>
                         <label>Viloyat</label>
                         <select>
-                            <option>Toshkent</option>
-                            <option>Samarqand</option>
+                            <option>{ curOrder ? curOrder.agentId.regionId.name : "" }</option>
                         </select>
                     </div>
                     <div className='bottom'>
                         <div>
                             <p>Agent</p>
-                            <h5>Abror Askarov</h5>
+                            <h5>{ curOrder ? curOrder.agentId.fullname : "" }</h5>
                         </div>
-                        <button>Yuborish</button>
+                        <button onClick={() => giveOrderToCourier()}>Yuborish</button>
                     </div>
                 </div>
             </Modal>
@@ -232,6 +238,7 @@ const ManagerHome = (props) => {
                             products={item.products} 
                             index={index} 
                             date={date} 
+                            getCurOrder={getCurOrder}
                         />
                     )
                 }) : ''

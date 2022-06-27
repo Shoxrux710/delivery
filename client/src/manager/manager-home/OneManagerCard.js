@@ -3,7 +3,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 
 const OneManagerCard = (props) => {
 
-    const { setIsModalVisible, item, products, index, date } = props
+    const { setIsModalVisible, item, products, index, date, getCurOrder } = props
 
     const [ orderMenu, setOrderMenu ] = useState(false)
     const [ leftNames, setLeftNames ] = useState(false)
@@ -39,7 +39,9 @@ const OneManagerCard = (props) => {
                         </div>
                         <h6>Taxrirlash</h6>
                     </div>
-                    <div onClick={() => setIsModalVisible(true)}>
+                    <div onClick={() => {
+                        getCurOrder(item)
+                    }}>
                         <div className='bg bg2'>
                             <div></div>
                         </div>

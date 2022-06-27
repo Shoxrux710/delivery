@@ -117,7 +117,6 @@ const AgentHomeContainer = () => {
     }
 
     useEffect(() => {
-        getAllCustomer()
         getUserData()
         getAllProducts()
         //eslint-disable-next-line

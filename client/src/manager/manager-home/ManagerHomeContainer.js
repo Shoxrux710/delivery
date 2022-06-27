@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import Loader from '../../components/loader/Loader'
 import ManagerHome from './ManagerHome'
 
@@ -19,6 +20,7 @@ const ManagerHomeContainer = () => {
     const [ isModalVisible, setIsModalVisible ] = useState(false)
     
     const [ userData, setUserData ] = useState()
+    const [ couriers, setCouriers ] = useState([])
     const getUserData = () => {
         axios.get(`/api/user/userId/${userId}`, ).then(res => {
             setUserData(res.data.userId)
@@ -30,6 +32,7 @@ const ManagerHomeContainer = () => {
             })
 
             axios.get(`/api/user/each?position=courier&regionId=${res.data.userId.regionId._id}`).then(res => {
+                setCouriers(res.data.userEach)
                 setKuryersCount(res.data.count)
             }).catch(err => {
                 console.log(err)
@@ -87,6 +90,34 @@ const ManagerHomeContainer = () => {
         })
     }
 
+    const [ curOrder, setCurOrder ] = useState(null)
+
+    const getCurOrder = (order) => {
+        setCurOrder(order)
+        setIsModalVisible(true)
+    }
+
+    const [ selectedCourier, setSelectedCourier ] = useState(null)
+
+    const giveOrderToCourier = () => {
+        if(selectedCourier) {
+            axios
+                .post('/api/deliver/all', 
+                    { orderId: curOrder._id, courierId: selectedCourier },
+                    { headers: { "Authorization": "Bearer " + token } })
+                .then(({ data }) => {
+                    toast.success("Muvaffaqqiyatli biriktirildi!", {
+                        position: toast.POSITION.BOTTOM_RIGHT
+                    })
+                    getAllOrders()
+                    setIsModalVisible(false)
+                })
+                .catch((err) => { console.log(err) })
+        } else {
+            alert("Kuryerni tanlang!")
+        } 
+    }
+
     useEffect(() => {
         getUserData()
         //eslint-disable-next-line
@@ -100,6 +131,11 @@ const ManagerHomeContainer = () => {
 
     return (
         <ManagerHome 
+            couriers={couriers}
+            curOrder={curOrder}
+            getCurOrder={getCurOrder}
+            setSelectedCourier={setSelectedCourier}
+            giveOrderToCourier={giveOrderToCourier}
             userBody={userBody}
             setUserBody={setUserBody}
             setOrderType={setOrderType} 
