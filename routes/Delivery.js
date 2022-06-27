@@ -50,7 +50,7 @@ const router = Router()
  *   
  */
 
-router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BB'),  async (req, res) => {
+router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BB'), async (req, res) => {
 
     const session = await mongoose.startSession()
     session.startTransaction()
@@ -105,19 +105,21 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
-    const {id} = req.user
-    const {status} = req.query
+    const { id } = req.user
+    const { status } = req.query
 
     const orderDeliver = (await Order
-        .find({status})
+        .find({ status })
         .select('_id'))
         .map((o) => o._id)
 
-        console.log(orderDeliver)
+    console.log(orderDeliver)
 
-    const deliver = await Delivery.find({courierId: id, orderId: { $in: orderDeliver }})
-         .populate({path: 'orderId', select: 'code', 
-         populate:[{path: 'customerId', select: 'fullname fog address shopNumber phone phoneTwo' }, {path: 'products', select: 'count', populate: [{path: 'productId', select: 'name price'}]}]})
+    const deliver = await Delivery.find({ courierId: id, orderId: { $in: orderDeliver } })
+        .populate({
+            path: 'orderId', select: 'code',
+            populate: [{ path: 'customerId', select: 'fullname fog address shopNumber phone phoneTwo' }, { path: 'products', select: 'count', populate: [{ path: 'productId', select: 'name price' }] }]
+        })
 
     // const deliverTotal = await Delivery.aggregate(
     //     [
@@ -171,47 +173,58 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     //         }]
     // )
 
-    const deliverTotal = await Order.aggregate(
+    const deliverTotal = await Delivery.aggregate(
         [{
             $match: {
                 courierId: mongoose.Types.ObjectId(id)
             }
         },
-        {
+            {
+            $lookup: {
+                from: 'orders',
+                localField: 'orderId',
+                foreignField: '_id',
+                as: 'orderId'
+            }
+        }, {
             $unwind: {
-                path: '$products'
+                path: '$orderId'
+            }
+        }, {
+            $unwind: {
+                path: '$orderId.products'
             }
         }, {
             $lookup: {
                 from: 'products',
-                localField: 'products.productId',
+                localField: 'orderId.products.productId',
                 foreignField: '_id',
-                as: 'products.productId'
+                as: 'orderId.products.productId'
             }
         }, {
             $unwind: {
-                path: '$products.productId'
+                path: '$orderId.products.productId'
             }
         }, {
             $group: {
-                _id: '$status',
+                _id: '$orderId.status',
                 count: {
                     $sum: 1
                 },
                 totalPrice: {
                     $sum: {
                         $multiply: [
-                            '$products.count',
-                            '$products.productId.price'
+                            '$orderId.products.count',
+                            '$orderId.products.productId.price'
                         ]
                     }
                 }
             }
         }]
-    ) 
+    )
 
 
-    res.status(200).json({deliverTotal, deliver})
+    res.status(200).json({ deliverTotal, deliver })
 })
 
 
@@ -235,15 +248,17 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
  */
 
 
-router.get('/:id', async (req,res) => {
-    const {id} = req.params
+router.get('/:id', async (req, res) => {
+    const { id } = req.params
 
-    const deliverId = await Delivery.findOne({_id: id})
-    .populate({path: 'orderId', select: 'code', 
-    populate: [{path: 'customerId', select: 'address'}, {path: 'agentId', select: 'fullname'}, {path: 'products', select: 'count', populate: [{path: 'productId', select: 'price'}]}] })
-    .populate('courierId', 'fullname')
+    const deliverId = await Delivery.findOne({ _id: id })
+        .populate({
+            path: 'orderId', select: 'code',
+            populate: [{ path: 'customerId', select: 'address' }, { path: 'agentId', select: 'fullname' }, { path: 'products', select: 'count', populate: [{ path: 'productId', select: 'price' }] }]
+        })
+        .populate('courierId', 'fullname')
 
-    res.status(200).json({deliverId})
+    res.status(200).json({ deliverId })
 
 })
 
