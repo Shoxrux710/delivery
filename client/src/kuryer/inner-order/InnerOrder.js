@@ -7,10 +7,13 @@ import './innerOrder.css'
 
 const InnerOrder = (props) => {
 
-    const { setIsModalVisible, isModalVisible, orderById, orderProducts, price } = props
+    const { setIsModalVisible, isModalVisible, orderById, orderProducts, price, comment, setComment,
+        cash, setCash, card, setCard, debt, setDebt, completeOrder, rejectOrder
+    } = props
 
     const { Panel } = Collapse
     const date = new Date(orderById ? orderById.date : '')
+    const date2 = new Date(orderById && orderById.orderId ? orderById.orderId.date : '')
 
     return (
         <div className='inner-order-component'>
@@ -43,7 +46,7 @@ const InnerOrder = (props) => {
                         </div>
                         <div>
                             <span>Yetkazish manzili</span>
-                            <p>{orderById && orderById.customerId ? orderById.customerId.address : ''}</p>
+                            <p>{orderById && orderById.orderId && orderById.orderId.customerId ? orderById.orderId.customerId.address : ''}</p>
                         </div>
                     </div>
                 </div>
@@ -54,13 +57,13 @@ const InnerOrder = (props) => {
                     </div>
                     <div>
                         <span>Yetkazib berish vaqti</span>
-                        <p>{date ? date.getDate() : ''}-{date ? date.getMonth() + 1 : ''}-{date ? date.getFullYear() : ''} {date ? date.getHours() : ''}:{date ? date.getMinutes() : ''}</p>
+                        <p>{date2 ? date2.getDate() : ''}-{date2 ? date2.getMonth() + 1 : ''}-{date2 ? date2.getFullYear() : ''} {date2 ? date2.getHours() : ''}:{date2 ? date2.getMinutes() : ''}</p>
                     </div>
                 </div>
                 <div className='qator'>
                     <div>
                         <span>Buyurtma ID</span>
-                        <p>{orderById ? orderById.code : ''}</p>
+                        <p>{orderById && orderById.orderId ? orderById.orderId.code : ''}</p>
                     </div>
                     <div>
                         <span>Manba</span>
@@ -70,11 +73,11 @@ const InnerOrder = (props) => {
                 <div className='qator'>
                     <div>
                         <span>Mijoz</span>
-                        <p>{orderById && orderById.customerId ? orderById.customerId.fullname : ''}</p>
+                        <p>{orderById && orderById.orderId && orderById.orderId.customerId ? orderById.orderId.customerId.fullname : ''}</p>
                     </div>
                     <div>
                         <span>Telefon raqam</span>
-                        <p>{orderById && orderById.customerId ? orderById.customerId.phone : ''}</p>
+                        <p>{orderById && orderById.orderId && orderById.orderId.customerId ? orderById.orderId.customerId.phone : ''}</p>
                     </div>
                 </div>
                 <div className='qator'>
@@ -112,7 +115,7 @@ const InnerOrder = (props) => {
                 </div>
 
                 <div className='btn-wrap'>
-                    <button>Rad etish</button>
+                    <button onClick={rejectOrder}>Rad etish</button>
                     <button onClick={() => setIsModalVisible(true)}>Yakunlash</button>
                 </div>
             </div>
@@ -123,48 +126,48 @@ const InnerOrder = (props) => {
                 footer={null}
                 className='add-modal'
             >
-                <form>
+                <form onSubmit={completeOrder}>
                     <div className='qator'>
                         <div>
                             <span>Operator</span>
-                            <p>Azizbek Abduxalilov</p>
+                            <p>{orderById && orderById.orderId && orderById.orderId.agentId ? orderById.orderId.agentId.fullname : ''}</p>
                         </div>
                         <div>
                             <span>Kuryer</span>
-                            <p>Azizbek abduxalilov</p>
+                            <p>{orderById && orderById.courierId ? orderById.courierId.fullname : ''}</p>
                         </div>
                     </div>
                     <div className='qator'>
                         <div>
                             <span>ID</span>
-                            <p>5461611</p>
+                            <p>{orderById && orderById.orderId ? orderById.orderId.code : ''}</p>
                         </div>
                         <div>
                             <span>Narxi</span>
-                            <p>100 000 000</p>
+                            <p>{price}</p>
                         </div>
                     </div>
                     <div className='qator last'>
                         <div>
                             <span>Adress</span>
-                            <p>mahalla, ko’cha , uy raqami</p>
+                            <p>{orderById && orderById.orderId && orderById.orderId.customerId ? orderById.orderId.customerId.address : ''}</p>
                         </div>
                     </div>
                     <div>
                         <label>Naqt pul</label>
-                        <input type='number' />
+                        <input type='number' value={cash} onChange={(e) => setCash(e.target.value)} required />
                     </div>
                     <div>
                         <label>Perechisleniya</label>
-                        <input type='number' />
+                        <input type='number' value={card} onChange={(e) => setCard(e.target.value)} required />
                     </div>
                     <div>
                         <label>Qarz</label>
-                        <input type='number' />
+                        <input type='number' value={debt} onChange={(e) => setDebt(e.target.value)} required />
                     </div>
                     <div>
                         <label>Izoh</label>
-                        <textarea></textarea>
+                        <textarea value={comment} onChange={(e) => setComment(e.target.value)} required></textarea>
                     </div>
                     <button type='submit'>Buyurtmani yakunlash</button>
                 </form>

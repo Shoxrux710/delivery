@@ -10,7 +10,7 @@ import OneKuryerCard from './OneKuryerCard'
 const KuryerHome = (props) => {
 
     const { setUserBody, userBody, setOrderType, orderType, userData, allOrders, loader, activePrice,
-        activeCount, courierCount, courierPrice, completedCount, completedPrice, rejectedCount, rejectedPrice 
+        activeCount, completedCount, completedPrice, rejectedCount, rejectedPrice 
     } = props
 
     return (
@@ -84,7 +84,7 @@ const KuryerHome = (props) => {
             </div>
 
             <div className='all-orders-top'>
-                <div className={orderType === 'active' ? 'square square-active' : 'square'} onClick={() => setOrderType('active')}>
+                <div className={orderType === 'courier' ? 'square square-active' : 'square'} onClick={() => setOrderType('courier')}>
                     <div className='topp'></div>
                     <div className='type'>
                         <div className='bg'>
@@ -100,26 +100,6 @@ const KuryerHome = (props) => {
                         <div className='right'>
                             <h6>Puli</h6>
                             <h5>{activePrice} so'm</h5>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={orderType === 'courier' ? 'square square-active' : 'square'} onClick={() => setOrderType('courier')}>
-                    <div className='topp'></div>
-                    <div className='type'>
-                        <div className='bg'>
-                            <div className='ikki'></div>
-                        </div>
-                        <h1>Kuryerdagi buyurtmalar</h1>
-                    </div>
-                    <div className='about'>
-                        <div className='left'>
-                            <h6>Soni</h6>
-                            <h5>{courierCount} ta</h5>
-                        </div>
-                        <div className='right'>
-                            <h6>Puli</h6>
-                            <h5>{courierPrice} so'm</h5>
                         </div>
                     </div>
                 </div>
@@ -171,7 +151,7 @@ const KuryerHome = (props) => {
                     allOrders && Array.isArray(allOrders) ? allOrders.map((item, index) => {
                         const date = new Date(item.date)
                         return (
-                            <OneKuryerCard key={index} item={item} products={item.products} index={index} date={date} />
+                            <OneKuryerCard key={index} item={item} products={item.orderId.products} index={index} date={date} />
                         )
                     }) : ''
                 }

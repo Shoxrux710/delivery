@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BsThreeDotsVertical } from 'react-icons/bs';
+// import { BsThreeDotsVertical } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 const OneKuryerCard = (props) => {
@@ -21,7 +21,7 @@ const OneKuryerCard = (props) => {
 
     return (
         <div className='one-order'>
-            <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
+            {/* <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} /> */}
             <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>
                 {
                     products && Array.isArray(products) ? products.map((item, index) => {
@@ -92,12 +92,12 @@ const OneKuryerCard = (props) => {
                             </div>
                             <div>
                                 <span>Yetkazish manzili</span>
-                                <p>{item && item.customerId ? item.customerId.address : ''}</p>
+                                <p>{item && item.orderId && item.orderId.customerId ? item.orderId.customerId.address : ''}</p>
                             </div>
                         </div>
                     </div>
                     <div className='qator'>
-                        <p>ID {item ? item.code : ''}</p>
+                        <p>ID {item && item.orderId ? item.orderId.code : ''}</p>
                         <span>{date ? date.getDate() : ''}-{date ? date.getMonth() + 1 : ''}-{date ? date.getFullYear() : ''} {date ? date.getHours() : ''}:{date ? date.getMinutes() : ''}</span>
                     </div>
                     <div className='qator'>
@@ -110,11 +110,11 @@ const OneKuryerCard = (props) => {
                     </div> */}
                     <div className='bottom'>
                         <div className='ust'>
-                            <h3>{item && item.customerId ? item.customerId.fullname : ''}</h3>
+                            <h3>{item && item.orderId && item.orderId.customerId ? item.orderId.customerId.fullname : ''}</h3>
                             <p>Mijoz</p>
                         </div>
                         <div className='ust'>
-                            <h3>{item && item.customerId ? item.customerId.phone : ''}</h3>
+                            <h3>{item && item.orderId && item.orderId.customerId ? item.orderId.customerId.phone : ''}</h3>
                             <p>Telefon raqam</p>
                         </div>
                     </div>
