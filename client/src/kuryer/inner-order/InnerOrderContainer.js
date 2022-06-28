@@ -68,7 +68,7 @@ const InnerOrderContainer = () => {
     }
 
     const rejectOrder = () => {
-        axios.put(`/api/order/${id}`, {}, {
+        axios.put(`/api/order/${orderById && orderById.orderId ? orderById.orderId._id : ''}`, {}, {
             headers: {
                 'authorization': `Bearer ${token}`
             }
