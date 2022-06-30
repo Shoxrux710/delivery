@@ -24,14 +24,7 @@ const AgentProfileContainer = () => {
     }
 
     const [ allOrders, setAllOrders ] = useState([])
-    const [ activeCount, setActiveCount ] = useState(0)
-    const [ courierCount, setCourierCount ] = useState(0)
-    const [ completedCount, setCompletedCount ] = useState(0)
-    const [ rejectedCount, setrejectedCount ] = useState(0)
-    const [ activePrice, setActivePrice ] = useState(0)
-    const [ courierPrice, setCourierPrice ] = useState(0)
-    const [ completedPrice, setCompletedPrice ] = useState(0)
-    const [ rejectedPrice, setRejectedPrice ] = useState(0)
+
 
     const getAllOrders = () => {
         axios.get('/api/order/each', {
@@ -42,26 +35,8 @@ const AgentProfileContainer = () => {
                 status: orderType 
             }
         }).then(res => {
-            res.data.orderCount.forEach(item => {
-                if( item._id === 'active' ) {
-                    setActiveCount(item.count)
-                    setActivePrice(item.totalPrice)
-                }
-                if( item._id === 'courier' ) {
-                    setCourierCount(item.count)
-                    setCourierPrice(item.totalPrice)
-                }
-                if( item._id === 'completed' ) {
-                    setCompletedCount(item.count)
-                    setCompletedPrice(item.totalPrice)
-                }
-                if( item._id === 'rejected' ) {
-                    setrejectedCount(item.count)
-                    setRejectedPrice(item.totalPrice)
-                }
-            })
-
-            setAllOrders(res.data.orderStatus)
+            console.log(res.data.orderManger)
+            setAllOrders(res.data.orderManger)
             setLoading(false)
         }).catch(err => {
             console.log(err)
@@ -69,8 +44,45 @@ const AgentProfileContainer = () => {
         })
     }
 
+    const [ activeCount, setActiveCount ] = useState(0)
+    const [ courierCount, setCourierCount ] = useState(0)
+    const [ completedCount, setCompletedCount ] = useState(0)
+    const [ rejectedCount, setrejectedCount ] = useState(0)
+    const [ activePrice, setActivePrice ] = useState(0)
+    const [ courierPrice, setCourierPrice ] = useState(0)
+    const [ completedPrice, setCompletedPrice ] = useState(0)
+    const [ rejectedPrice, setRejectedPrice ] = useState(0)
+
+    const getOrderStatusData = () => {
+        axios
+            .get('/api/order/card', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token } })
+            .then(({ data }) => {
+                data.orderCount.map(order => {
+                    if(order._id === "active") {
+                        setActiveCount(order.count)
+                        setActivePrice(order.totalPrize)
+                    }
+                    if(order._id === "courier") {
+                        setCourierCount(order.count)
+                        setCourierPrice(order.totalPrize)
+                    }
+                    if(order._id === "rejected") {
+                        setrejectedCount(order.count)
+                        setRejectedPrice(order.totalPrize)
+                    }
+                    if(order._id === "completed") {
+                        setCompletedCount(order.count)
+                        setCompletedPrice(order.totalPrize)
+                    }
+                    return null
+                })
+            })
+    }
+
     useEffect(() => {
         getUserData()
+        getOrderStatusData()
         //eslint-disable-next-line
     }, [])
 

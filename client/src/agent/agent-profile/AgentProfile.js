@@ -164,7 +164,7 @@ const AgentProfile = (props) => {
                 {loader}
                 {
                     allOrders && Array.isArray(allOrders) ? allOrders.map((item, index) => {
-                        const date = new Date(item.date)
+                        const date = new Date(item._id.date)
                         return (
                             <OneAgentCard key={index} item={item} products={item.products} index={index} date={date} />
                         )
