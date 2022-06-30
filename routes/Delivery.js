@@ -127,8 +127,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             $match: {
                 courierId: mongoose.Types.ObjectId(id)
             }
-        },
-            {
+        }, {
             $lookup: {
                 from: 'orders',
                 localField: 'orderId',
@@ -136,13 +135,9 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 as: 'orderId'
             }
         }, {
-            $unwind: {
-                path: '$orderId'
-            }
+            $unwind: '$orderId'
         }, {
-            $unwind: {
-                path: '$orderId.products'
-            }
+            $unwind: '$orderId.products'
         }, {
             $lookup: {
                 from: 'products',
@@ -151,15 +146,10 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 as: 'orderId.products.productId'
             }
         }, {
-            $unwind: {
-                path: '$orderId.products.productId'
-            }
+            $unwind: '$orderId.products.productId'
         }, {
             $group: {
                 _id: '$orderId.status',
-                count: {
-                    $sum: 1
-                },
                 totalPrice: {
                     $sum: {
                         $multiply: [
@@ -167,6 +157,16 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                             '$orderId.products.productId.price'
                         ]
                     }
+                },
+                count: {
+                    $addToSet: '$orderId._id'
+                }
+            }
+        }, {
+            $project: {
+                totalPrice: '$totalPrice',
+                count: {
+                    $size: '$count'
                 }
             }
         }]
@@ -203,7 +203,7 @@ router.get('/:id', async (req, res) => {
     const deliverId = await Delivery.findOne({ _id: id })
         .populate({
             path: 'orderId', select: 'code date',
-            populate: [{ path: 'customerId', select: 'address phone fullname' }, 
+            populate: [{ path: 'customerId', select: 'address phone fullname' },
             { path: 'agentId', select: 'fullname' }, { path: 'products', select: 'count', populate: [{ path: 'productId', select: 'price' }] }]
         })
         .populate('courierId', 'fullname')
