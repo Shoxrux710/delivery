@@ -288,12 +288,50 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 })
 
 
+
+/**
+ * @swagger
+ * /api/order/card:
+ *  get:
+ *   summary: buyurtmalarni status bo'yicha chiqarib beradi
+ *   tags: [Order]
+ *   security:
+ *     - bearerAuth: []
+ *   responses:
+ *       200:
+ *         description: response 200   
+ *       400:
+ *         description: response 400
+ *       500:
+ *         description: response 500 
+ */
+
 router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
 
     const { id, position } = req.user
 
-    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
-        (position === 'manager' ? 'agent.managerId' : '_id.agentId')
+    // const func = () => {
+    //     if (position === 'admin' || position === 'super-admin') return null
+    //     if (position === 'manager')
+    //         return 'agent.managerId'
+    //     return '_id.agentId'
+    // }
+
+    // const filterAgent = func()
+    //     ? {
+    //         [func()]: mongoose.Types.ObjectId(id)
+    //     } : {}
+
+    const filterAgent = (position === 'admin' || position === 'super-admin') ? [] : (position === 'manager' ? [{
+        '$match': {
+            'agent.managerId': mongoose.Types.ObjectId(id)
+        }
+    }] : [{
+        '$match': {
+            'agentId': mongoose.Types.ObjectId(id)
+        }
+    }])
+
 
     const orderCount = await Order.aggregate(
         [
@@ -328,11 +366,9 @@ router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 '$unwind': {
                     'path': '$agent'
                 }
-            }, {
-                '$match': {
-                    [filterAgent]: mongoose.Types.ObjectId(id)
-                }
-            }, {
+            },
+            ...filterAgent,
+            {
                 '$group': {
                     '_id': '$status',
                     'totalPrice': {
@@ -343,8 +379,14 @@ router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                         }
                     },
                     'count': {
-                        '$sum': 1
+                        '$addToSet': '$_id._id'
                     }
+                }
+            },
+            {
+                '$project': {
+                    'totalPrice': '$totalPrice',
+                    'count': { '$size': '$count' }
                 }
             }
         ]
