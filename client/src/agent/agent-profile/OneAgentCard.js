@@ -6,8 +6,6 @@ const OneAgentCard = (props) => {
 
     const { item, products, index, date } = props
 
-    console.log(item)
-
     const [ orderMenu, setOrderMenu ] = useState(false)
     const [ leftNames, setLeftNames ] = useState(false)
 
@@ -58,7 +56,7 @@ const OneAgentCard = (props) => {
                 }
             </div>
 
-            <Link to={`order/${item ? item._id : ''}`}>
+            <Link to={`order/${item ? item._id._id : ''}`}>
                 <div className='order' onClick={() => {setOrderMenu(false); setLeftNames(false)}}>
                     <div className='topp'>
                         <div>

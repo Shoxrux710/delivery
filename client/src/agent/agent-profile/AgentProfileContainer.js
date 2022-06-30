@@ -35,7 +35,6 @@ const AgentProfileContainer = () => {
                 status: orderType 
             }
         }).then(res => {
-            console.log(res.data.orderManger)
             setAllOrders(res.data.orderManger)
             setLoading(false)
         }).catch(err => {
