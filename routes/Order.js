@@ -127,77 +127,89 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const filterId = position === 'agent' ? '_id.agentId' : 'agent.managerId'
 
 
+
     if (position === 'admin' || position === 'super-admin') {
         const orderAdmin = await Order.aggregate(
-            [{
-                $match: {
-                    status: status
-                }
-            }, {
-                $unwind: {
-                    path: '$products'
-                }
-            }, {
-                $lookup: {
-                    from: 'products',
-                    localField: 'products.productId',
-                    foreignField: '_id',
-                    as: 'products.productId'
-                }
-            }, {
-                $unwind: {
-                    path: '$products.productId'
-                }
-            }, {
-                $group: {
-                    _id: '$_id',
-                    orderPrice: {
-                        $sum: {
-                            $multiply: [
-                                '$products.count',
-                                '$products.productId.price'
-                            ]
+            [
+                {
+                    $match: {
+                        status: status
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$products'
+                    }
+                }, {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'products.productId',
+                        foreignField: '_id',
+                        as: 'products.productId'
+                    }
+                }, {
+                    $unwind: {
+                        path: '$products.productId'
+                    }
+                }, {
+                    $group: {
+                        _id: '$_id',
+                        orderPrice: {
+                            $sum: {
+                                $multiply: [
+                                    '$products.count',
+                                    '$products.productId.price'
+                                ]
+                            }
                         }
                     }
-                }
-            }, {
-                $lookup: {
-                    from: 'orders',
-                    localField: '_id',
-                    foreignField: '_id',
-                    as: '_id'
-                }
-            }, {
-                $unwind: '$_id'
-            }, {
-                $lookup: {
-                    from: 'users',
-                    localField: '_id.agentId',
-                    foreignField: '_id',
-                    as: 'agent'
-                }
-            }, {
-                $unwind: '$agent'
-            }, {
-                $group: {
-                    _id: '$agent.managerId',
-                    orderCount: {
-                        $sum: 1
-                    },
-                    orderPrice: {
-                        $sum: '$orderPrice'
+                }, {
+                    $lookup: {
+                        from: 'orders',
+                        localField: '_id',
+                        foreignField: '_id',
+                        as: '_id'
                     }
-                }
-            }, {
-                $lookup: {
-                    from: 'users',
-                    localField: '_id',
-                    foreignField: '_id',
-                    as: 'manager'
-                }
-            }, {
-                $unwind: '$manager'
-            }]
+                }, {
+                    $unwind: '$_id'
+                }, {
+                    $lookup: {
+                        from: 'users',
+                        localField: '_id.agentId',
+                        foreignField: '_id',
+                        as: 'agent'
+                    }
+                }, {
+                    $unwind: '$agent'
+                }, {
+                    $group: {
+                        _id: '$agent.managerId',
+                        orderCount: {
+                            $sum: 1
+                        },
+                        orderPrice: {
+                            $sum: '$orderPrice'
+                        }
+                    }
+                }, {
+                    $lookup: {
+                        from: 'users',
+                        localField: '_id',
+                        foreignField: '_id',
+                        as: 'manager'
+                    }
+                }, {
+                    $unwind: '$manager'
+                }, {
+                    $lookup: {
+                        from: 'regions',
+                        localField: 'manager.regionId',
+                        foreignField: '_id',
+                        as: 'manager.regionId'
+                    }
+                }, {
+                    $unwind: '$manager.regionId'
+                }]
         )
 
         return res.status(200).json({ orderAdmin })
