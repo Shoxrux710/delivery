@@ -282,6 +282,15 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }, {
                 $unwind: '$_id.agentId'
             }, {
+                $lookup: {
+                    from: 'regions',
+                    localField: '_id.agentId.regionId',
+                    foreignField: '_id',
+                    as: '_id.agentId.regionId'
+                }
+            }, {
+                $unwind: '$_id.agentId.regionId'
+            }, {
                 $match: {
                     [filterId]: mongoose.Types.ObjectId(id)
                 }
