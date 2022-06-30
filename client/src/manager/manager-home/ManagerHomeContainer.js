@@ -21,6 +21,7 @@ const ManagerHomeContainer = () => {
     
     const [ userData, setUserData ] = useState()
     const [ couriers, setCouriers ] = useState([])
+
     const getUserData = () => {
         axios.get(`/api/user/userId/${userId}`, ).then(res => {
             setUserData(res.data.userId)
@@ -32,7 +33,6 @@ const ManagerHomeContainer = () => {
             })
 
             axios.get(`/api/user/each?position=courier&regionId=${res.data.userId.regionId._id}`).then(res => {
-                console.log(res.data.userEach)
                 setCouriers(res.data.userEach)
                 setKuryersCount(res.data.count)
             }).catch(err => {
@@ -120,6 +120,7 @@ const ManagerHomeContainer = () => {
                     })
                     getAllOrders()
                     setIsModalVisible(false)
+                    getOrderStatusData()
                 })
                 .catch((err) => { console.log(err) })
         } else {

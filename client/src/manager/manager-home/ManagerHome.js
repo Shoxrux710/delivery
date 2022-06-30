@@ -203,25 +203,23 @@ const ManagerHome = (props) => {
                         </div>
                         <div className='right' >
                             <label>Id</label>
-                            <input type='text' disabled defaultValue={curOrder ? curOrder.code : "ID"}  />
+                            <input type='text' disabled defaultValue={curOrder ? curOrder._id.code : "ID"}  />
                         </div>
                     </div>
                     <div className='inp-w'>
                         <label>Narxi</label>
-                        <input type='text' disabled defaultValue={curOrder ? curOrder.products.reduce((price, product) => {
-                            return price + product.count * product.productId?.price
-                        }, 0) : "Narxi"} />
+                        <input type='text' disabled defaultValue={curOrder ? curOrder.orderPrice : 'Narxi'} />
                     </div>
                     <div className='inp-w'>
                         <label>Viloyat</label>
                         <select>
-                            <option>{ curOrder ? curOrder.agentId.regionId.name : "" }</option>
+                            <option>{ curOrder ? curOrder._id.agentId.regionId.name : "Viloyat" }</option>
                         </select>
                     </div>
                     <div className='bottom'>
                         <div>
                             <p>Agent</p>
-                            <h5>{ curOrder ? curOrder.agentId.fullname : "" }</h5>
+                            <h5>{ curOrder ? curOrder._id.agentId.fullname : "Agent" }</h5>
                         </div>
                         <button onClick={() => giveOrderToCourier()}>Yuborish</button>
                     </div>
@@ -236,7 +234,7 @@ const ManagerHome = (props) => {
                         <OneManagerCard 
                             setIsModalVisible={setIsModalVisible} 
                             key={index} 
-                            item={item._id} 
+                            item={item} 
                             products={item.products} 
                             index={index} 
                             date={date} 
