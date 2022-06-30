@@ -215,7 +215,12 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         return res.status(200).json({ orderAdmin })
     } else {
         orderManger = await Order.aggregate(
-            [{
+            [
+            {
+                $match: {
+                    status: status
+                }
+            }, {
                 $unwind: '$products'
             }, {
                 $lookup: {
