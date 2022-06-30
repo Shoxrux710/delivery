@@ -124,7 +124,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const { status } = req.query
     console.log(position)
 
-    const filter = position === 'manager' ? 'agent.managerId' : 'agentId'
+    const filter = position === 'manager' ? 'agent.managerId' : '_id.agentId._id'
 
     const filterAgent = (position === 'admin' || position === 'super-admin') ? [] : ([{
         '$match': {
@@ -296,9 +296,9 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 }
             }, {
                 $unwind: '$_id.agentId.regionId'
-            }, 
+            },
             ...filterAgent,
-             {
+            {
                 $project: {
                     orderPrice: '$orderPrice',
                     products: '$products',
