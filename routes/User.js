@@ -297,8 +297,6 @@ router.get('/userId/:id', async (req, res) => {
     const { id } = req.params
 
     const userId = await User.findOne({ _id: id }).populate('regionId', 'name')
-        .populate({ path: 'worker', select: 'fullname login position', populate: [{ path: 'regionId', select: 'name' }] })
-    console.log(userId)
 
     res.status(200).json({ userId })
 
