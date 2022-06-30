@@ -216,74 +216,74 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     } else {
         orderManger = await Order.aggregate(
             [
-            {
-                $match: {
-                    status: status
-                }
-            }, {
-                $unwind: '$products'
-            }, {
-                $lookup: {
-                    from: 'products',
-                    localField: 'products.productId',
-                    foreignField: '_id',
-                    as: 'products.productId'
-                }
-            }, {
-                $unwind: '$products.productId'
-            }, {
-                $group: {
-                    _id: '$_id',
-                    orderPrice: {
-                        $sum: {
-                            $multiply: [
-                                '$products.count',
-                                '$products.productId.price'
-                            ]
-                        }
-                    },
-                    products: {
-                        $push: '$products'
+                {
+                    $match: {
+                        status: status
                     }
-                }
-            }, {
-                $lookup: {
-                    from: 'orders',
-                    localField: '_id',
-                    foreignField: '_id',
-                    as: '_id'
-                }
-            }, {
-                $unwind: '$_id'
-            }, {
-                $lookup: {
-                    from: 'users',
-                    localField: '_id.agentId',
-                    foreignField: '_id',
-                    as: 'agent'
-                }
-            }, {
-                $unwind: '$agent'
-            }, {
-                $lookup: {
-                    from: 'customers',
-                    localField: '_id.customerId',
-                    foreignField: '_id',
-                    as: '_id.customerId'
-                }
-            }, {
-                $unwind: '$_id.customerId'
-            }, {
-                $match: {
-                    [filterId]: mongoose.Types.ObjectId(id)
-                }
-            }, {
-                $project: {
-                    orderPrice: '$orderPrice',
-                    products: '$products',
-                    _id: '$_id'
-                }
-            }]
+                }, {
+                    $unwind: '$products'
+                }, {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'products.productId',
+                        foreignField: '_id',
+                        as: 'products.productId'
+                    }
+                }, {
+                    $unwind: '$products.productId'
+                }, {
+                    $group: {
+                        _id: '$_id',
+                        orderPrice: {
+                            $sum: {
+                                $multiply: [
+                                    '$products.count',
+                                    '$products.productId.price'
+                                ]
+                            }
+                        },
+                        products: {
+                            $push: '$products'
+                        }
+                    }
+                }, {
+                    $lookup: {
+                        from: 'orders',
+                        localField: '_id',
+                        foreignField: '_id',
+                        as: '_id'
+                    }
+                }, {
+                    $unwind: '$_id'
+                }, {
+                    $lookup: {
+                        from: 'users',
+                        localField: '_id.agentId',
+                        foreignField: '_id',
+                        as: 'agent'
+                    }
+                }, {
+                    $unwind: '$agent'
+                }, {
+                    $lookup: {
+                        from: 'customers',
+                        localField: '_id.customerId',
+                        foreignField: '_id',
+                        as: '_id.customerId'
+                    }
+                }, {
+                    $unwind: '$_id.customerId'
+                }, {
+                    $match: {
+                        [filterId]: mongoose.Types.ObjectId(id)
+                    }
+                }, {
+                    $project: {
+                        orderPrice: '$orderPrice',
+                        products: '$products',
+                        _id: '$_id'
+                    }
+                }]
         )
 
         return res.status(200).json({ orderManger })
@@ -327,13 +327,11 @@ router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     //         [func()]: mongoose.Types.ObjectId(id)
     //     } : {}
 
-    const filterAgent = (position === 'admin' || position === 'super-admin') ? [] : (position === 'manager' ? [{
+    const filter = position === 'manager' ? 'agent.managerId' : 'agentId'
+
+    const filterAgent = (position === 'admin' || position === 'super-admin') ? [] : ([{
         '$match': {
-            'agent.managerId': mongoose.Types.ObjectId(id)
-        }
-    }] : [{
-        '$match': {
-            'agentId': mongoose.Types.ObjectId(id)
+            [filter] : mongoose.Types.ObjectId(id)
         }
     }])
 
