@@ -296,58 +296,7 @@ router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         (position === 'manager' ? 'agent.managerId' : '_id.agentId')
 
     const orderCount = await Order.aggregate(
-        [{
-            $unwind: '$products'
-        }, {
-            $lookup: {
-                from: 'orders',
-                localField: '_id',
-                foreignField: '_id',
-                as: '_id'
-            }
-        }, {
-            $unwind: '$_id'
-        }, {
-            $lookup: {
-                from: 'products',
-                localField: 'products.productId',
-                foreignField: '_id',
-                as: 'products.productId'
-            }
-        }, {
-            $unwind: '$products.productId'
-        }, {
-            $lookup: {
-                from: 'users',
-                localField: '_id.agentId',
-                foreignField: '_id',
-                as: 'agent'
-            }
-        }, {
-            $unwind: {
-                path: '$agent'
-            }
-        }, {
-            $match: {
-                [filterAgent]: mongoose.Types.ObjectId(id)
-                
-            }
-        }, {
-            $group: {
-                _id: '$status',
-                totalPrice: {
-                    $sum: {
-                        $multiply: [
-                            '$products.count',
-                            '$products.productId.price'
-                        ]
-                    }
-                },
-                count: {
-                    $sum: 1
-                }
-            }
-        }]
+       
     )
 
     res.status(200).json({ orderCount })
