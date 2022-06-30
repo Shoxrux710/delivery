@@ -273,7 +273,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
 
-    const {id} = req.user
+    const { id } = req.user
 
     const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
         (position === 'manager' ? 'agent.managerId' : '_id.agentId')
@@ -312,7 +312,7 @@ router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }
         }, {
             $match: {
-              [filterAgent]:  mongoose.Types.ObjectId(id)
+                [filterAgent]: mongoose.Types.ObjectId(id)
             }
         }, {
             $group: {
@@ -324,6 +324,9 @@ router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                             '$products.productId.price'
                         ]
                     }
+                },
+                count: {
+                    $sum: 1
                 }
             }
         }]
