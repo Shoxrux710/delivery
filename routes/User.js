@@ -117,23 +117,53 @@ router.post('/register', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
 
     const { fullname, login, password, regionId, phone, position, worker } = req.body
+    const session = await mongoose.startSession()
+    session.startTransaction()
+    if (position === 'manager') {
+        try {
+            const user = await User.findOne({ login })
 
-    const user = await User.findOne({ login })
+            if (user) return res.status(400).json({ errorMessage: 'User already' })
+            const passwordHashed = await bcrypt.hash(password, 12)
 
-    if (user) return res.status(400).json({ errorMessage: 'User already' })
-    const passwordHashed = await bcrypt.hash(password, 12)
+            const newUser = new User({
+                fullname,
+                login,
+                regionId,
+                phone,
+                position,
+                password: passwordHashed
+            })
+            const { _id: newUserId } = await newUser.save({ session })
 
-    const newUser = new User({
-        fullname,
-        login,
-        regionId,
-        phone,
-        worker,
-        position,
-        password: passwordHashed
-    })
-    await newUser.save()
-    res.status(200).json({ successMessage: "Register success" })
+            await User.updateMany({ _id: { $in: worker } }, { managerId: newUserId }).session(session)
+            await session.commitTransaction()
+            res.status(200).json({ successMessage: "Register success" })
+
+        } catch (err) {
+            await session.abortTransaction()
+            res.status(500).json({ errorMessage: 'server error' })
+        }
+
+    } else {
+        const user = await User.findOne({ login })
+
+        if (user) return res.status(400).json({ errorMessage: 'User already' })
+        const passwordHashed = await bcrypt.hash(password, 12)
+
+        const newUser = new User({
+            fullname,
+            login,
+            regionId,
+            phone,
+            position,
+            password: passwordHashed
+        })
+        await newUser.save()
+        res.status(200).json({ successMessage: "Register success" })
+    }
+
+    session.endSession()
 
 })
 
@@ -167,41 +197,26 @@ router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array(), errorMessage: `Please fill in` })
 
-    const session = await mongoose.startSession()
+    const { id } = req.user
+    const { fullname, login, password, regionId, phone, position } = req.body
 
-    session.startTransaction()
-    try {
-        const { id } = req.user
-        const { fullname, login, password, regionId, phone, position } = req.body
+    const condedate = await User.findOne({ login })
+    if (condedate) return res.status(400).json({ errorMessage: 'User already' })
 
-        const condedate = await User.findOne({ login })
-        if (condedate) return res.status(400).json({ errorMessage: 'User already' })
+    const passwordHashed = await bcrypt.hash(password, 12)
 
-        const passwordHashed = await bcrypt.hash(password, 12)
+    const newUser = new User({
+        fullname,
+        login,
+        password: passwordHashed,
+        regionId,
+        phone,
+        position,
+        managerId: id
+    })
 
-        const newUser = new User({
-            fullname,
-            login,
-            password: passwordHashed,
-            regionId,
-            phone,
-            position
-        })
-
-        const { _id: newUserId } = await newUser.save({ session })
-
-        const user = await User.findOne({ _id: id })
-        user.worker = [...user.worker, newUserId]
-        await user.save({ session })
-        await session.commitTransaction()
-
-        res.status(200).json({ successMessage: "Register success" })
-    } catch (err) {
-        await session.abortTransaction()
-        res.status(500).json({ errorMessage: "server error" })
-    }
-     
-    session.endSession()
+    await newUser.save()
+    res.status(200).json({ successMessage: "Register success" })
 
 })
 
@@ -240,14 +255,14 @@ router.post("/login", loginValidator, async (req, res) => {
 
     const { login, password } = req.body
     const user = await User.findOne({ login })
-    
+
     if (!user) return res.status(400).json({ errorMessage: "Please login..." })
 
     const match = await bcrypt.compare(password, user.password)
     if (!match) return res.status(400).json({ errorMessage: "inCorrect password" })
 
     const payload = { id: user._id }
-    
+
     const token = jwt.sign(payload, config.get('jsonwebtoken'))
     res.status(200).json({
         token,
@@ -283,8 +298,8 @@ router.get('/userId/:id', async (req, res) => {
 
     const userId = await User.findOne({ _id: id }).populate('regionId', 'name')
         .populate({ path: 'worker', select: 'fullname login position', populate: [{ path: 'regionId', select: 'name' }] })
-    console.log(userId)     
-    
+    console.log(userId)
+
     res.status(200).json({ userId })
 
 })
@@ -401,16 +416,16 @@ router.get('/each', async (req, res) => {
  *    
  */
 
-router.put('/delete/:id', (req,res) => {
+router.put('/delete/:id', (req, res) => {
 
-    const {id} = req.params
+    const { id } = req.params
 
     User.findById(id, async (err, userOne) => {
         if (err) return res.status(400).json({ errorMessage: 'Xato' })
         userOne.active = false
 
         await userOne.save()
-        res.status(200).json({successMessage: "Delete"})
+        res.status(200).json({ successMessage: "Delete" })
     })
 })
 

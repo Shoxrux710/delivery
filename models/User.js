@@ -21,13 +21,13 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    worker: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-            default: null
-        }
-    ],
+    // worker: [
+    //     {
+    //         type: Schema.Types.ObjectId,
+    //         ref: 'User',
+    //         default: null
+    //     }
+    // ],
     position: {
         type: String,
         enum: ['super-admin', 'admin', 'manager', 'agent', 'courier']
@@ -41,7 +41,13 @@ const userSchema = new Schema({
     active: {
         type: Boolean,
         default: true
+    },
+    managerId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
     }
+
 })
 
 module.exports = model('User', userSchema)

@@ -104,11 +104,10 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
  *   tags: [Order]
  *   parameters:
  *     - in: query
- *       name: pagination
+ *       name: status
  *       schema:   
- *          type: object
- *       required: 
- *          - status
+ *          type: string
+ *       required: true
  *   security:
  *     - bearerAuth: []
  *   responses:
@@ -121,70 +120,200 @@ router.post('/add', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
  */
 router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
 
-    const { position, worker, id } = req.user
+    const { position, id } = req.user
     const { status } = req.query
-    const managerAll = await User.find({position: 'manager'})
-    console.log(managerAll)
-     
-    const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
-    const objectStatus = { agentId: { $in: objectIdWorker } }
+    console.log(position)
 
-    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} : 
-        (position === 'manager' ? { ...objectStatus } : { agentId: mongoose.Types.ObjectId(id) })
-
-    const orderStatus = await Order.find({ status: status, ...filterAgent })
-        .populate('customerId', 'fullname fog address shopNumber phone phoneTwo')
-        .populate({ path: 'products', select: 'count', populate: [{ path: 'productId', select: 'name price' }] })
-        .populate({ path: 'agentId', select: 'fullname', populate: [{ path: 'regionId', select: 'name' }] })
+    const filterId = position === 'agent' ? '_id.agentId' : 'agent.managerId'
 
 
-    const orderCount = await Order.aggregate(
-        [{
-            $match: {
-                ...filterAgent
-            }
-        },
-        {
-            $unwind: {
-                path: '$products'
-            }
-        }, {
-            $lookup: {
-                from: 'products',
-                localField: 'products.productId',
-                foreignField: '_id',
-                as: 'products.productId'
-            }
-        }, {
-            $unwind: {
-                path: '$products.productId'
-            }
-        }, {
-            $group: {
-                _id: '$status',
-                count: {
-                    $sum: 1
-                },
-                totalPrice: {
-                    $sum: {
-                        $multiply: [
-                            '$products.count',
-                            '$products.productId.price'
-                        ]
+    if (position === 'admin' || position === 'super-admin') {
+        const orderAdmin = await Order.aggregate(
+            [{
+                $match: {
+                    status: status
+                }
+            }, {
+                $unwind: {
+                    path: '$products'
+                }
+            }, {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.productId',
+                    foreignField: '_id',
+                    as: 'products.productId'
+                }
+            }, {
+                $unwind: {
+                    path: '$products.productId'
+                }
+            }, {
+                $group: {
+                    _id: '$_id',
+                    orderPrice: {
+                        $sum: {
+                            $multiply: [
+                                '$products.count',
+                                '$products.productId.price'
+                            ]
+                        }
                     }
                 }
-            }
-        }]
-    )    
+            }, {
+                $lookup: {
+                    from: 'orders',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: '_id'
+                }
+            }, {
+                $unwind: '$_id'
+            }, {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id.agentId',
+                    foreignField: '_id',
+                    as: 'agent'
+                }
+            }, {
+                $unwind: '$agent'
+            }, {
+                $group: {
+                    _id: '$agent.managerId',
+                    orderCount: {
+                        $sum: 1
+                    },
+                    orderPrice: {
+                        $sum: '$orderPrice'
+                    }
+                }
+            }, {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'manager'
+                }
+            }, {
+                $unwind: '$manager'
+            }]
+        )
 
-    res.status(200).json({
-        orderStatus,
-        orderCount
-    })
+        return res.status(200).json({ orderAdmin })
+    } else {
+        orderManger = await Order.aggregate(
+            [{
+                $unwind: {
+                    path: '$products'
+                }
+            }, {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.productId',
+                    foreignField: '_id',
+                    as: 'products.productId'
+                }
+            }, {
+                $unwind: {
+                    path: '$products.productId'
+                }
+            }, {
+                $group: {
+                    _id: '$_id',
+                    orderPrice: {
+                        $sum: {
+                            $multiply: [
+                                '$products.count',
+                                '$products.productId.price'
+                            ]
+                        }
+                    },
+                    products: {
+                        $push: '$products'
+                    }
+                }
+            }, {
+                $lookup: {
+                    from: 'orders',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: '_id'
+                }
+            }, {
+                $unwind: '$_id'
+            }, {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id.agentId',
+                    foreignField: '_id',
+                    as: 'agent'
+                }
+            }, {
+                $unwind: '$agent'
+            }, {
+                $match: {
+                    [filterId]: mongoose.Types.ObjectId(id),
+                }
+            }, {
+                $project: {
+                    orderPrice: '$orderPrice',
+                    products: '$products',
+                    _id: '$_id'
+                }
+            }]
+        )
+
+        return res.status(200).json({ orderManger })
+    }
+
 
 })
 
 
+router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
+
+    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
+        (position === 'manager' ? { ...objectStatus } : { agentId: mongoose.Types.ObjectId(id) })
+
+    const orderCount = await Order.aggregate(
+        [
+            {
+                $unwind: {
+                    path: '$products'
+                }
+            }, {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.productId',
+                    foreignField: '_id',
+                    as: 'products.productId'
+                }
+            }, {
+                $unwind: {
+                    path: '$products.productId'
+                }
+            }, {
+                $group: {
+                    _id: '$status',
+                    count: {
+                        $sum: 1
+                    },
+                    totalPrice: {
+                        $sum: {
+                            $multiply: [
+                                '$products.count',
+                                '$products.productId.price'
+                            ]
+                        }
+                    }
+                }
+            }]
+    )
+
+    res.status(200).json({ orderCount })
+
+})
 
 
 /**

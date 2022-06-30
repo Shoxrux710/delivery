@@ -121,57 +121,6 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             populate: [{ path: 'customerId', select: 'fullname fog address shopNumber phone phoneTwo' }, { path: 'products', select: 'count', populate: [{ path: 'productId', select: 'name price' }] }]
         })
 
-    // const deliverTotal = await Delivery.aggregate(
-    //     [
-    //         {
-    //             $match: {
-    //                 courierId: mongoose.Types.ObjectId(id)
-    //             }
-    //         },
-    //         {
-    //             $lookup: {
-    //                 from: 'orders',
-    //                 localField: 'orderId',
-    //                 foreignField: '_id',
-    //                 as: 'orderId'
-    //             }
-    //         },
-    //         {
-    //             $unwind: {
-    //                 path: '$orderId'
-    //             }
-    //         }, {
-    //             $unwind: {
-    //                 path: '$orderId.products'
-    //             }
-    //         }, {
-    //             $lookup: {
-    //                 from: 'products',
-    //                 localField: 'orderId.products.productId',
-    //                 foreignField: '_id',
-    //                 as: 'orderId.products.productId'
-    //             }
-    //         }, {
-    //             $unwind: {
-    //                 path: '$orderId.products.productId'
-    //             }
-    //         }, {
-    //             $group: {
-    //                 _id: 'static',
-    //                 totalPrice: {
-    //                     $sum: {
-    //                         $multiply: [
-    //                             '$orderId.products.productId.price',
-    //                             '$orderId.products.count'
-    //                         ]
-    //                     }
-    //                 },
-    //                 count: {
-    //                     $sum: '$orderId.products.count'
-    //                 }
-    //             }
-    //         }]
-    // )
 
     const deliverTotal = await Delivery.aggregate(
         [{
