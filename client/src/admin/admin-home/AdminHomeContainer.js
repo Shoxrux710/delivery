@@ -56,10 +56,7 @@ const AdminHomeContainer = () => {
     }
 
     const [ orders, setOrders ] = useState([])
-    const [ activeOrders, setActiveOrders ] = useState({ _id: "active", count: 0, totalPrice: 0 })
-    const [ courierOrders, setCourierOrders ] = useState({ _id: "courier", count: 0, totalPrice: 0 })
-    const [ rejectedOrders, setRejectedOrders ] = useState({ _id: "rejected", count: 0, totalPrice: 0 })
-    const [ completedOrders, setCompletedOrders ] = useState({ _id: "completed", count: 0, totalPrice: 0 })
+
     const getEachOrders = useCallback(() => {
         axios
             .get(`/api/order/each`, {
@@ -68,22 +65,26 @@ const AdminHomeContainer = () => {
             })
             .then(({data}) => {
                 setOrders(data.orderAdmin)
-                console.log(data.orderAdmin)
-                data.orderCount.forEach(order => {
-                    order._id === 'active' && setActiveOrders(order)
-                    order._id === 'courier' && setCourierOrders(order)
-                    order._id === 'rejected' && setRejectedOrders(order)
-                    order._id === 'completed' && setCompletedOrders(order)
-                })
+
             })
     }, [orderType])
+
+    const [ activeOrders, setActiveOrders ] = useState({ _id: "active", count: 0, totalPrice: 0 })
+    const [ courierOrders, setCourierOrders ] = useState({ _id: "courier", count: 0, totalPrice: 0 })
+    const [ rejectedOrders, setRejectedOrders ] = useState({ _id: "rejected", count: 0, totalPrice: 0 })
+    const [ completedOrders, setCompletedOrders ] = useState({ _id: "completed", count: 0, totalPrice: 0 })
 
     const getOrderStatusData = () => {
         axios
             .get('/api/order/card', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token } })
             .then(({ data }) => {
-                console.log(data)
+                data.orderCount.forEach(order => {
+                    order._id === 'active' && setActiveOrders(order)
+                    order._id === 'courier' && setCourierOrders(order)
+                    order._id === 'rejected' && setRejectedOrders(order)
+                    order._id === 'completed' && setCompletedOrders(order)
+                })
             })
 
     }

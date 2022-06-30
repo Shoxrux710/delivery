@@ -57,22 +57,23 @@ const AgentProfileContainer = () => {
             .get('/api/order/card', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token } })
             .then(({ data }) => {
+                console.log(data)
                 data.orderCount.map(order => {
                     if(order._id === "active") {
                         setActiveCount(order.count)
-                        setActivePrice(order.totalPrize)
+                        setActivePrice(order.totalPrice)
                     }
                     if(order._id === "courier") {
                         setCourierCount(order.count)
-                        setCourierPrice(order.totalPrize)
+                        setCourierPrice(order.totalPrice)
                     }
                     if(order._id === "rejected") {
                         setrejectedCount(order.count)
-                        setRejectedPrice(order.totalPrize)
+                        setRejectedPrice(order.totalPrice)
                     }
                     if(order._id === "completed") {
                         setCompletedCount(order.count)
-                        setCompletedPrice(order.totalPrize)
+                        setCompletedPrice(order.totalPrice)
                     }
                     return null
                 })

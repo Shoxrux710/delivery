@@ -32,6 +32,7 @@ const ManagerHomeContainer = () => {
             })
 
             axios.get(`/api/user/each?position=courier&regionId=${res.data.userId.regionId._id}`).then(res => {
+                console.log(res.data.userEach)
                 setCouriers(res.data.userEach)
                 setKuryersCount(res.data.count)
             }).catch(err => {
@@ -63,26 +64,7 @@ const ManagerHomeContainer = () => {
                 status: orderType 
             }
         }).then(res => {
-            res.data.orderCount.forEach(item => {
-                if( item._id === 'active' ) {
-                    setActiveCount(item.count)
-                    setActivePrice(item.totalPrice)
-                }
-                if( item._id === 'courier' ) {
-                    setCourierCount(item.count)
-                    setCourierPrice(item.totalPrice)
-                }
-                if( item._id === 'completed' ) {
-                    setCompletedCount(item.count)
-                    setCompletedPrice(item.totalPrice)
-                }
-                if( item._id === 'rejected' ) {
-                    setrejectedCount(item.count)
-                    setRejectedPrice(item.totalPrice)
-                }
-            })
-
-            setAllOrders(res.data.orderStatus)
+            setAllOrders(res.data.orderManger)
             setLoading(false)
         }).catch(err => {
             console.log(err)
@@ -95,6 +77,33 @@ const ManagerHomeContainer = () => {
     const getCurOrder = (order) => {
         setCurOrder(order)
         setIsModalVisible(true)
+    }
+
+    const getOrderStatusData = () => {
+        axios
+            .get('/api/order/card', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token } })
+            .then(({ data }) => {
+                data.orderCount.map(order => {
+                    if(order._id === "active") {
+                        setActiveCount(order.count)
+                        setActivePrice(order.totalPrice)
+                    }
+                    if(order._id === "courier") {
+                        setCourierCount(order.count)
+                        setCourierPrice(order.totalPrice)
+                    }
+                    if(order._id === "rejected") {
+                        setrejectedCount(order.count)
+                        setRejectedPrice(order.totalPrice)
+                    }
+                    if(order._id === "completed") {
+                        setCompletedCount(order.count)
+                        setCompletedPrice(order.totalPrice)
+                    }
+                    return null
+                })
+            })
     }
 
     const [ selectedCourier, setSelectedCourier ] = useState(null)
@@ -120,6 +129,7 @@ const ManagerHomeContainer = () => {
 
     useEffect(() => {
         getUserData()
+        getOrderStatusData()
         //eslint-disable-next-line
     }, [])
 

@@ -40,6 +40,7 @@ const OneManagerCard = (props) => {
                         <h6>Taxrirlash</h6>
                     </div>
                     <div onClick={() => {
+                        console.log(item)
                         getCurOrder(item)
                     }}>
                         <div className='bg bg2'>

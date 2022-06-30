@@ -90,11 +90,11 @@ const AgentProfile = (props) => {
                     <div className='about'>
                         <div className='left'>
                             <h6>Soni</h6>
-                            <h5>{activeCount} ta</h5>
+                            <h5>{activeCount ? activeCount : 0} ta</h5>
                         </div>
                         <div className='right'>
                             <h6>Puli</h6>
-                            <h5>{activePrice} so'm</h5>
+                            <h5>{activePrice ? activePrice : 0} so'm</h5>
                         </div>
                     </div>
                 </div>

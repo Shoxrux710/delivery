@@ -16,6 +16,8 @@ const ManagerHome = (props) => {
         curOrder, getCurOrder, couriers, setSelectedCourier, giveOrderToCourier 
     } = props
 
+    console.log(curOrder)
+
     return (
         <div className='manager-home-component'>
             <NavbarContainer />
@@ -193,7 +195,7 @@ const ManagerHome = (props) => {
                             <select onChange={(e) => setSelectedCourier(e.target.value)} >
                                 <option value={null}>Tanlang</option>
                                 {
-                                    couriers.map((courier) => (
+                                    couriers && couriers.map((courier) => (
                                         <option key={courier._id} value={courier._id}>{ courier.fullname }</option>
                                     ))
                                 }
@@ -229,12 +231,12 @@ const ManagerHome = (props) => {
             {loader}
             {
                 allOrders && Array.isArray(allOrders) ? allOrders.map((item, index) => {
-                    const date = new Date(item.date)
+                    const date = new Date(item._id.date)
                     return (
                         <OneManagerCard 
                             setIsModalVisible={setIsModalVisible} 
                             key={index} 
-                            item={item} 
+                            item={item._id} 
                             products={item.products} 
                             index={index} 
                             date={date} 

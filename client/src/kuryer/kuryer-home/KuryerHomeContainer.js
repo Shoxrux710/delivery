@@ -40,6 +40,7 @@ const KuryerHomeContainer = () => {
                 status: orderType 
             }
         }).then(res => {
+            console.log(res.data)
             res.data.deliverTotal.forEach(item => {
                 if( item._id === 'courier' ) {
                     setActiveCount(item.count)
@@ -63,8 +64,37 @@ const KuryerHomeContainer = () => {
         })
     }
 
+    const getOrderStatusData = () => {
+        axios
+            .get('/api/order/card', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token } })
+            .then(({ data }) => {
+                console.log(data)
+                // data.orderCount.map(order => {
+                //     if(order._id === "active") {
+                //         setActiveCount(order.count)
+                //         setActivePrice(order.totalPrize)
+                //     }
+                //     if(order._id === "courier") {
+                //         setCourierCount(order.count)
+                //         setCourierPrice(order.totalPrize)
+                //     }
+                //     if(order._id === "rejected") {
+                //         setrejectedCount(order.count)
+                //         setRejectedPrice(order.totalPrize)
+                //     }
+                //     if(order._id === "completed") {
+                //         setCompletedCount(order.count)
+                //         setCompletedPrice(order.totalPrize)
+                //     }
+                //     return null
+                // })
+            })
+    }
+
     useEffect(() => {
         getUserData()
+        getOrderStatusData()
         //eslint-disable-next-line
     }, [])
 
