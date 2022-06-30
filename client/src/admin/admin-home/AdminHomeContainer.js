@@ -67,7 +67,8 @@ const AdminHomeContainer = () => {
                 params: { status: orderType }
             })
             .then(({data}) => {
-                setOrders(data.orderStatus)
+                setOrders(data.orderAdmin)
+                console.log(data.orderAdmin)
                 data.orderCount.forEach(order => {
                     order._id === 'active' && setActiveOrders(order)
                     order._id === 'courier' && setCourierOrders(order)
@@ -76,6 +77,16 @@ const AdminHomeContainer = () => {
                 })
             })
     }, [orderType])
+
+    const getOrderStatusData = () => {
+        axios
+            .get('/api/order/card', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token } })
+            .then(({ data }) => {
+                console.log(data)
+            })
+
+    }
 
     useEffect(() => {
         getEachOrders()
@@ -88,6 +99,7 @@ const AdminHomeContainer = () => {
         getManagersCount()
         getUserData()
         getAdminsCount()
+        getOrderStatusData()
         // eslint-disable-next-line
     }, [])
 

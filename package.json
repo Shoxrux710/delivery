@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
-    "server": "nodemon index.js",
+    "server": "node index.js",
     "client:install": "npm install --prefix ./client",
     "client:build": "npm run build --prefix ./client"
   },

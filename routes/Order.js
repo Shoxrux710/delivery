@@ -285,7 +285,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
 
-    const { id } = req.user
+    const { id, position } = req.user
 
     const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
         (position === 'manager' ? 'agent.managerId' : '_id.agentId')

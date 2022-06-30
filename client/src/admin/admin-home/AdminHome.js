@@ -188,21 +188,15 @@ const AdminHome = (props) => {
             </div>
 
             <div className='all-orders-wrapper'>
-                {/* 
-                    BU qismi o`ylab ko`rilishi kerak
-                    Boshqaruvchiga agent, kuryer biriktirilgan bo`ladi
-                    agent va kuryerlar ishlagan buyurtmalar soni va summasi bitta boshqaruvchiga biriktirilib chiqadi
-                    uning nomeri va qaysi viloyatga biriktirilgani chiqadi
-                */}
                 {
-                    orders.map((order) => (
+                    orders.map((order, index) => (
                         <div className='order' key={order._id}>
                             <div className='order-top'>
                                 <div className='left'>
-                                    <h1>1</h1>
+                                    <h1>{ index + 1 }</h1>
                                     <div>
-                                        <h3>Azizbek Abduxalilov</h3>
-                                        <p>Samarqand</p>
+                                        <h3>{ order.manager.fullname }</h3>
+                                        <p>{ order.manager.regionId.name }</p> 
                                     </div>
                                 </div>
                                 <div className='right'>
@@ -211,15 +205,15 @@ const AdminHome = (props) => {
                             </div>
                             <div className='qator'>
                                 <p>Faol buyurtmalar</p>
-                                <span>150</span>
+                                <span>{ order.orderCount }</span>
                             </div>
                             <div className='qator'>
                                 <p>Umumiy narxi</p>
-                                <h6>11 236 540 so’m</h6>
+                                <h6>{ order.orderPrice } so’m</h6>
                             </div>
                             <div className='qator'>
-                                <h5>Samarqand</h5>
-                                <h5>+998934805885</h5>
+                                <h5>{ order.manager.regionId.name }</h5>
+                                <h5>+ { order.manager.phone }</h5>
                             </div>
                         </div>
                     ))
