@@ -298,56 +298,56 @@ router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const orderCount = await Order.aggregate(
         [
             {
-              '$unwind': '$products'
+                '$unwind': '$products'
             }, {
-              '$lookup': {
-                'from': 'orders', 
-                'localField': '_id', 
-                'foreignField': '_id', 
-                'as': '_id'
-              }
-            }, {
-              '$unwind': '$_id'
-            }, {
-              '$lookup': {
-                'from': 'products', 
-                'localField': 'products.productId', 
-                'foreignField': '_id', 
-                'as': 'products.productId'
-              }
-            }, {
-              '$unwind': '$products.productId'
-            }, {
-              '$lookup': {
-                'from': 'users', 
-                'localField': '_id.agentId', 
-                'foreignField': '_id', 
-                'as': 'agent'
-              }
-            }, {
-              '$unwind': {
-                'path': '$agent'
-              }
-            }, {
-              '$match': {
-                '_id.agentId': new ObjectId('62bc8a7192b9bbb0555cfb5e')
-              }
-            }, {
-              '$group': {
-                '_id': '$status', 
-                'totalPrice': {
-                  '$sum': {
-                    '$multiply': [
-                      '$products.count', '$products.productId.price'
-                    ]
-                  }
-                }, 
-                'count': {
-                  '$sum': 1
+                '$lookup': {
+                    'from': 'orders',
+                    'localField': '_id',
+                    'foreignField': '_id',
+                    'as': '_id'
                 }
-              }
+            }, {
+                '$unwind': '$_id'
+            }, {
+                '$lookup': {
+                    'from': 'products',
+                    'localField': 'products.productId',
+                    'foreignField': '_id',
+                    'as': 'products.productId'
+                }
+            }, {
+                '$unwind': '$products.productId'
+            }, {
+                '$lookup': {
+                    'from': 'users',
+                    'localField': '_id.agentId',
+                    'foreignField': '_id',
+                    'as': 'agent'
+                }
+            }, {
+                '$unwind': {
+                    'path': '$agent'
+                }
+            }, {
+                '$match': {
+                    [filterAgent]: mongoose.Types.ObjectId(id)
+                }
+            }, {
+                '$group': {
+                    '_id': '$status',
+                    'totalPrice': {
+                        '$sum': {
+                            '$multiply': [
+                                '$products.count', '$products.productId.price'
+                            ]
+                        }
+                    },
+                    'count': {
+                        '$sum': 1
+                    }
+                }
             }
-          ]
+        ]
     )
 
     res.status(200).json({ orderCount })
