@@ -216,9 +216,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     } else {
         orderManger = await Order.aggregate(
             [{
-                $unwind: {
-                    path: '$products'
-                }
+                $unwind: '$products'
             }, {
                 $lookup: {
                     from: 'products',
@@ -227,9 +225,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                     as: 'products.productId'
                 }
             }, {
-                $unwind: {
-                    path: '$products.productId'
-                }
+                $unwind: '$products.productId'
             }, {
                 $group: {
                     _id: '$_id',
@@ -264,8 +260,17 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }, {
                 $unwind: '$agent'
             }, {
+                $lookup: {
+                    from: 'customers',
+                    localField: '_id.customerId',
+                    foreignField: '_id',
+                    as: '_id.customerId'
+                }
+            }, {
+                $unwind: '$_id.customerId'
+            }, {
                 $match: {
-                    [filterId]: mongoose.Types.ObjectId(id),
+                    [filterId]: mongoose.Types.ObjectId(id)
                 }
             }, {
                 $project: {
