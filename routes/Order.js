@@ -124,7 +124,13 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const { status } = req.query
     console.log(position)
 
-    const filterId = position === 'agent' ? '_id.agentId._id' : 'agent.managerId'
+    const filter = position === 'manager' ? 'agent.managerId' : 'agentId'
+
+    const filterAgent = (position === 'admin' || position === 'super-admin') ? [] : ([{
+        '$match': {
+            [filter]: mongoose.Types.ObjectId(id)
+        }
+    }])
 
 
 
@@ -290,11 +296,9 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 }
             }, {
                 $unwind: '$_id.agentId.regionId'
-            }, {
-                $match: {
-                    [filterId]: mongoose.Types.ObjectId(id)
-                }
-            }, {
+            }, 
+            ...filterAgent,
+             {
                 $project: {
                     orderPrice: '$orderPrice',
                     products: '$products',
