@@ -273,42 +273,60 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 router.get('/card', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
 
+    const {id} = req.user
+
     const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
-        (position === 'manager' ? { ...objectStatus } : { agentId: mongoose.Types.ObjectId(id) })
+        (position === 'manager' ? 'agent.managerId' : '_id.agentId')
 
     const orderCount = await Order.aggregate(
-        [
-            {
-                $unwind: {
-                    path: '$products'
-                }
-            }, {
-                $lookup: {
-                    from: 'products',
-                    localField: 'products.productId',
-                    foreignField: '_id',
-                    as: 'products.productId'
-                }
-            }, {
-                $unwind: {
-                    path: '$products.productId'
-                }
-            }, {
-                $group: {
-                    _id: '$status',
-                    count: {
-                        $sum: 1
-                    },
-                    totalPrice: {
-                        $sum: {
-                            $multiply: [
-                                '$products.count',
-                                '$products.productId.price'
-                            ]
-                        }
+        [{
+            $unwind: '$products'
+        }, {
+            $lookup: {
+                from: 'orders',
+                localField: '_id',
+                foreignField: '_id',
+                as: '_id'
+            }
+        }, {
+            $unwind: '$_id'
+        }, {
+            $lookup: {
+                from: 'products',
+                localField: 'products.productId',
+                foreignField: '_id',
+                as: 'products.productId'
+            }
+        }, {
+            $unwind: '$products.productId'
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: '_id.agentId',
+                foreignField: '_id',
+                as: 'agent'
+            }
+        }, {
+            $unwind: {
+                path: '$agent'
+            }
+        }, {
+            $match: {
+              [filterAgent]:  mongoose.Types.ObjectId(id)
+            }
+        }, {
+            $group: {
+                _id: '$status',
+                totalPrice: {
+                    $sum: {
+                        $multiply: [
+                            '$products.count',
+                            '$products.productId.price'
+                        ]
                     }
                 }
-            }]
+            }
+        }]
     )
 
     res.status(200).json({ orderCount })
