@@ -1,14 +1,19 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import Loader from '../../components/loader/Loader'
 import InnerOrder from './InnerOrder'
 
 const InnerOrderContainer = () => {
 
     const token = JSON.parse(window.localStorage.getItem('user'))?.token
 
+    const [ loading, setLoading ] = useState(true)
+    const loader = loading ? <Loader /> : ''
+
     const params = useParams()
+    const navigate = useNavigate()
     const id = params.id
 
     const [ isModalVisible, setIsModalVisible ] = useState(false)
@@ -28,7 +33,7 @@ const InnerOrderContainer = () => {
 
         }).catch(err => {
             console.log(err)
-        })
+        }).finally(fin => setLoading(false))
     }
 
     const [ comment, setComment ] = useState('')
@@ -52,14 +57,10 @@ const InnerOrderContainer = () => {
                 'authorization': `Bearer ${token}`
             }
         }).then(res => {
+            navigate('/')
             toast.success("Muvaffaqqiyatli yakunlandi!", {
                 position: toast.POSITION.BOTTOM_RIGHT
             })
-            setCard('')
-            setCash('')
-            setDebt('')
-            setComment('')
-            setIsModalVisible(false)
         }).catch(err => {
             toast.error("Error!", {
                 position: toast.POSITION.BOTTOM_RIGHT
@@ -73,6 +74,7 @@ const InnerOrderContainer = () => {
                 'authorization': `Bearer ${token}`
             }
         }).then(res => {
+            navigate('/')
             toast.success("Rad etildi!", {
                 position: toast.POSITION.BOTTOM_RIGHT
             })
@@ -105,6 +107,8 @@ const InnerOrderContainer = () => {
             setDebt={setDebt}
             completeOrder={completeOrder}
             rejectOrder={rejectOrder}
+            loader={loader}
+            loading={loading}
         />
     )
 }

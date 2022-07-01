@@ -149,13 +149,19 @@ const KuryerHome = (props) => {
                 {loader}
                 {
                     allOrders && Array.isArray(allOrders) ? allOrders.map((item, index) => {
-                        const date = new Date(item.date)
+                        const date =  new Date(new Date(item.date) - new Date(18000000))
                         return (
                             <OneKuryerCard key={index} item={item} products={item.orderId.products} index={index} date={date} />
                         )
                     }) : ''
                 }
             </div>
+
+            {
+                allOrders.length === 0 ? (
+                    <h3 style={{textAlign: 'center'}}>Buyurtma mavjud emas</h3>
+                ) : ''
+            }
         </div>
     )
 }

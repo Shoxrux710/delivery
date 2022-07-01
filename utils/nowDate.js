@@ -1,7 +1,7 @@
 
 module.exports = () => {
     const today = new Date()
-    const day = today.getUTCDay()
+    const day = today.getUTCDate()
     const month = today.getUTCMonth()
     const year = today.getUTCFullYear()
     const hours = today.getUTCHours() + 5

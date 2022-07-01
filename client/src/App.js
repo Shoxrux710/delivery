@@ -24,6 +24,7 @@ import InnerDebtContainer from './manager/inner-debt/InnerDebtContainer';
 import AllManagerMoneyContainer from './manager/all-manager-money/AllManagerMoneyContainer';
 import AllAdminMoneyContainer from './admin/all-admin-money/AllAdminMoneyContainer';
 import AddProductContainer from './admin/add-product/AddProductContainer';
+import PageNotFound from './components/page-not-found/PageNotFound';
 
 const App = () => {
 
@@ -58,6 +59,7 @@ const App = () => {
       <Route path='/all-couriers' element={<AllKuryersContainer />} />
       <Route path='/all-money' element={<AllAdminMoneyContainer />} />
       <Route path='/add-product' element={<AddProductContainer />} />
+      <Route path='*' element={<PageNotFound />} />
     </Routes>
   )
 
@@ -69,6 +71,7 @@ const App = () => {
       <Route path='/all-money' element={<AllManagerMoneyContainer />} />
       <Route path='/debt' element={<ManagerDebtContainer />} />
       <Route path='/debt/:id' element={<InnerDebtContainer />} />
+      <Route path='*' element={<PageNotFound />} />
     </Routes>
   )
 
@@ -78,6 +81,7 @@ const App = () => {
       <Route path='/profile' element={<AgentProfileContainer />} />
       <Route path='/profile/order/:id' element={<InnerOrderAgentContainer />} />
       <Route path='/profile/debt' element={<AgentDebtContainer />} />
+      <Route path='*' element={<PageNotFound />} />
     </Routes>
   )
 
@@ -86,6 +90,7 @@ const App = () => {
       <Route path='/' element={<KuryerHomeContainer />} />
       <Route path='/money' element={<KuryerMoneyContainer />} />
       <Route path='/order/:id' element={<InnerOrderContainer />} />
+      <Route path='*' element={<PageNotFound />} />
     </Routes>
   )
 

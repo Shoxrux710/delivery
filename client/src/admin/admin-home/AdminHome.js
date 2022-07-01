@@ -1,7 +1,6 @@
 import React from 'react'
 import { HiFilter } from 'react-icons/hi'
 import { IoIosArrowUp } from 'react-icons/io'
-import { BsThreeDotsVertical } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import userPng from '../../img/user.png'
 import './adminHome.css'
@@ -146,7 +145,7 @@ const AdminHome = (props) => {
                     </div>
                 </div>
 
-                <div className={orderType === 'finished' ? 'square square-active' : 'square'} onClick={() => setOrderType('finished')}>
+                <div className={orderType === 'completed' ? 'square square-active' : 'square'} onClick={() => setOrderType('completed')}>
                     <div className='topp'></div>
                     <div className='type'>
                         <div className='bg'>
@@ -190,35 +189,39 @@ const AdminHome = (props) => {
             <div className='all-orders-wrapper'>
                 {
                     orders.map((order, index) => (
-                        <div className='order' key={order._id}>
-                            <div className='order-top'>
-                                <div className='left'>
-                                    <h1>{ index + 1 }</h1>
-                                    <div>
-                                        <h3>{ order.manager.fullname }</h3>
-                                        <p>{ order.manager.regionId.name }</p> 
+                        <Link to='/' key={order._id}>
+                            <div className='order'>
+                                <div className='order-top'>
+                                    <div className='left'>
+                                        <h1>{ index + 1 }</h1>
+                                        <div>
+                                            <h3>{ order.manager.fullname }</h3>
+                                            <p>{ order.manager.regionId.name }</p> 
+                                        </div>
                                     </div>
                                 </div>
-                                <div className='right'>
-                                    <BsThreeDotsVertical className='icon' />
+                                <div className='qator'>
+                                    <p>Faol buyurtmalar</p>
+                                    <span>{ order.orderCount }</span>
+                                </div>
+                                <div className='qator'>
+                                    <p>Umumiy narxi</p>
+                                    <h6>{ order.orderPrice } so’m</h6>
+                                </div>
+                                <div className='qator'>
+                                    <h5>{ order.manager.regionId.name }</h5>
+                                    <h5>{ order.manager.phone }</h5>
                                 </div>
                             </div>
-                            <div className='qator'>
-                                <p>Faol buyurtmalar</p>
-                                <span>{ order.orderCount }</span>
-                            </div>
-                            <div className='qator'>
-                                <p>Umumiy narxi</p>
-                                <h6>{ order.orderPrice } so’m</h6>
-                            </div>
-                            <div className='qator'>
-                                <h5>{ order.manager.regionId.name }</h5>
-                                <h5>+ { order.manager.phone }</h5>
-                            </div>
-                        </div>
+                        </Link>
                     ))
                 }
             </div>
+            {
+                orders.length === 0 ? (
+                    <h3 style={{textAlign: 'center'}}>Buyurtma mavjud emas</h3>
+                ) : ''
+            }
         </div>
     )
 }

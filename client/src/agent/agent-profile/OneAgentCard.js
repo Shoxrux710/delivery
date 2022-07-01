@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BsThreeDotsVertical } from 'react-icons/bs';
+// import { BsThreeDotsVertical } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 const OneAgentCard = (props) => {
@@ -11,7 +11,7 @@ const OneAgentCard = (props) => {
 
     return (
         <div className='one-order'>
-            <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
+            {/* <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} /> */}
             <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>
                 {
                     products && Array.isArray(products) ? products.map((item, index) => {
@@ -22,7 +22,7 @@ const OneAgentCard = (props) => {
                 }
             </h2>
 
-            <div className={orderMenu ? 'menu-active menu' : 'menu'}>
+            {/* <div className={orderMenu ? 'menu-active menu' : 'menu'}>
                 <div>
                     <div className='bg'>
                         <div></div>
@@ -41,7 +41,7 @@ const OneAgentCard = (props) => {
                     </div>
                     <h6>Bekor qilish</h6>
                 </div>
-            </div>
+            </div> */}
 
             <div className={leftNames ? 'left-names left-names-active' : 'left-names'}>
                 {

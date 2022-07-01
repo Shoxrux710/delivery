@@ -3,14 +3,13 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 
 const OneManagerCard = (props) => {
 
-    const { setIsModalVisible, item, products, index, date, getCurOrder } = props
+    const { item, products, index, date, getCurOrder } = props
 
     const [ orderMenu, setOrderMenu ] = useState(false)
     const [ leftNames, setLeftNames ] = useState(false)
     const [ price, setPrice ] = useState(0)
 
     useEffect(() => {
-        console.log(item)
         if( products ) {
             setPrice(item.orderPrice)
         }
@@ -23,7 +22,6 @@ const OneManagerCard = (props) => {
                 <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>
                     {
                         products && Array.isArray(products) ? products.map((item, index) => {
-                            // setPrice(price + (item.count * item.productId.price))
                             return (
                                 <span key={index}>{item.productId ? item.productId.name : ''}; </span>
                             )
@@ -38,15 +36,18 @@ const OneManagerCard = (props) => {
                         </div>
                         <h6>Taxrirlash</h6>
                     </div>
-                    <div onClick={() => {
-                        console.log(item)
-                        getCurOrder(item)
-                    }}>
-                        <div className='bg bg2'>
-                            <div></div>
-                        </div>
-                        <h6>Kuryer</h6>
-                    </div>
+                    {
+                        item && item._id && item._id.status !== 'courier' ? (
+                            <div onClick={() => {
+                                getCurOrder(item)
+                            }}>
+                                <div className='bg bg2'>
+                                    <div></div>
+                                </div>
+                                <h6>Kuryer</h6>
+                            </div>
+                        ) : null
+                    }
                     <div>
                         <div className='bg bg3'>
                             <div></div>

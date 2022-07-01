@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Loader from '../../components/loader/Loader'
 import AgentHome from './AgentHome'
@@ -8,6 +9,7 @@ const AgentHomeContainer = () => {
 
     const token = JSON.parse(window.localStorage.getItem('user'))?.token
     const userId = JSON.parse(window.localStorage.getItem('user'))?.id
+    const navigate = useNavigate()
 
     const [ regionId, setRegionId ] = useState('')
     const getUserData = () => {
@@ -109,6 +111,7 @@ const AgentHomeContainer = () => {
             toast.success("Muvaffaqqiyatli qo'shildi!", {
                 position: toast.POSITION.BOTTOM_RIGHT
             })
+            navigate('/profile')
         }).catch(err => {
             toast.error("Error!", {
                 position: toast.POSITION.BOTTOM_RIGHT

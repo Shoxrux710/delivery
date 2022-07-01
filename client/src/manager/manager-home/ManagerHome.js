@@ -16,8 +16,6 @@ const ManagerHome = (props) => {
         curOrder, getCurOrder, couriers, setSelectedCourier, giveOrderToCourier 
     } = props
 
-    console.log(curOrder)
-
     return (
         <div className='manager-home-component'>
             <NavbarContainer />
@@ -226,25 +224,31 @@ const ManagerHome = (props) => {
                 </div>
             </Modal>
                 
-            {loader}
+                {loader}
+                {
+                    allOrders ? allOrders.map((item, index) => {
+                        const date =  new Date(new Date(item._id.date) - new Date(18000000))
+                        return (
+                            <OneManagerCard 
+                                setIsModalVisible={setIsModalVisible} 
+                                key={index} 
+                                item={item} 
+                                products={item.products} 
+                                index={index} 
+                                date={date} 
+                                getCurOrder={getCurOrder}
+                            />
+                        )
+                    }) : ''
+                }
+            </div>
+
             {
-                allOrders && Array.isArray(allOrders) ? allOrders.map((item, index) => {
-                    const date = new Date(item._id.date)
-                    return (
-                        <OneManagerCard 
-                            setIsModalVisible={setIsModalVisible} 
-                            key={index} 
-                            item={item} 
-                            products={item.products} 
-                            index={index} 
-                            date={date} 
-                            getCurOrder={getCurOrder}
-                        />
-                    )
-                }) : ''
+                allOrders.length === 0 ? (
+                    <h3 style={{textAlign: 'center'}}>Buyurtma mavjud emas</h3>
+                ) : ''
             }
 
-            </div>
         </div>
     )
 }

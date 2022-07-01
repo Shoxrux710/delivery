@@ -57,7 +57,6 @@ const AgentProfileContainer = () => {
             .get('/api/order/card', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token } })
             .then(({ data }) => {
-                console.log(data)
                 data.orderCount.map(order => {
                     if(order._id === "active") {
                         setActiveCount(order.count)
