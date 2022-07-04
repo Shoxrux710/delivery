@@ -103,52 +103,134 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 })
 
 
-router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
+router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
-    const { position, id, worker } = req.user
+    const { position, id } = req.user
 
-    const objectIdWorker = worker.map((w) => mongoose.Types.ObjectId(w))
-    const objectStatus = { agentId: { $in: objectIdWorker } }
 
-    const filterAgent = (position === 'admin' || position === 'super-admin') ? {} :
-        (position === 'manager' ? { ...objectStatus } : { agentId: mongoose.Types.ObjectId(id) })
 
-    const chequeDebt = await Cheque.find({ debt: { $gt: 0 } })
-          .populate({path: 'deliveryId', select: '', 
-          populate: [{path: 'courierId', select: 'fullname'}, 
-          {path: 'orderId', select: 'code date', populate: [{path: 'agentId', select: 'fullname'}, {path: 'products', select: 'count', populate: [{path: 'productId', select: 'name price'}]}]}]}) 
-    const chequeCash = await Cheque.find({ cash: { $gt: 0 } })
+    const filter = position === 'manager' ? 'agent.manager' : (position === 'agent' ? 'order.agentId' : 'deliveryId.courierId')
 
-    // const groupCash = await Cheque.aggregate(
-    //     [{
-    //         $lookup: {
-    //             from: 'deliveries',
-    //             localField: 'deliveryId',
-    //             foreignField: '_id',
-    //             as: 'deliveryId'
-    //         }
-    //     }, {
-    //         $unwind: {
-    //             path: '$deliveryId'
-    //         }
-    //     }, {
-    //         $lookup: {
-    //             from: 'orders',
-    //             localField: 'deliveryId.orderId',
-    //             foreignField: '_id',
-    //             as: 'deliveryId.orderId'
-    //         }
-    //     }, {
-    //         $unwind: {
-    //             path: '$deliveryId.orderId'
-    //         }
-    //     }]
-    // )
+    const filterCash = (position === 'super-admin' || position === 'admin') ? [] : ([{
+        '$match': {
+            [filter]: mongoose.Types.ObjectId(id)
+        }
+    }])
+
+    const chequeCash = await Cheque.aggregate(
+        [{
+            $match: {
+                cash: {
+                    $gt: 0
+                }
+            }
+        }, {
+            $lookup: {
+                from: 'deliveries',
+                localField: 'deliveryId',
+                foreignField: '_id',
+                as: 'deliveryId'
+            }
+        }, {
+            $unwind: '$deliveryId'
+        }, {
+            $lookup: {
+                from: 'orders',
+                localField: 'deliveryId.orderId',
+                foreignField: '_id',
+                as: 'order'
+            }
+        }, {
+            $unwind: '$order'
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: 'order.agentId',
+                foreignField: '_id',
+                as: 'agent'
+            }
+        }, {
+            $unwind: '$agent'
+        },
+        ...filterCash
+            , {
+            $group: {
+                _id: 'static',
+                count: {
+                    $sum: '$cash'
+                }
+            }
+        }]
+    )
+
+    const chequeCard = await Cheque.aggregate(
+        [{
+            $match: {
+                cash: {
+                    $gt: 0
+                }
+            }
+        }, {
+            $lookup: {
+                from: 'deliveries',
+                localField: 'deliveryId',
+                foreignField: '_id',
+                as: 'deliveryId'
+            }
+        }, {
+            $unwind: '$deliveryId'
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: 'deliveryId.courierId',
+                foreignField: '_id',
+                as: 'deliveryId.courierId'
+            }
+        }, {
+            $unwind: '$deliveryId.courierId'
+        }, {
+            $lookup: {
+                from: 'orders',
+                localField: 'deliveryId.orderId',
+                foreignField: '_id',
+                as: 'deliveryId.orderId'
+            }
+        }, {
+            $unwind: '$deliveryId.orderId'
+        }, {
+            $lookup: {
+                from: 'customers',
+                localField: 'deliveryId.orderId.customerId',
+                foreignField: '_id',
+                as: 'deliveryId.orderId.customerId'
+            }
+        }, {
+            $unwind: '$deliveryId.orderId.customerId'
+        }]
+    )
 
     res.status(200).json({
-        chequeCash,
-        chequeDebt
+        chequeCard,
+        chequeCash
     })
+
+})
+
+
+router.get('/:id', async (req, res) => {
+
+    const { id } = req.params
+
+    const chequeId = await Cheque.findOne({ _id: id }).populate({
+        path: 'deliveryId', select: 'date',
+        populate: [{ path: 'courierId', select: 'fullname address phone' }, {
+            path: 'orderId', select: 'code date products',
+            populate: [{ path: 'customerId', select: 'fullname phone' }, { path: 'products.productId', select: 'name price' }]
+        }]
+    })
+
+
+    res.status(200).json({ chequeId })
 
 })
 
