@@ -107,8 +107,6 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
     const { position, id } = req.user
 
-
-
     const filter = position === 'manager' ? 'agent.manager' : (position === 'agent' ? 'order.agentId' : 'deliveryId.courierId')
 
     const filterCash = (position === 'super-admin' || position === 'admin') ? [] : ([{

@@ -421,6 +421,10 @@
     margin: 0;
 }
 
+.kuryer-money-component .active-money .order .bottom .ust:last-of-type h3 {
+    text-align: right;
+}
+
 .kuryer-money-component .active-money .order .bottom p {
     font-family: 'Poppins-Regular';
     font-weight: 400;
