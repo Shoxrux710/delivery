@@ -25,7 +25,7 @@ export const KuryerMoney = (props) => {
                 cards && cards.map((card, index) => (
                     <div className='one-order' key={ card._id }>
                         <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
-                        <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>Коляска-автокресло Doona S1 Grey</h2>
+                        <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>Bu yerda qandaydur nom berish kerak</h2>
 
                         <div className={leftNames ? 'left-names left-names-active' : 'left-names'}>
                             <div>
