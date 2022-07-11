@@ -13,7 +13,8 @@ const ManagerHome = (props) => {
     const { setUserBody, userBody, setOrderType, orderType, kuryersCount, agentsCount, userData, isModalVisible, 
         setIsModalVisible, allOrders, loader, activePrice,
         activeCount, courierCount, courierPrice, completedCount, completedPrice, rejectedCount, rejectedPrice,
-        curOrder, getCurOrder, couriers, setSelectedCourier, giveOrderToCourier 
+        curOrder, getCurOrder, couriers, setSelectedCourier, giveOrderToCourier,
+        debt 
     } = props
 
     return (
@@ -72,7 +73,7 @@ const ManagerHome = (props) => {
                 <div className='debt'>
                     <Link to='/debt'>
                         <div className='div1'>
-                            <h5>Qarz: <span>21 485 230 so’m</span></h5>
+                            <h5>Qarz: <span>{ debt } so’m</span></h5>
                         </div>
                     </Link>
                     <div className='div2'>

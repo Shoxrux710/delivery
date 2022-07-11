@@ -128,7 +128,19 @@ const ManagerHomeContainer = () => {
         } 
     }
 
+    const [ debt, setDebt ] = useState(0)
+    const getDebt = () => {
+        axios
+            .get('/api/cheque/debt', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+            })
+            .then(({data}) => {
+                setDebt(data.chequeDebt[0].count)
+            })
+    }
+
     useEffect(() => {
+        getDebt()
         getUserData()
         getOrderStatusData()
         //eslint-disable-next-line
@@ -166,6 +178,7 @@ const ManagerHomeContainer = () => {
             completedPrice={completedPrice}
             rejectedCount={rejectedCount}
             rejectedPrice={rejectedPrice}
+            debt={ debt }
         />
     )
 }
