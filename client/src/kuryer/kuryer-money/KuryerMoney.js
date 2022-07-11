@@ -1,13 +1,17 @@
 import React from 'react'
-import { MdArrowBack } from 'react-icons/md'
-import { HiFilter } from 'react-icons/hi'
-import './kuryerMoney.css'
 import { Link } from 'react-router-dom'
+
+import { getDateInMonthString } from '../../utils/date'
+
+import './kuryerMoney.css'
+
+import { HiFilter } from 'react-icons/hi'
+import { MdArrowBack } from 'react-icons/md'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 
 export const KuryerMoney = (props) => {
 
-    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames } = props
+    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames, cards } = props
 
 
     const active = (
@@ -17,73 +21,56 @@ export const KuryerMoney = (props) => {
                 <p>100 000 000 so’m</p>
             </div>
 
-            <div className='one-order'>
-                <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
-                <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>Коляска-автокресло Doona S1 Grey</h2>
+            {
+                cards && cards.map((card, index) => (
+                    <div className='one-order' key={ card._id }>
+                        <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
+                        <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>Bu yerda qandaydur nom berish kerak</h2>
 
-                <div className={orderMenu ? 'menu-active menu' : 'menu'}>
-                    <div>
-                        <div className='bg'>
-                            <div></div>
+                        <div className={leftNames ? 'left-names left-names-active' : 'left-names'}>
+                            <div>
+                                <p>Коляска-автокресло Doona S1 Grey</p>
+                                <span>2x</span>
+                            </div>
+                            <div>
+                                <p>Коляска-автокресло Doona S1 Grey</p>
+                                <span>5x</span>
+                            </div>
+                            <div className='last'>
+                                <p>Коляска-автокресло Doona S1 Grey</p>
+                                <span>2x</span>
+                            </div>
                         </div>
-                        <h6>Taxrirlash</h6>
-                    </div>
-                    <div>
-                        <div className='bg bg2'>
-                            <div></div>
-                        </div>
-                        <h6>Kuryer</h6>
-                    </div>
-                    <div>
-                        <div className='bg bg3'>
-                            <div></div>
-                        </div>
-                        <h6>Bekor qilish</h6>
-                    </div>
-                </div>
 
-                <div className={leftNames ? 'left-names left-names-active' : 'left-names'}>
-                    <div>
-                        <p>Коляска-автокресло Doona S1 Grey</p>
-                        <span>2x</span>
-                    </div>
-                    <div>
-                        <p>Коляска-автокресло Doona S1 Grey</p>
-                        <span>5x</span>
-                    </div>
-                    <div className='last'>
-                        <p>Коляска-автокресло Doona S1 Grey</p>
-                        <span>2x</span>
-                    </div>
-                </div>
-
-                <div className='order' onClick={() => {setOrderMenu(false); setLeftNames(false)}}>
-                    <div className='topp'>
-                        <div>
-                            <h1>1</h1>
-                        </div>
-                        <div></div>
-                    </div>
-                    <div className='qator'>
-                        <p>ID 1942497</p>
-                        <span>23 Fevral 15:00</span>
-                    </div>
-                    <div className='qator lst'>
-                        <p>Qo'ldagi pul</p>
-                        <h4>11 236 540 so’m</h4>
-                    </div>
-                    <div className='bottom'>
-                        <div className='ust'>
-                            <h3>Abduvali Abdusoliyev</h3>
-                            <p>Mijoz</p>
-                        </div>
-                        <div className='ust'>
-                            <h3>+998934805885</h3>
-                            <p>Telefon raqam</p>
+                        <div className='order' onClick={() => {setOrderMenu(false); setLeftNames(false)}}>
+                            <div className='topp'>
+                                <div>
+                                    <h1>{ index + 1 }</h1>
+                                </div>
+                                <div></div>
+                            </div>
+                            <div className='qator'>
+                                <p>ID { card.card }</p>
+                                <span>{ getDateInMonthString(card.date) }</span>
+                            </div>
+                            <div className='qator lst'>
+                                <p>Qo'ldagi pul</p>
+                                <h4>{ card.cash } so’m</h4>
+                            </div>
+                            <div className='bottom'>
+                                <div className='ust'>
+                                    <h3>{ card.deliveryId.orderId.customerId.fullname }</h3>
+                                    <p>Mijoz</p>
+                                </div>
+                                <div className='ust'>
+                                    <h3>{ card.deliveryId.orderId.customerId.phone }</h3>
+                                    <p>Telefon raqam</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                ))
+            }
 
             <button>Boshqaruvchiga berish</button>
             

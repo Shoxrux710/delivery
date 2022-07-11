@@ -127,7 +127,15 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
 router.get('/cashCard', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
-    const { id } = req.user
+    const { id, position } = req.user
+
+    const filter = position === 'manager' ? 'managerId' : (position === 'agent' ? 'agentId' : 'courierId')
+
+    const filterCash = (position === 'super-admin' || position === 'admin') ? [] : ([{
+        '$match': {
+            [filter]: mongoose.Types.ObjectId(id)
+        }
+    }]);
 
     const chequeCard = await Cheque.aggregate(
         [{
@@ -172,11 +180,9 @@ router.get('/cashCard', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
                 date: '$date',
                 code: '$deliveryId.orderId.code'
             }
-        }, {
-            $match: {
-                courierId: mongoose.Types.ObjectId(id)
-            }
-        }]
+        },
+        ...filterCash
+        ]
     )
 
     res.status(200).json({ chequeCard })
