@@ -6,7 +6,8 @@ const Cheque = require('../models/Cheque')
 const Order = require('../models/Order')
 const Delivery = require('../models/Delivery')
 const mongoose = require('mongoose')
-const nowDate = require('../utils/nowDate')
+const nowDate = require('../utils/nowDate');
+const { func, funcDebt } = require('../utils/function');
 const router = Router()
 
 /**
@@ -103,65 +104,30 @@ router.post('/all', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 })
 
 
+router.get('/debt', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
+    const { position, id } = req.user
+    const chequeDebt = await Cheque.aggregate(func(position, id));
+    res.status(200).json({ chequeDebt })
+})
+
+router.get('/debtCard', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
+    const { position, id } = req.user
+    const chequeAll = await Cheque.aggregate(func(position, id, true));
+    res.status(200).json({ chequeAll })
+})
+
 router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
     const { position, id } = req.user
+    const chequeCash = await Cheque.aggregate(func(position, id, false, true))
 
+    res.status(200).json({ chequeCash })
 
+})
 
-    const filter = position === 'manager' ? 'agent.manager' : (position === 'agent' ? 'order.agentId' : 'deliveryId.courierId')
+router.get('/cashCard', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
-    const filterCash = (position === 'super-admin' || position === 'admin') ? [] : ([{
-        '$match': {
-            [filter]: mongoose.Types.ObjectId(id)
-        }
-    }])
-
-    const chequeCash = await Cheque.aggregate(
-        [{
-            $match: {
-                cash: {
-                    $gt: 0
-                }
-            }
-        }, {
-            $lookup: {
-                from: 'deliveries',
-                localField: 'deliveryId',
-                foreignField: '_id',
-                as: 'deliveryId'
-            }
-        }, {
-            $unwind: '$deliveryId'
-        }, {
-            $lookup: {
-                from: 'orders',
-                localField: 'deliveryId.orderId',
-                foreignField: '_id',
-                as: 'order'
-            }
-        }, {
-            $unwind: '$order'
-        }, {
-            $lookup: {
-                from: 'users',
-                localField: 'order.agentId',
-                foreignField: '_id',
-                as: 'agent'
-            }
-        }, {
-            $unwind: '$agent'
-        },
-        ...filterCash
-            , {
-            $group: {
-                _id: 'static',
-                count: {
-                    $sum: '$cash'
-                }
-            }
-        }]
-    )
+    const { id } = req.user
 
     const chequeCard = await Cheque.aggregate(
         [{
@@ -198,24 +164,98 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         }, {
             $unwind: '$deliveryId.orderId'
         }, {
-            $lookup: {
-                from: 'customers',
-                localField: 'deliveryId.orderId.customerId',
-                foreignField: '_id',
-                as: 'deliveryId.orderId.customerId'
+            $project: {
+                cash: '$cash',
+                courierId: '$deliveryId.courierId._id',
+                fullname: '$deliveryId.courierId.fullname',
+                phone: '$deliveryId.courierId.phone',
+                date: '$date',
+                code: '$deliveryId.orderId.code'
             }
         }, {
-            $unwind: '$deliveryId.orderId.customerId'
+            $match: {
+                courierId: mongoose.Types.ObjectId(id)
+            }
         }]
     )
 
-    res.status(200).json({
-        chequeCard,
-        chequeCash
-    })
-
+    res.status(200).json({ chequeCard })
 })
 
+
+/**
+ * @swagger
+ * /api/cheque/userPrice:
+ *  get:
+ *   summary: xaridorni qarzlar tarixi
+ *   tags: [Cheque]
+ *   parameters:
+ *     - in: query
+ *       name: userId
+ *       schema:
+ *          type: string
+ *       required: true
+ *   security: 
+ *    - bearerAuth: []
+ *   responses:
+ *        200:
+ *          description: response 200   
+ *        500:
+ *          description: response 500  
+ */
+
+router.get('/userPrice', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
+
+    const { position, id } = req.user
+    const { userId } = req.query
+
+    const userPrice = await Cheque.aggregate(funcDebt(position, id, userId, true))
+
+    res.status(200).json({ userPrice })
+})
+
+/**
+ * @swagger
+ * /api/cheque/cardPrice:
+ *  get:
+ *   summary: xaridorni qarzlar tarixi
+ *   tags: [Cheque]
+ *   parameters:
+ *     - in: query
+ *       name: userId
+ *       schema:
+ *          type: string
+ *       required: true
+ *   security: 
+ *    - bearerAuth: []
+ *   responses:
+ *        200:
+ *          description: response 200   
+ *        500:
+ *          description: response 500  
+ */
+
+router.get('/cardPrice', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
+
+    const { position, id } = req.user
+    const { userId } = req.query
+
+    // const filter = position === 'manager' ? 'managerId' : (position === 'agent' ? 'agentId' : 'courierId')
+
+    // const filterCash = (position === 'super-admin' || position === 'admin') ? [] : ([{
+    //     '$match': {
+    //         'customerId': mongoose.Types.ObjectId(userId),
+    //         [filter]: mongoose.Types.ObjectId(id)
+    //     }
+    // }]);
+
+    const cardPrice = await Cheque.aggregate(funcDebt(position, id, userId))
+
+    console.log(cardPrice)
+
+    res.status(200).json({ cardPrice })
+
+})
 
 router.get('/:id', async (req, res) => {
 

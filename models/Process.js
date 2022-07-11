@@ -9,21 +9,15 @@ const processSchema = new Schema({
     cheques: [
         {
             type: Schema.Types.ObjectId,
+            ref: 'Cheque',
             required: true
         }
     ],
     status: {
         type: String,
-        enum: ['pending', 'received', 'refusal'],
-        required: true
-    },
-    issuedDate: {
-        type: Date,
-        required: true
-    },
-    recdDate: {
-        type: Date,
-        default: null
+        enum: ['inCour', 'process-Cour', 'inManager', 'processAdmin', 'admin', 'finish'],
+        required: true,
+        default: 'inCour'
     }
 })
 

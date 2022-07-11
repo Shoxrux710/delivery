@@ -19,6 +19,7 @@ const chequeRouter = require('./routes/Cheque')
 const regionRouter = require('./routes/Region')
 const productRouter = require('./routes/Product')
 const orderRouter = require('./routes/Order')
+const processRouter = require('./routes/Process')
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -54,6 +55,7 @@ app.use('/api/cheque', chequeRouter)
 app.use('/api/region', regionRouter)
 app.use('/api/product', productRouter)
 app.use('/api/order', orderRouter)
+app.use('/api/process', processRouter)
 app.use(function(errorMessage, req,res, next){
     res.status(400).json(`server errors: ${errorMessage}`)
 })
