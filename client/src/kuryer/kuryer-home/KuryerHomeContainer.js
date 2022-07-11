@@ -63,8 +63,34 @@ const KuryerHomeContainer = () => {
         })
     }
 
+    const [ cash, setCash ] = useState(0)
+
+    const getCash = () => {
+        axios
+            .get('/api/cheque/cash', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+            })
+            .then(({data}) => {
+                setCash(data.chequeCash[0].count)
+            })
+    }
+
+    const [ debt, setDebt ] = useState(0)
+
+    const getDebt = () => {
+        axios
+            .get('/api/cheque/debt', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+            })
+            .then(({data}) => {
+                setDebt(data.chequeDebt[0].count)
+            })
+    }
+
     useEffect(() => {
         getUserData()
+        getCash()
+        getDebt()
         //eslint-disable-next-line
     }, [])
 
@@ -88,6 +114,8 @@ const KuryerHomeContainer = () => {
             completedPrice={completedPrice}
             rejectedCount={rejectedCount}
             rejectedPrice={rejectedPrice}
+            cash={ cash }
+            debt={ debt }
         />
     )
 }

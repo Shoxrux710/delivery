@@ -11,14 +11,14 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 
 export const KuryerMoney = (props) => {
 
-    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames, cards } = props
+    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames, cards, cash } = props
 
 
     const active = (
         <div className='active-money'>
             <div className='top'>
                 <p>Qo’ldagi pul</p>
-                <p>100 000 000 so’m</p>
+                <p>{ cash } so’m</p>
             </div>
 
             {
@@ -50,7 +50,7 @@ export const KuryerMoney = (props) => {
                                 <div></div>
                             </div>
                             <div className='qator'>
-                                <p>ID { card.card }</p>
+                                <p>ID { card.code }</p>
                                 <span>{ getDateInMonthString(card.date) }</span>
                             </div>
                             <div className='qator lst'>
@@ -59,11 +59,11 @@ export const KuryerMoney = (props) => {
                             </div>
                             <div className='bottom'>
                                 <div className='ust'>
-                                    <h3>{ card.deliveryId.orderId.customerId.fullname }</h3>
+                                    <h3>{ card.fullname }</h3>
                                     <p>Mijoz</p>
                                 </div>
                                 <div className='ust'>
-                                    <h3>{ card.deliveryId.orderId.customerId.phone }</h3>
+                                    <h3>{ card.phone }</h3>
                                     <p>Telefon raqam</p>
                                 </div>
                             </div>

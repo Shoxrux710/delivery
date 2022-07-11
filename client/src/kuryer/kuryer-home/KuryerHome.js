@@ -10,7 +10,7 @@ import OneKuryerCard from './OneKuryerCard'
 const KuryerHome = (props) => {
 
     const { setUserBody, userBody, setOrderType, orderType, userData, allOrders, loader, activePrice,
-        activeCount, completedCount, completedPrice, rejectedCount, rejectedPrice 
+        activeCount, completedCount, completedPrice, rejectedCount, rejectedPrice, cash, debt
     } = props
 
     return (
@@ -68,13 +68,13 @@ const KuryerHome = (props) => {
             <div className='wrapper'>
                 <Link to='money' className='users-info lst'>
                     <h5>Qo'ldagi pul:</h5>
-                    <h5>21 435 230 so'm</h5>
+                    <h5>{ cash } so'm</h5>
                 </Link>
 
                 <div className='debt'>
                     <Link to='/'>
                         <div className='div1'>
-                            <h5>Qarz: <span>21 485 230 so’m</span></h5>
+                            <h5>Qarz: <span>{ debt } so’m</span></h5>
                         </div>
                     </Link>
                     <div className='div2'>

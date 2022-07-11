@@ -9,23 +9,32 @@ const KuryerMoneyContainer = () => {
     const [ orderMenu, setOrderMenu ] = useState(false)
     const [ leftNames, setLeftNames ] = useState(false)
 
-    const [ debt, setDebt ] = useState(0)
+    const [ cash, setCash ] = useState(0)
     const [ cards, setCards ] = useState([])
 
-    const getDebt = () => {
+    const getCash = () => {
         axios
             .get('/api/cheque/cash', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
             .then(({data}) => {
-                console.log(data)
+                setCash(data.chequeCash[0].count)
+            })
+    }
+
+    const getCashCards = () => {
+        axios
+            .get('/api/cheque/cashCard', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+            })
+            .then(({data}) => {
                 setCards(data.chequeCard)
             })
     }
 
     useEffect(() => {
-        getDebt()
-        
+        getCash()
+        getCashCards()
     }, [])
 
     return (
@@ -33,6 +42,7 @@ const KuryerMoneyContainer = () => {
             h2={h2} 
             setH2={setH2} 
             cards={ cards }
+            cash={ cash }
             orderMenu={orderMenu}
             setOrderMenu={setOrderMenu}
             setLeftNames={setLeftNames}
