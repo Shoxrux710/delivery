@@ -10,7 +10,7 @@ import OneAgentCard from './OneAgentCard'
 const AgentProfile = (props) => {
 
     const { setUserBody, userBody, setOrderType, orderType, userData, allOrders, loader, activePrice,
-        activeCount, courierCount, courierPrice, completedCount, completedPrice, rejectedCount, rejectedPrice 
+        activeCount, courierCount, courierPrice, completedCount, completedPrice, rejectedCount, rejectedPrice, debt
     } = props
 
     return (
@@ -69,7 +69,7 @@ const AgentProfile = (props) => {
                 <div className='debt'>
                     <Link to='debt'>
                         <div className='div1'>
-                            <h5>Qarz: <span>21 485 230 so’m</span></h5>
+                            <h5>Qarz: <span>{ debt } so’m</span></h5>
                         </div>
                     </Link>
                     <div className='div2'>

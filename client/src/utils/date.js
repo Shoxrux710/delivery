@@ -5,6 +5,12 @@ export const getDateInMonthString = (_date) => {
     return `${Number(date)} ${getMonthFromMonthNumber(month)} ${Number(hour)}:${min}`
 }
 
+export const getDate = (_date) => {
+    let [ year, month, date ] = _date.split("T")[0].split('-')
+
+    return `${date}:${month}:${year}`
+}
+
 const getMonthFromMonthNumber = (number) => {
     switch(Number(number)) {
         case 1: return "Yanvar";
