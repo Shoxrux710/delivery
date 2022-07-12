@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 
 import AllManagerMoney from './AllManagerMoney'
 
 const AllManagerMoneyContainer = () => {
-
-    
 
     const [ h2, setH2 ] = useState('confirm')
 

@@ -11,6 +11,12 @@ export const getDate = (_date) => {
     return `${date}:${month}:${year}`
 }
 
+export const getDateWithDash = (_date) => {
+    let [ year, month, date ] = _date.split("T")[0].split('-')
+
+    return `${date}-${month}-${year}`
+}
+
 const getMonthFromMonthNumber = (number) => {
     switch(Number(number)) {
         case 1: return "Yanvar";

@@ -32,7 +32,9 @@ const ManagerDebt = (props) => {
             <div className='wrapper'>
                 {
                     cards && cards.map(card => (
-                        <Link to={`/debt/${card.customers.id}`} key={ card._id }>
+                        <Link to={`/debt/${card.customers.id}`} key={ card._id } onClick={() => {
+                            localStorage.setItem("client", card.customers.fullname)
+                        }} >
                             <div className='one'>
                                 <div className='qator'>
                                     <div>
