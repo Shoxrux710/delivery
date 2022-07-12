@@ -22,7 +22,6 @@ const ManagerDebtContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
             .then(({data}) => {
-                console.log(data);
                 setDebtCards(data.chequeAll)
             })
     }

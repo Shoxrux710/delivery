@@ -81,6 +81,7 @@ const App = () => {
       <Route path='/profile' element={<AgentProfileContainer />} />
       <Route path='/profile/order/:id' element={<InnerOrderAgentContainer />} />
       <Route path='/profile/debt' element={<AgentDebtContainer />} />
+      <Route path='/profile/debt/:id' element={<InnerDebtContainer />} />
       <Route path='*' element={<PageNotFound />} />
     </Routes>
   )

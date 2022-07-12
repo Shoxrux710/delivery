@@ -47,13 +47,13 @@ const ManagerHomeContainer = () => {
 
     const [ allOrders, setAllOrders ] = useState([])
     const [ activeCount, setActiveCount ] = useState(0)
-    const [ courierCount, setCourierCount ] = useState(0)
-    const [ completedCount, setCompletedCount ] = useState(0)
-    const [ rejectedCount, setrejectedCount ] = useState(0)
     const [ activePrice, setActivePrice ] = useState(0)
+    const [ courierCount, setCourierCount ] = useState(0)
     const [ courierPrice, setCourierPrice ] = useState(0)
-    const [ completedPrice, setCompletedPrice ] = useState(0)
+    const [ rejectedCount, setrejectedCount ] = useState(0)
     const [ rejectedPrice, setRejectedPrice ] = useState(0)
+    const [ completedCount, setCompletedCount ] = useState(0)
+    const [ completedPrice, setCompletedPrice ] = useState(0)
 
     const getAllOrders = () => {
         axios.get('/api/order/each', {

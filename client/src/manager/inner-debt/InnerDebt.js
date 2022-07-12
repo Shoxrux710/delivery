@@ -16,8 +16,6 @@ const InnerDebt = (props) => {
         price, cards, client, getChequeById, modalData, setModalData
     } = props
 
-    console.log(modalData);
-
     return (
         <div className='inner-debt-container'>
              <div className='kuryer-top'>

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { formatString } from '../../utils/number'
 
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
@@ -26,7 +27,7 @@ const ManagerDebt = (props) => {
             </div>
             <div className='debt'>
                 <p>Qarz:</p>
-                <p>{ debt } so’m</p>
+                <p>{ formatString(debt) } so’m</p>
             </div>
 
             <div className='wrapper'>
@@ -52,7 +53,7 @@ const ManagerDebt = (props) => {
                                         <p>{ getDate(card.date) }</p>
                                     </div>
                                     <div className='last'>
-                                        <p>{ card.debt } so’m</p>
+                                        <p>{ formatString(card.debt) } so’m</p>
                                     </div>
                                 </div>
                             </div>

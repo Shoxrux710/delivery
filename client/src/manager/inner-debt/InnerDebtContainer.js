@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import { getDateInMonthString } from '../../utils/date'
+
 import { formatString } from '../../utils/number'
+import { getDateInMonthString } from '../../utils/date'
 
 import InnerDebt from './InnerDebt'
 

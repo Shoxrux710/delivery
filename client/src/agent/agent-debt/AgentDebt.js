@@ -5,6 +5,7 @@ import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
 
 import { getDate } from '../../utils/date'
+import { formatString } from '../../utils/number'
 
 import './agentDebt.css'
 
@@ -32,27 +33,31 @@ const AgentDebt = (props) => {
             <div className='wrapper'>
                 {
                     cards && cards.map((card) => (
-                        <div className='one' key={ card._id }>
-                            <div className='qator'>
-                                <div>
-                                    <span>Klient</span>
-                                    <p>{ card.customers.fullname }</p>
+                        <Link to={`/profile/debt/${card.customers.id}`} key={ card._id } onClick={() => {
+                            localStorage.setItem("client", card.customers.fullname)
+                        }} >
+                            <div className='one'>
+                                <div className='qator'>
+                                    <div>
+                                        <span>Klient</span>
+                                        <p>{ card.customers.fullname }</p>
+                                    </div>
+                                    <div>
+                                        <span>Moljal</span>
+                                        <p>{ card.customers.address }</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span>Mo'ljal</span>
-                                    <p>{ card.customers.address }</p>
+                                <div className='qator'>
+                                    <div>
+                                        <span>Vaqt</span>
+                                        <p>{ getDate(card.date) }</p>
+                                    </div>
+                                    <div className='last'>
+                                        <p>{ formatString(card.debt) } so’m</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className='qator'>
-                                <div>
-                                    <span>Vaqt</span>
-                                    <p>{ getDate(card.date) }</p>
-                                </div>
-                                <div className='last'>
-                                    <p>{ card.debt } so’m</p>
-                                </div>
-                            </div>
-                        </div>
+                        </Link>
                     ))
                 }
             </div>
