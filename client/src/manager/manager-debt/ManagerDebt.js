@@ -32,8 +32,7 @@ const ManagerDebt = (props) => {
             <div className='wrapper'>
                 {
                     cards && cards.map(card => (
-                        // Link dagi id ga customer id qoyilishi kerak, bu yerda debt ning id si qoyilgan
-                        <Link to={`/debt/${card._id}`} key={ card._id }>
+                        <Link to={`/debt/${card.customers.id}`} key={ card._id }>
                             <div className='one'>
                                 <div className='qator'>
                                     <div>

@@ -5,6 +5,8 @@ import AllManagerMoney from './AllManagerMoney'
 
 const AllManagerMoneyContainer = () => {
 
+    
+
     const [ h2, setH2 ] = useState('confirm')
 
     return (

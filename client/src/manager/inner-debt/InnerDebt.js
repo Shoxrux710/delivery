@@ -8,7 +8,10 @@ import './innerDebt.css'
 
 const InnerDebt = (props) => {
 
-    const { orderMenu, setOrderMenu, leftNames, setLeftNames, isModalVisible, setIsModalVisible } = props
+    const { 
+        orderMenu, setOrderMenu, leftNames, setLeftNames, isModalVisible, setIsModalVisible,
+        price
+    } = props
 
     return (
         <div className='inner-debt-container'>
@@ -28,21 +31,21 @@ const InnerDebt = (props) => {
             </div>
             <div className='debt'>
                 <p>Qarz:</p>
-                <p>21 485 230 so’m</p>
+                <p>{ price.debt } so’m</p>
             </div>
 
             <div className='about'>
                 <div>
                     <p>Barcha pullar:</p>
-                    <p>21 485 230 so’m</p>
+                    <p>{ price.cash + price.card } so’m</p>
                 </div>
                 <div>
                     <p>Naqd pul:</p>
-                    <p>21 485 230 so’m</p>
+                    <p>{ price.cash } so’m</p>
                 </div>
                 <div>
                     <p>Karta pul:</p>
-                    <p>21 485 230 so’m</p>
+                    <p>{ price.card } so’m</p>
                 </div>
             </div>
 
