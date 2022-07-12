@@ -56,7 +56,8 @@ const func = (position, id, route = false, cash = false) => {
         date: '$date',
         customers: {
             fullname: '$order.customerId.fullname',
-            address: '$order.customerId.address'
+            address: '$order.customerId.address',
+            id: '$order.customerId._id'
         }
     } : {};
 
