@@ -186,13 +186,93 @@ const funcDebt = (position, id, userId, route = false) => {
         }
     },
     ...filterCash,
-    ...groupDebt 
-     ]
+    ...groupDebt
+    ]
 
     return pipelineDebt
 }
 
+
+const managerAsset = (id, asset = false) => {
+
+    const matchStatus = asset ? {
+        toStatus: 'process-Cour',
+    } : {
+        toStatus: 'processAdmin',
+    }
+
+    const pipelineCash = [{
+        $match: {
+            isRefusal: false,
+            ...matchStatus
+        }
+    }, {
+        $lookup: {
+            from: 'processes',
+            localField: 'processId',
+            foreignField: '_id',
+            as: 'processId'
+        }
+    }, {
+        $unwind: '$processId'
+    }, {
+        $unwind: '$processId.cheques'
+    }, {
+        $lookup: {
+            from: 'users',
+            localField: 'processId.courierId',
+            foreignField: '_id',
+            as: 'courierId'
+        }
+    }, {
+        $unwind: '$courierId'
+    }, {
+        $lookup: {
+            from: 'cheques',
+            localField: 'processId.cheques',
+            foreignField: '_id',
+            as: 'processId.cheques'
+        }
+    }, {
+        $unwind: '$processId.cheques'
+    }, {
+        $match: {
+            'courierId.managerId': mongoose.Types.ObjectId(id)
+        }
+    }, {
+        $group: {
+            _id: '$_id',
+            cash: {
+                $sum: '$processId.cheques.cash'
+            },
+            count: {
+                $sum: 1
+            },
+            fullname: {
+                $addToSet: '$courierId.fullname'
+            },
+            date: {
+                $addToSet: '$date'
+            },
+            processId: {
+                $addToSet: '$processId._id'
+            }
+        }
+    }, {
+        $unwind: '$fullname'
+    }, {
+        $unwind: '$date'
+    }, {
+        $unwind: '$processId'
+    }]
+
+    return pipelineCash
+}
+
+
+
 module.exports = {
     func,
-    funcDebt
+    funcDebt,
+    managerAsset
 }

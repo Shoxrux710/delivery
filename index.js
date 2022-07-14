@@ -20,6 +20,7 @@ const regionRouter = require('./routes/Region')
 const productRouter = require('./routes/Product')
 const orderRouter = require('./routes/Order')
 const processRouter = require('./routes/Process')
+const processDateRouter = require('./routes/ProcessDate')
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -56,6 +57,7 @@ app.use('/api/region', regionRouter)
 app.use('/api/product', productRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/process', processRouter)
+app.use('/api/processDate', processDateRouter)
 app.use(function(errorMessage, req,res, next){
     res.status(400).json(`server errors: ${errorMessage}`)
 })

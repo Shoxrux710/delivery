@@ -7,6 +7,7 @@ const Order = require('../models/Order')
 const Delivery = require('../models/Delivery')
 const mongoose = require('mongoose')
 const nowDate = require('../utils/nowDate');
+const ProcessDate = require('../models/ProcessDate');
 const { func, funcDebt } = require('../utils/function');
 const router = Router()
 
@@ -137,9 +138,23 @@ router.get('/cashCard', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
         }
     }]);
 
+    const processOne = await ProcessDate
+    .find({isRefusal: false, userId: id, toStatus: 'process-Cour'})
+    .populate('processId', 'cheques')
+    .select('processId')
+    
+    let cheques = [];
+    processOne
+    .map((p) => p.processId.cheques)
+    .forEach((value) => {
+        cheques = [...cheques, ...value]
+    });
+    console.log(cheques);
+
     const chequeCard = await Cheque.aggregate(
         [{
             $match: {
+                _id: {$nin: cheques},
                 cash: {
                     $gt: 0
                 }

@@ -7,6 +7,10 @@ const processDateSchema = new Schema({
         type: Date,
         required: true
     },
+    isRefusal: {
+        type: Boolean,
+        default: false,
+    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'user',
