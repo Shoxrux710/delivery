@@ -1,42 +1,49 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
-import { Link } from 'react-router-dom'
 import { BsThreeDotsVertical } from 'react-icons/bs'
+
+import { getDateInMonthString } from '../../utils/date'
+import { formatString } from '../../utils/number'
+
 import './allManagerMoney.css'
 
 const AllManagerMoney = (props) => {
 
-    const { h2, setH2 } = props
+    const { h2, setH2, cards, cash, rejectCard, confirmCard } = props
 
     const confirm = (
         <div className='confirm-datas'>
             <div className='money'>
                 <p>Qo’ldagi pul</p>
-                <p>100 000 000 so’m</p>
+                <p>{ formatString(cash) } so’m</p>
             </div>
-            <div className='one'>
-                <div className='top'>
-                    <h3>1. <span>Azizbek abduxalilov</span></h3>
-                    <BsThreeDotsVertical className='icon' />
-                </div>
-                <div className='qator'>
-                    <p>Berilgan vaqti</p>
-                    <span>23 Fevral 15:00</span>
-                </div>
-                <div className='qator'>
-                    <p>Buyurtmalar soni</p>
-                    <span>1 456 ta</span>
-                </div>
-                <div className='qator'>
-                    <p>Qo’ldagi pul</p>
-                    <span>11 236 540 so’m</span>
-                </div>
-                <div className='btns-wrap'>
-                    <button>Rad etish</button>
-                    <button>Tasdiqlash</button>
-                </div>
-            </div>
+            {
+                cards && cards.map((card, index) => (
+                    <div className='one' key = { card._id }>
+                        <div className='top'>
+                            <h3>{ index + 1 }. <span>{ card.fullname }</span></h3>
+                        </div>
+                        <div className='qator'>
+                            <p>Berilgan vaqti</p>
+                            <span>{ getDateInMonthString(card.date) }</span>
+                        </div>
+                        <div className='qator'>
+                            <p>Buyurtmalar soni</p>
+                            <span>{ formatString(card.count) }</span>
+                        </div>
+                        <div className='qator'>
+                            <p>Qo’ldagi pul</p>
+                            <span>{ formatString(card.cash) } so’m</span>
+                        </div>
+                        <div className='btns-wrap'>
+                            <button onClick={() => rejectCard(card._id)} >Rad etish</button>
+                            <button onClick={() => confirmCard(card.processId)} >Tasdiqlash</button>
+                        </div>
+                    </div>
+                ))
+            }
         </div>
     )
 

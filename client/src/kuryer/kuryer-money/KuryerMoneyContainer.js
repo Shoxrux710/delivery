@@ -18,7 +18,7 @@ const KuryerMoneyContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
             .then(({data}) => {
-                setCash(data.chequeCash[0].count)
+                setCash(data.chequeCash.length ? data.chequeCash[0].count : 0)
             })
     }
 
@@ -30,6 +30,20 @@ const KuryerMoneyContainer = () => {
             .then(({data}) => {
                 setCards(data.chequeCard)
             })
+    }
+
+    const giveMoneyToManager = () => {
+        let cheques = cards.map(card => card._id)
+        cards.length && (
+            axios  
+                .post('/api/process/cour', { cheques }, {
+                    headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
+                })
+                .then(() => {
+                    getCash()
+                    getCashCards()
+                })
+        ) 
     }
 
     useEffect(() => {
@@ -47,6 +61,7 @@ const KuryerMoneyContainer = () => {
             setOrderMenu={setOrderMenu}
             setLeftNames={setLeftNames}
             leftNames={leftNames}
+            giveMoneyToManager={ giveMoneyToManager }
         />
     )
 }
