@@ -142,7 +142,7 @@ router.get('/adminSumm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
         }]
     )
 
-    res.status(200).json({adminSumm})
+    res.status(200).json({ adminSumm })
 
 })
 
@@ -193,6 +193,10 @@ router.get('/courSumm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
         }, {
             $unwind: '$processId'
         }, {
+            $match: {
+                'processId.status': 'inCour'
+            }
+        }, {
             $unwind: '$processId.cheques'
         }, {
             $lookup: {
@@ -232,15 +236,15 @@ router.get('/courSumm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
 
 // admin rad etish
 
-router.put('/rejectionAdmin', (req,res) => {
+router.put('/rejectionAdmin', (req, res) => {
 
-    const {id} = req.query
+    const { id } = req.query
 
     ProcessDate.findById(id, async (err, processDateOne) => {
-        if (err) return res.status(400).json({errorMessage: 'error server'})
+        if (err) return res.status(400).json({ errorMessage: 'error server' })
         processDateOne.isRefusal = true
         await processDateOne.save()
-        res.status(200).json({successMessage: 'admin rad etish'})
+        res.status(200).json({ successMessage: 'admin rad etish' })
     })
 })
 
