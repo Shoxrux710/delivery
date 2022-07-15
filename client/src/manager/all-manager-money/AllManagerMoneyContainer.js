@@ -30,6 +30,18 @@ const AllManagerMoneyContainer = () => {
             })
     }
 
+    const [ activeCards, setActiveCards ] = useState([])
+    const getActiveCards = () => {
+        axios
+            .get('/api/processDate/asset', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
+            })
+            .then(({ data }) => {
+                console.log(data)
+                setActiveCards(data.managerCashAsset)
+            })
+    }
+
     const rejectCard = (id) => {
         axios
             .put('/api/processDate/rejectionCour', {}, {
@@ -64,9 +76,11 @@ const AllManagerMoneyContainer = () => {
             h2={h2}
             setH2={setH2}
             cards = { cards }
+            activeCards = { activeCards }
             cash = { cash }
             rejectCard = { rejectCard }
             confirmCard = { confirmCard }
+            getActiveCards = { getActiveCards }
         />
     )
 }

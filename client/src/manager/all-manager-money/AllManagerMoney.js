@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
-import { BsThreeDotsVertical } from 'react-icons/bs'
+// import { BsThreeDotsVertical } from 'react-icons/bs'
 
 import { getDateInMonthString } from '../../utils/date'
 import { formatString } from '../../utils/number'
@@ -11,7 +11,7 @@ import './allManagerMoney.css'
 
 const AllManagerMoney = (props) => {
 
-    const { h2, setH2, cards, cash, rejectCard, confirmCard } = props
+    const { h2, setH2, cards, activeCards, cash, rejectCard, confirmCard, getActiveCards } = props
 
     const confirm = (
         <div className='confirm-datas'>
@@ -49,24 +49,28 @@ const AllManagerMoney = (props) => {
 
     const active = (
         <div className='confirm-datas'>
-            <div className='one'>
-                <div className='top'>
-                    <h3>1. <span>Azizbek abduxalilov</span></h3>
-                    <BsThreeDotsVertical className='icon' />
+        {
+            activeCards && activeCards.map((card, index) => (
+                <div className='one' key = { card._id }>
+                    <div className='top'>
+                        <h3>{ index + 1 }. <span>{ card.fullname }</span></h3>
+                        {/* <BsThreeDotsVertical className='icon' /> */}
+                    </div>
+                    <div className='qator'>
+                        <p>Berilgan vaqti</p>
+                        <span>{ getDateInMonthString(card.date) }</span>
+                    </div>
+                    <div className='qator'>
+                        <p>Buyurtmalar soni</p>
+                        <span>{ formatString(card.count) } ta</span>
+                    </div>
+                    <div className='qator'>
+                        <p>Qo’ldagi pul</p>
+                        <span>{ formatString(card.cash) } so’m</span>
+                    </div>
                 </div>
-                <div className='qator'>
-                    <p>Berilgan vaqti</p>
-                    <span>23 Fevral 15:00</span>
-                </div>
-                <div className='qator'>
-                    <p>Buyurtmalar soni</p>
-                    <span>1 456 ta</span>
-                </div>
-                <div className='qator'>
-                    <p>Qo’ldagi pul</p>
-                    <span>11 236 540 so’m</span>
-                </div>
-            </div>
+            ))
+        }
             <button>Adminga berish</button>
         </div>
     )
@@ -129,8 +133,13 @@ const AllManagerMoney = (props) => {
             </div>
 
             <div className='h2-wrap'>
-                <h2 className={h2 === 'confirm' ? 'act-h2' : ''} onClick={() => setH2('confirm')}>Tasdiqlash</h2>
-                <h2 className={h2 === 'active' ? 'act-h2' : ''} onClick={() => setH2('active')}>Aktiv</h2>
+                <h2 className={h2 === 'confirm' ? 'act-h2' : ''} onClick={() => {
+                    setH2('confirm')
+                }}>Tasdiqlash</h2>
+                <h2 className={h2 === 'active' ? 'act-h2' : ''} onClick={() => {
+                    getActiveCards()
+                    setH2('active')
+                }}>Aktiv</h2>
                 <h2 className={h2 === 'archive' ? 'act-h2' : ''} onClick={() => setH2('archive')}>Arxiv</h2>
             </div>
 
