@@ -141,6 +141,8 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             cheques = [...cheques, ...value]
         });
 
+        console.log("one",cheques)
+
     const chequeCash = await Cheque.aggregate(
         [{
             $match: {
@@ -222,7 +224,7 @@ router.get('/cashCard', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
         .forEach((value) => {
             cheques = [...cheques, ...value]
         });
-    console.log(cheques);
+    console.log("one", cheques);
 
     const chequeCard = await Cheque.aggregate(
         [{
