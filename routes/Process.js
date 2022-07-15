@@ -106,6 +106,45 @@ router.post('/cour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
 
 })
 
+router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BB'), async (req,res) => {
+
+    const { id } = req.user
+    const { date } = nowDate()
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    try {
+
+        const { processId } = req.body
+
+        const process = new Process({
+            courierId: id,
+            processId,
+            status: 'inManager'
+        })
+
+        const {_id: newProcessId} = await process.save({session})
+
+        const dataProcess = new ProcessDate({
+            fromStatus: 'inManager',
+            toStatus: 'processAdmin',
+            date: date,
+            userId: id,
+            processId: newProcessId
+        })
+
+        await dataProcess.save({session})
+        await session.commitTransaction()
+        res.status(200).json({successMessage: 'buyurtmani adminga berish'})
+        
+    } catch (err) {
+        await session.abortTransaction()
+        res.status(400).json({errorMessage: 'error server'})
+    }
+
+    session.endSession()
+})
+
 // manager tasdiqlash
 
 router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BB'), async (req, res) => {
@@ -136,8 +175,8 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
 
         await dateProcess.save({ session })
         await session.commitTransaction() 
-        res.status(200).json({ successMessage: 'Bashqaruvchi tasdiqladi' })
         session.endSession()
+        res.status(200).json({ successMessage: 'Bashqaruvchi tasdiqladi' })
 
     } catch (err) {
         await session.abortTransaction()

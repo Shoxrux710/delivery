@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose')
 
-const func = (position, id, route = false, cash = false) => {
+const func = (position, id, route = false) => {
     const filter = position === 'manager' ? 'managerId' : (position === 'agent' ? 'agentId' : 'courierId')
 
     const filterCash = (position === 'super-admin' || position === 'admin') ? [] : ([{
@@ -23,31 +23,33 @@ const func = (position, id, route = false, cash = false) => {
         }
     ] : [];
 
-    const cashOther = cash ? {
-        cash: {
-            $gt: 0
-        }
-    } : {
-        debt: {
-            $gt: 0
-        }
-    }
+    // const cashOther = cash ? {
+    //     cash: {
+    //         $gt: 0
+    //     }
+    // } : {
+    //     debt: {
+    //         $gt: 0
+    //     }
+    // }
 
-    const countOther = cash ? {
-        count: {
-            $sum: '$cash'
-        }
-    } : {
-        count: {
-            $sum: '$debt'
-        }
-    }
+    // const countOther = cash ? {
+    //     count: {
+    //         $sum: '$cash'
+    //     }
+    // } : {
+    //     count: {
+    //         $sum: '$debt'
+    //     }
+    // }
 
     const groupOther = !route ? [
         {
             $group: {
                 _id: 'static',
-                ...countOther
+                count: {
+                    $sum: '$debt'
+                }
             }
         }
     ] : [];
@@ -61,12 +63,12 @@ const func = (position, id, route = false, cash = false) => {
         }
     } : {};
 
-    const price = cash ? { cash: '$cash' } : { debt: '$debt' }
+    // const price = cash ? { cash: '$cash' } : { debt: '$debt' }
 
 
     const pipeline = [{
         $match: {
-            ...cashOther
+            debt: {$gt: 0}
         }
     }, {
         $lookup: {
@@ -101,7 +103,7 @@ const func = (position, id, route = false, cash = false) => {
             courierId: '$deliveryId.courierId',
             managerId: '$agent.managerId',
             agentId: '$order.agentId',
-            ...price,
+            debt: '$debt',
             ...projectOther
         }
     },
@@ -198,7 +200,7 @@ const managerAsset = (id, asset = false) => {
     const matchStatus = asset ? {
         toStatus: 'process-Cour',
     } : {
-        toStatus: 'processAdmin',
+        toStatus: 'inManager',
     }
 
     const pipelineCash = [{

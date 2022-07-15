@@ -13,6 +13,13 @@ const processSchema = new Schema({
             required: true
         }
     ],
+    processId: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Process',
+            required: true
+        }
+    ],
     status: {
         type: String,
         enum: ['inCour', 'process-Cour', 'inManager', 'processAdmin', 'admin', 'finish'],

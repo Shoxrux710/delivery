@@ -120,7 +120,80 @@ router.get('/debtCard', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
 router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
     const { position, id } = req.user
-    const chequeCash = await Cheque.aggregate(func(position, id, false, true))
+
+    const filter = position === 'manager' ? 'managerId' : (position === 'agent' ? 'agentId' : 'courierId')
+
+    const filterCash = (position === 'super-admin' || position === 'admin') ? [] : ([{
+        '$match': {
+            [filter]: mongoose.Types.ObjectId(id)
+        }
+    }]);
+
+    const processOne = await ProcessDate
+        .find({ isRefusal: false, userId: id, toStatus: 'process-Cour' })
+        .populate('processId', 'cheques')
+        .select('processId')
+
+    let cheques = [];
+    processOne
+        .map((p) => p.processId.cheques)
+        .forEach((value) => {
+            cheques = [...cheques, ...value]
+        });
+
+    const chequeCash = await Cheque.aggregate(
+        [{
+            $match: {
+                _id: {$nin: cheques},
+                cash: {
+                    $gt: 0
+                }
+            }
+        }, {
+            $lookup: {
+                from: 'deliveries',
+                localField: 'deliveryId',
+                foreignField: '_id',
+                as: 'deliveryId'
+            }
+        }, {
+            $unwind: '$deliveryId'
+        }, {
+            $lookup: {
+                from: 'orders',
+                localField: 'deliveryId.orderId',
+                foreignField: '_id',
+                as: 'order'
+            }
+        }, {
+            $unwind: '$order'
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: 'order.agentId',
+                foreignField: '_id',
+                as: 'agent'
+            }
+        }, {
+            $unwind: '$agent'
+        }, {
+            $project: {
+                courierId: '$deliveryId.courierId',
+                managerId: '$agent.managerId',
+                agentId: '$order.agentId',
+                debt: '$debt'
+            }
+        },
+        ...filterCash 
+        , {
+            $group: {
+                _id: 'static',
+                count: {
+                    $sum: '$debt'
+                }
+            }
+        }]
+    )
 
     res.status(200).json({ chequeCash })
 
@@ -139,22 +212,22 @@ router.get('/cashCard', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
     }]);
 
     const processOne = await ProcessDate
-    .find({isRefusal: false, userId: id, toStatus: 'process-Cour'})
-    .populate('processId', 'cheques')
-    .select('processId')
-    
+        .find({ isRefusal: false, userId: id, toStatus: 'process-Cour' })
+        .populate('processId', 'cheques')
+        .select('processId')
+
     let cheques = [];
     processOne
-    .map((p) => p.processId.cheques)
-    .forEach((value) => {
-        cheques = [...cheques, ...value]
-    });
+        .map((p) => p.processId.cheques)
+        .forEach((value) => {
+            cheques = [...cheques, ...value]
+        });
     console.log(cheques);
 
     const chequeCard = await Cheque.aggregate(
         [{
             $match: {
-                _id: {$nin: cheques},
+                _id: { $nin: cheques },
                 cash: {
                     $gt: 0
                 }
