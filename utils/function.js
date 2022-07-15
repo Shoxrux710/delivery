@@ -68,7 +68,7 @@ const func = (position, id, route = false) => {
 
     const pipeline = [{
         $match: {
-            debt: {$gt: 0}
+            debt: { $gt: 0 }
         }
     }, {
         $lookup: {
@@ -203,6 +203,12 @@ const managerAsset = (id, asset = false) => {
         toStatus: 'inManager',
     }
 
+    const processStatus = asset ? {
+        'processId.status': 'inCour'
+    } : {
+        'processId.status': 'inManager'
+    }
+
     const pipelineCash = [{
         $match: {
             isRefusal: false,
@@ -217,6 +223,10 @@ const managerAsset = (id, asset = false) => {
         }
     }, {
         $unwind: '$processId'
+    }, {
+        $match: {
+            ...processStatus
+        }
     }, {
         $unwind: '$processId.cheques'
     }, {
