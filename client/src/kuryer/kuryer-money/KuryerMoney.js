@@ -11,7 +11,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 
 export const KuryerMoney = (props) => {
 
-    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames, cards, cash, giveMoneyToManager } = props
+    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames, cards, cash, giveMoneyToManager, archiveCash } = props
 
 
     const active = (

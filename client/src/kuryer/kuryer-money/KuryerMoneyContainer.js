@@ -22,6 +22,18 @@ const KuryerMoneyContainer = () => {
             })
     }
 
+    const [ archiveCash, setArchiveCash ] = useState([])
+    const getActiveCash = () => {
+        axios
+            .get('/api/processDate/lastCour', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+            })
+            .then(({data}) => {
+                console.log(data.lastProcess);
+                setArchiveCash(data.lastProcess)
+            })
+    }
+
     const getCashCards = () => {
         axios
             .get('/api/cheque/cashCard', {
@@ -31,6 +43,8 @@ const KuryerMoneyContainer = () => {
                 setCards(data.chequeCard)
             })
     }
+
+
 
     const giveMoneyToManager = () => {
         let cheques = cards.map(card => card._id)
@@ -49,6 +63,7 @@ const KuryerMoneyContainer = () => {
     useEffect(() => {
         getCash()
         getCashCards()
+        getActiveCash()
     }, [])
 
     return (
@@ -57,6 +72,7 @@ const KuryerMoneyContainer = () => {
             setH2={setH2} 
             cards={ cards }
             cash={ cash }
+            archiveCash = { archiveCash }
             orderMenu={orderMenu}
             setOrderMenu={setOrderMenu}
             setLeftNames={setLeftNames}
