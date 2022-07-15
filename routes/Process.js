@@ -106,6 +106,8 @@ router.post('/cour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
 
 })
 
+// bashqaruvchi
+
 router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BB'), async (req,res) => {
 
     const { id } = req.user
@@ -160,8 +162,9 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
 
     try {
         Process.findById(id, async (err, processOne) => {
+            console.log(processOne)
             if (err) return res.status(200).json({ errorMessage: 'error server' })
-            processOne.status = 'inManager'
+            processOne.status = 'inManager' 
             await processOne.save({ session })
         })
 
@@ -175,13 +178,14 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
 
         await dateProcess.save({ session })
         await session.commitTransaction() 
-        session.endSession()
         res.status(200).json({ successMessage: 'Bashqaruvchi tasdiqladi' })
 
     } catch (err) {
         await session.abortTransaction()
         res.status(500).json({ successMessage: 'error' })
     }
+
+    session.endSession()
 
 })
 
