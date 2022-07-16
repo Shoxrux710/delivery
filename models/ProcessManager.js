@@ -1,24 +1,24 @@
 const { Schema, model } = require('mongoose');
 
-const processSchema = new Schema({
-    courierId: {
+const processManagerSchema = new Schema({
+    managerId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    cheques: [
+    processId: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Cheque',
+            ref: 'Process',
             required: true
         }
     ],
     status: {
         type: String,
-        enum: ['inCour', 'process-Cour', 'inManager'],
+        enum: ['inManager', 'processAdmin', 'admin', 'finish'],
         required: true,
-        default: 'inCour'
+        default: 'inManager'
     }
 })
 
-module.exports = model('Process', processSchema)
+module.exports = model('ProcessManager', processManagerSchema)

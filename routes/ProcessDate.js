@@ -166,7 +166,88 @@ router.get('/asset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
 
     const { id } = req.user
 
-    const managerCashAsset = await ProcessDate.aggregate(managerAsset(id))
+
+    const processOne = await ProcessDate
+        .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
+        .populate('processManagerId', 'processId')
+        .select('processManagerId')
+
+    let chequeAll = []
+
+    processOne
+        .map((p) => p.processManagerId.processId)
+        .forEach((value) => {
+            chequeAll = [...chequeAll, ...value]
+        })
+    console.log(chequeAll)
+
+    const managerCashAsset = await ProcessDate.aggregate(
+        [{
+            $match: {
+                _id: { $nin: chequeAll },
+                isRefusal: false,
+                toStatus: 'inManager'
+            }
+        }, {
+            $lookup: {
+                from: 'processes',
+                localField: 'processId',
+                foreignField: '_id',
+                as: 'processId'
+            }
+        }, {
+            $unwind: '$processId'
+        }, {
+            $unwind: '$processId.cheques'
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: 'processId.courierId',
+                foreignField: '_id',
+                as: 'courierId'
+            }
+        }, {
+            $unwind: '$courierId'
+        }, {
+            $lookup: {
+                from: 'cheques',
+                localField: 'processId.cheques',
+                foreignField: '_id',
+                as: 'processId.cheques'
+            }
+        }, {
+            $unwind: '$processId.cheques'
+        }, {
+            $match: {
+                'courierId.managerId': mongoose.Types.ObjectId(id)
+            }
+        }, {
+            $group: {
+                _id: '$_id',
+                cash: {
+                    $sum: '$processId.cheques.cash'
+                },
+                count: {
+                    $sum: 1
+                },
+                fullname: {
+                    $addToSet: '$courierId.fullname'
+                },
+                date: {
+                    $addToSet: '$date'
+                },
+                processId: {
+                    $addToSet: '$processId._id'
+                }
+            }
+        }, {
+            $unwind: '$fullname'
+        }, {
+            $unwind: '$date'
+        }, {
+            $unwind: '$processId'
+        }]
+    )
 
     res.status(200).json({ managerCashAsset })
 })
