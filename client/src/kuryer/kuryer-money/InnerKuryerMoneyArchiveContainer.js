@@ -36,6 +36,7 @@ const InnerKuryerMoneyArchiveContainer = () => {
     useEffect(() => {
         getCards()
         getPrice()
+        //eslint-disable-next-line
     }, [])
 
 
