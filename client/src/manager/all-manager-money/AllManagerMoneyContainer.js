@@ -42,6 +42,17 @@ const AllManagerMoneyContainer = () => {
             })
     }
 
+    const giveProcessToAdmin = () => {
+        axios
+            .post('/api/processManager/manager', {}, {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
+            })
+            .then(({data}) => {
+                getCash()
+                getCards()
+            })
+    }
+
     const rejectCard = (id) => {
         axios
             .put('/api/processDate/rejectionCour', {}, {
@@ -81,6 +92,7 @@ const AllManagerMoneyContainer = () => {
             rejectCard = { rejectCard }
             confirmCard = { confirmCard }
             getActiveCards = { getActiveCards }
+            giveProcessToAdmin = { giveProcessToAdmin }
         />
     )
 }

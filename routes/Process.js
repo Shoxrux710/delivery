@@ -122,13 +122,18 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
     session.startTransaction()
 
     try {
-        Process.findById(id, async (err, processOne) => {
+
+        const processOneId = await Process.findOne({_id: id})
+        processOneId.status = 'inManager'
+        // Process.findById(id, (err, processOne) => {
             
-            if (err) return res.status(200).json({ errorMessage: 'error server' })
-            processOne.status = 'inManager'
-            await processOne.save({ session })
-            console.log(processOne)
-        })
+        //     if (err) return res.status(200).json({ errorMessage: 'error server' })
+        //     processOne.status = 'inManager'
+        //     await processOne.save({ session })
+        //     console.log(processOne)
+        // })
+
+        processOneId.save({session})
 
         const dateProcess = new ProcessDate({
             fromStatus: 'process-Cour',
@@ -143,6 +148,7 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
         res.status(200).json({ successMessage: 'Bashqaruvchi tasdiqladi' })
 
     } catch (err) {
+        console.log(err)
         await session.abortTransaction()
         res.status(500).json({ successMessage: 'error' })
     }

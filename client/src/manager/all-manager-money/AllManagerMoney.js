@@ -11,7 +11,7 @@ import './allManagerMoney.css'
 
 const AllManagerMoney = (props) => {
 
-    const { h2, setH2, cards, activeCards, cash, rejectCard, confirmCard, getActiveCards } = props
+    const { h2, setH2, cards, activeCards, cash, rejectCard, confirmCard, getActiveCards, giveProcessToAdmin } = props
 
     const confirm = (
         <div className='confirm-datas'>
@@ -71,7 +71,7 @@ const AllManagerMoney = (props) => {
                 </div>
             ))
         }
-            <button>Adminga berish</button>
+            <button onClick={() => giveProcessToAdmin()}>Adminga berish</button>
         </div>
     )
 
