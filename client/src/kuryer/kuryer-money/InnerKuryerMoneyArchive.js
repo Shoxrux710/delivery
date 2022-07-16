@@ -1,10 +1,18 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+
+import { formatString } from '../../utils/number'
+import { getDateInMonthString } from '../../utils/date'
+
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
-import { Link } from 'react-router-dom'
+
 import './kuryerMoney.css'
 
-const InnerKuryerMoneyArchive = () => {
+const InnerKuryerMoneyArchive = ({
+    cards,
+    price
+}) => {
     return (
         <div className='kuryer-money-component inner-kuryer-archive'>
 
@@ -22,28 +30,32 @@ const InnerKuryerMoneyArchive = () => {
 
             <div className='top'>
                 <p>Qo’ldagi pul</p>
-                <p>323 000 000 so’m</p>
+                <p>{ formatString(price) } so’m</p>
             </div>
 
             <div className='active-money archive-money'>
-                <div className='archive-prod'>
-                    <div className='qator'>
-                        <h5 style={{fontWeight: '400', color: '#C3C6CE'}}>ID 3231232</h5>
-                        <h5 style={{fontWeight: '400', color: '#C3C6CE'}}>23 Fevral 15:00</h5>
+            {
+                cards && cards.map((card) => (
+                    <div className='archive-prod' key={ card.code }>
+                        <div className='qator'>
+                            <h5 style={{fontWeight: '400', color: '#C3C6CE'}}>ID { card.code }</h5>
+                            <h5 style={{fontWeight: '400', color: '#C3C6CE'}}>{ getDateInMonthString(card.date) }</h5>
+                        </div>
+                        <div className='qator bb'>
+                            <p>Naqd pul</p>
+                            <p>{ formatString(card.cash) } so'm</p>
+                        </div>
+                        <div className='qator'>
+                            <p style={{fontWeight: '600', color: '#383838'}}>{ card.fullname }</p>
+                            <p style={{fontWeight: '600', color: '#383838'}}>{ card.phone }</p>
+                        </div>
+                        <div className='qator'>
+                            <span>Mijoz</span>
+                            <span>Telefon raqam</span>
+                        </div>
                     </div>
-                    <div className='qator bb'>
-                        <p>Naqd pul</p>
-                        <p>11 235 545 so'm</p>
-                    </div>
-                    <div className='qator'>
-                        <p style={{fontWeight: '600', color: '#383838'}}>Abduvali Abdusoli</p>
-                        <p style={{fontWeight: '600', color: '#383838'}}>+998931234567</p>
-                    </div>
-                    <div className='qator'>
-                        <span>Zakazlar soni</span>
-                        <span>3223</span>
-                    </div>
-                </div>
+                ))
+            }
             </div>
         </div>
     )
