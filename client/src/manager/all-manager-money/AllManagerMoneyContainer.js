@@ -25,7 +25,6 @@ const AllManagerMoneyContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(({ data }) => {
-                console.log(data.managerCash)
                 setCards(data.managerCash)
             })
     }
@@ -48,7 +47,6 @@ const AllManagerMoneyContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(({data}) => {
-                getCash()
                 getCards()
             })
     }
