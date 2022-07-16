@@ -100,6 +100,7 @@ router.post('/cour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
     } catch (err) {
         await session.abortTransaction()
         res.status(500).json({ errorMessage: 'server error' })
+        console.log(err)
     }
 
     session.endSession()
