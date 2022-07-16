@@ -25,7 +25,6 @@ const AllManagerMoneyContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(({ data }) => {
-                console.log(data.managerCash)
                 setCards(data.managerCash)
             })
     }
@@ -43,13 +42,14 @@ const AllManagerMoneyContainer = () => {
     }
 
     const giveProcessToAdmin = () => {
+        const processArr = activeCards.map(el => el._id)
+
         axios
-            .post('/api/processManager/manager', {}, {
+            .post('/api/processManager/manager', { processId: processArr }, {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
-            .then(({data}) => {
-                getCash()
-                getCards()
+            .then(() => {
+                getActiveCards()
             })
     }
 
