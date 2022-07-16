@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { getDateInMonthString } from '../../utils/date'
+import { getDateInMonthString, getFullDateTime } from '../../utils/date'
+import { formatString } from '../../utils/number'
 
 import './kuryerMoney.css'
 
@@ -11,8 +12,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 
 export const KuryerMoney = (props) => {
 
-    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames, cards, cash, giveMoneyToManager, archiveCash } = props
-
+    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames, cards, cash, giveMoneyToManager, archiveCash, getArchiveCash } = props
 
     const active = (
         <div className='active-money'>
@@ -79,29 +79,29 @@ export const KuryerMoney = (props) => {
 
     const archive = (
         <div className='active-money archive-money'>
-            <div className='top'>
-                <p>Qo’ldagi pul</p>
-                <p>100 000 000 so’m</p>
-            </div>
-
-            <div className='archive-prod'>
-                <div className='qator'>
-                    <h5>30.04.2022 10:35</h5>
-                    <h5>30.04.2022 10:30</h5>
-                </div>
-                <div className='qator bb'>
-                    <span>Berilgan vaqt</span>
-                    <span>Qabul qilingan vaqt</span>
-                </div>
-                <div className='qator'>
-                    <p>Umumiy summa</p>
-                    <p>100 000 000 so’m</p>
-                </div>
-                <div className='qator'>
-                    <p>Zakazlar soni</p>
-                    <p>120</p>
-                </div>
-            </div>
+            {
+                archiveCash && archiveCash.map(card => (
+                        <div className='archive-prod' key={ card._id }>
+                            <div className='qator'>
+                                <h5>{ getFullDateTime(card.dates[0]) }</h5>
+                                <h5>{ getFullDateTime(card.dates[1]) }</h5>
+                            </div>
+                            <div className='qator bb'>
+                                <span>Berilgan vaqt</span>
+                                <span>Qabul qilingan vaqt</span>
+                            </div>
+                            <div className='qator'>
+                                <p>Umumiy summa</p>
+                                <p>{ formatString(card.cash) } so’m</p>
+                            </div>
+                            <div className='qator'>
+                                <p>Zakazlar soni</p>
+                                <p>{ formatString(card.count) }</p>
+                            </div>
+                        </div>
+                    )
+                ) 
+            }
         </div>
     )
 
@@ -122,7 +122,10 @@ export const KuryerMoney = (props) => {
                 <div className={h2 === 'active' ? 'act-h2' : ''} onClick={() => setH2('active')}>
                     <h2>Aktiv</h2>
                 </div>
-                <div className={h2 === 'archive' ? 'act-h2' : ''} onClick={() => setH2('archive')}>
+                <div className={h2 === 'archive' ? 'act-h2' : ''} onClick={() => {
+                    setH2('archive')
+                    getArchiveCash()
+                }}>
                     <h2>Arxiv</h2>
                 </div>
             </div>

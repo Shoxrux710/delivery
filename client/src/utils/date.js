@@ -5,6 +5,13 @@ export const getDateInMonthString = (_date) => {
     return `${Number(date)} ${getMonthFromMonthNumber(month)} ${Number(hour)}:${min}`
 }
 
+export const getFullDateTime = (_date) => {
+    let [ year, month, date ] = _date.split("T")[0].split('-')
+    let [ hour, min ] = _date.split('T')[1].split(':')
+
+    return `${date}.${month}.${year} ${hour}:${min}`
+}
+
 export const getDate = (_date) => {
     let [ year, month, date ] = _date.split("T")[0].split('-')
 

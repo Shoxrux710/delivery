@@ -10,10 +10,8 @@ const KuryerMoneyContainer = () => {
     const [ leftNames, setLeftNames ] = useState(false)
 
     const [ cash, setCash ] = useState(0)
-    const [ cards, setCards ] = useState([])
-
     const getCash = () => {
-        axios
+        !cash && axios
             .get('/api/cheque/cash', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
@@ -23,19 +21,19 @@ const KuryerMoneyContainer = () => {
     }
 
     const [ archiveCash, setArchiveCash ] = useState([])
-    const getActiveCash = () => {
-        axios
+    const getArchiveCash = () => {
+        !archiveCash.length && axios
             .get('/api/processDate/lastCour', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
             .then(({data}) => {
-                console.log(data.lastProcess);
                 setArchiveCash(data.lastProcess)
             })
     }
 
+    const [ cards, setCards ] = useState([])
     const getCashCards = () => {
-        axios
+        !cards.length && axios
             .get('/api/cheque/cashCard', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
@@ -43,8 +41,6 @@ const KuryerMoneyContainer = () => {
                 setCards(data.chequeCard)
             })
     }
-
-
 
     const giveMoneyToManager = () => {
         let cheques = cards.map(card => card._id)
@@ -63,7 +59,8 @@ const KuryerMoneyContainer = () => {
     useEffect(() => {
         getCash()
         getCashCards()
-        getActiveCash()
+        
+        // eslint-disable-next-line
     }, [])
 
     return (
@@ -77,6 +74,7 @@ const KuryerMoneyContainer = () => {
             setOrderMenu={setOrderMenu}
             setLeftNames={setLeftNames}
             leftNames={leftNames}
+            getArchiveCash={ getArchiveCash }
             giveMoneyToManager={ giveMoneyToManager }
         />
     )

@@ -71,7 +71,7 @@ const KuryerHomeContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
             .then(({data}) => {
-                setCash(data.chequeCash[0].count)
+                data.chequeCash.length && setCash(data.chequeCash[0].count)
             })
     }
 
@@ -83,7 +83,7 @@ const KuryerHomeContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
             .then(({data}) => {
-                setDebt(data.chequeDebt[0].count)
+                data.chequeDebt.length && setDebt(data.chequeDebt[0].count)
             })
     }
 
