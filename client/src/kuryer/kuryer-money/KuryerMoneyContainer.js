@@ -11,7 +11,7 @@ const KuryerMoneyContainer = () => {
 
     const [ cash, setCash ] = useState(0)
     const getCash = () => {
-        !cash && axios
+        axios
             .get('/api/cheque/cash', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
@@ -22,7 +22,7 @@ const KuryerMoneyContainer = () => {
 
     const [ archiveCash, setArchiveCash ] = useState([])
     const getArchiveCash = () => {
-        !archiveCash.length && axios
+        axios
             .get('/api/processDate/lastCour', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
@@ -33,7 +33,7 @@ const KuryerMoneyContainer = () => {
 
     const [ cards, setCards ] = useState([])
     const getCashCards = () => {
-        !cards.length && axios
+        axios
             .get('/api/cheque/cashCard', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
