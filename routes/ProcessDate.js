@@ -179,7 +179,8 @@ router.get('/asset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
         .forEach((value) => {
             chequeAll = [...chequeAll, ...value]
         })
-    console.log(chequeAll)
+
+    console.log(processOne)
 
     const managerCashAsset = await ProcessDate.aggregate(
         [{
