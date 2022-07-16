@@ -6,9 +6,7 @@ import { KuryerMoney } from './KuryerMoney'
 const KuryerMoneyContainer = () => {
 
     const [ h2, setH2 ] = useState('active')
-    const [ orderMenu, setOrderMenu ] = useState(false)
-    const [ leftNames, setLeftNames ] = useState(false)
-
+    
     const [ cash, setCash ] = useState(0)
     const getCash = () => {
         axios
@@ -70,10 +68,6 @@ const KuryerMoneyContainer = () => {
             cards={ cards }
             cash={ cash }
             archiveCash = { archiveCash }
-            orderMenu={orderMenu}
-            setOrderMenu={setOrderMenu}
-            setLeftNames={setLeftNames}
-            leftNames={leftNames}
             getArchiveCash={ getArchiveCash }
             giveMoneyToManager={ giveMoneyToManager }
         />

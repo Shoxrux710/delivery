@@ -1,18 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { getDateInMonthString, getFullDateTime } from '../../utils/date'
+import { getFullDateTime } from '../../utils/date'
 import { formatString } from '../../utils/number'
 
 import './kuryerMoney.css'
 
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
-import { BsThreeDotsVertical } from 'react-icons/bs'
+import OneKuryerMoney from './OneKuryerMoney'
 
 export const KuryerMoney = (props) => {
 
-    const { setH2, h2, setOrderMenu, orderMenu, setLeftNames, leftNames, cards, cash, giveMoneyToManager, archiveCash, getArchiveCash } = props
+    const { setH2, h2, cards, cash, giveMoneyToManager, archiveCash, getArchiveCash } = props
 
     const active = (
         <div className='active-money'>
@@ -23,52 +23,11 @@ export const KuryerMoney = (props) => {
 
             {
                 cards && cards.map((card, index) => (
-                    <div className='one-order' key={ card._id }>
-                        <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
-                        <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>Bu yerda qandaydur nom berish kerak</h2>
-
-                        <div className={leftNames ? 'left-names left-names-active' : 'left-names'}>
-                            <div>
-                                <p>Коляска-автокресло Doona S1 Grey</p>
-                                <span>2x</span>
-                            </div>
-                            <div>
-                                <p>Коляска-автокресло Doona S1 Grey</p>
-                                <span>5x</span>
-                            </div>
-                            <div className='last'>
-                                <p>Коляска-автокресло Doona S1 Grey</p>
-                                <span>2x</span>
-                            </div>
-                        </div>
-
-                        <div className='order' onClick={() => {setOrderMenu(false); setLeftNames(false)}}>
-                            <div className='topp'>
-                                <div>
-                                    <h1>{ index + 1 }</h1>
-                                </div>
-                                <div></div>
-                            </div>
-                            <div className='qator'>
-                                <p>ID { card.code }</p>
-                                <span>{ getDateInMonthString(card.date) }</span>
-                            </div>
-                            <div className='qator lst'>
-                                <p>Qo'ldagi pul</p>
-                                <h4>{ card.cash } so’m</h4>
-                            </div>
-                            <div className='bottom'>
-                                <div className='ust'>
-                                    <h3>{ card.fullname }</h3>
-                                    <p>Mijoz</p>
-                                </div>
-                                <div className='ust'>
-                                    <h3>{ card.phone }</h3>
-                                    <p>Telefon raqam</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <OneKuryerMoney 
+                        key={ card._id }
+                        card={card}
+                        index={index}
+                    />
                 ))
             }
 
