@@ -81,24 +81,26 @@ export const KuryerMoney = (props) => {
         <div className='active-money archive-money'>
             {
                 archiveCash && archiveCash.map(card => (
-                        <div className='archive-prod' key={ card._id }>
-                            <div className='qator'>
-                                <h5>{ getFullDateTime(card.dates[0]) }</h5>
-                                <h5>{ getFullDateTime(card.dates[1]) }</h5>
+                        <Link to={card._id} key={ card._id }>
+                            <div className='archive-prod'>
+                                <div className='qator'>
+                                    <h5>{ getFullDateTime(card.dates[0]) }</h5>
+                                    <h5>{ getFullDateTime(card.dates[1]) }</h5>
+                                </div>
+                                <div className='qator bb'>
+                                    <span>Berilgan vaqt</span>
+                                    <span>Qabul qilingan vaqt</span>
+                                </div>
+                                <div className='qator'>
+                                    <p>Umumiy summa</p>
+                                    <p>{ formatString(card.cash) } so’m</p>
+                                </div>
+                                <div className='qator'>
+                                    <p>Zakazlar soni</p>
+                                    <p>{ formatString(card.count) }</p>
+                                </div>
                             </div>
-                            <div className='qator bb'>
-                                <span>Berilgan vaqt</span>
-                                <span>Qabul qilingan vaqt</span>
-                            </div>
-                            <div className='qator'>
-                                <p>Umumiy summa</p>
-                                <p>{ formatString(card.cash) } so’m</p>
-                            </div>
-                            <div className='qator'>
-                                <p>Zakazlar soni</p>
-                                <p>{ formatString(card.count) }</p>
-                            </div>
-                        </div>
+                        </Link>
                     )
                 ) 
             }

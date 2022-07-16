@@ -25,6 +25,7 @@ import AllManagerMoneyContainer from './manager/all-manager-money/AllManagerMone
 import AllAdminMoneyContainer from './admin/all-admin-money/AllAdminMoneyContainer';
 import AddProductContainer from './admin/add-product/AddProductContainer';
 import PageNotFound from './components/page-not-found/PageNotFound';
+import InnerKuryerMoneyArchiveContainer from './kuryer/kuryer-money/InnerKuryerMoneyArchiveContainer';
 
 const App = () => {
 
@@ -90,6 +91,7 @@ const App = () => {
     <Routes>
       <Route path='/' element={<KuryerHomeContainer />} />
       <Route path='/money' element={<KuryerMoneyContainer />} />
+      <Route path='/money/:id' element={<InnerKuryerMoneyArchiveContainer />} />
       <Route path='/order/:id' element={<InnerOrderContainer />} />
       <Route path='*' element={<PageNotFound />} />
     </Routes>
