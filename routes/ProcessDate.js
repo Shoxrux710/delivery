@@ -64,7 +64,7 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
             $unwind: '$processManagerId.managerId'
         }, {
             $group: {
-                _id: '$_id',
+                _id: '$processManagerId._id',
                 count: {
                     $addToSet: '$cheques._id'
                 },
