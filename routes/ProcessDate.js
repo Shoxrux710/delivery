@@ -97,6 +97,95 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
     res.status(200).json({ adminCash })
 })
 
+// admindagi aktivlar
+
+router.get('/adminAsset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
+
+    const adminAsset = await ProcessDate.aggregate(
+        [{
+            $match: {
+                isRefusal: false,
+                toStatus: 'admin'
+            }
+        }, {
+            $lookup: {
+                from: 'processmanagers',
+                localField: 'processManagerId',
+                foreignField: '_id',
+                as: 'processManagerId'
+            }
+        }, {
+            $unwind: '$processManagerId'
+        }, {
+            $match: {
+                'processManagerId.status': 'admin'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
+        }, {
+            $lookup: {
+                from: 'processes',
+                localField: 'processManagerId.processId',
+                foreignField: '_id',
+                as: 'processManagerId.processId'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
+        }, {
+            $unwind: '$processManagerId.processId.cheques'
+        }, {
+            $lookup: {
+                from: 'cheques',
+                localField: 'processManagerId.processId.cheques',
+                foreignField: '_id',
+                as: 'cheques'
+            }
+        }, {
+            $unwind: '$cheques'
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: 'processManagerId.managerId',
+                foreignField: '_id',
+                as: 'processManagerId.managerId'
+            }
+        }, {
+            $unwind: '$processManagerId.managerId'
+        }, {
+            $group: {
+                _id: '$processManagerId._id',
+                count: {
+                    $addToSet: '$cheques._id'
+                },
+                cash: {
+                    $sum: '$cheques.cash'
+                },
+                date: {
+                    $addToSet: '$date'
+                },
+                fullname: {
+                    $addToSet: '$processManagerId.managerId.fullname'
+                }
+            }
+        }, {
+            $unwind: '$fullname'
+        }, {
+            $unwind: '$date'
+        }, {
+            $project: {
+                count: {
+                    $size: '$count'
+                },
+                fullname: '$fullname',
+                date: '$date',
+                cash: '$cash'
+            }
+        }]
+    )
+
+    res.status(200).json({adminAsset})
+})
+
 router.get('/adminSumm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
 
     const adminSumm = await ProcessDate.aggregate(
@@ -149,9 +238,7 @@ router.get('/adminSumm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
             }
         }]
     )
-
     res.status(200).json({ adminSumm })
-
 })
 
 
