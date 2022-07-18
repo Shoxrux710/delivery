@@ -126,7 +126,7 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
         const processOneId = await Process.findOne({_id: id})
         processOneId.status = 'inManager'
 
-        processOneId.save({session})
+        await processOneId.save({session})
 
         const dateProcess = new ProcessDate({
             fromStatus: 'process-Cour',

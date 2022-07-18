@@ -84,7 +84,7 @@ router.put('/adminIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlewa
         const managerOne = await ProcessManager.findOne({_id: id})
         managerOne.status = 'admin'
 
-        managerOne.save({session})
+        await managerOne.save({session})
 
         const dateManager = new ProcessDate({
             fromStatus: 'processAdmin',
