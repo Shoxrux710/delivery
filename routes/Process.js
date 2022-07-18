@@ -143,7 +143,7 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
     } catch (err) {
         console.log(err)
         await session.abortTransaction()
-        res.status(500).json({ successMessage: 'error' })
+        res.status(500).json({ errorMessage: 'error' })
     }
 
     session.endSession()

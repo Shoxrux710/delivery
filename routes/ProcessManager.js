@@ -73,6 +73,37 @@ router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
 
 router.put('/adminIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req,res) => {
 
+    const {id} = req.query
+    const {id: userId} = req.user
+    const {date} = nowDate()
+
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    try {
+        const managerOne = await ProcessManager.findOne({_id: id})
+        managerOne.status = 'admin'
+
+        managerOne.save({session})
+
+        const dateManager = new ProcessDate({
+            fromStatus: 'processAdmin',
+            toStatus: 'admin',
+            date: date,
+            userId: userId,
+            processManagerId: id
+        })
+
+        await dateManager.save({session})
+        await session.commitTransaction()
+        res.status(200).json({successMessage: 'Admin tasdiqlash'})
+
+    } catch (err) {
+        await session.abortTransaction()
+        res.status(200).json({errorMessage: 'error'})
+    }
+
+    session.endSession()
 })
 
 module.exports = router
