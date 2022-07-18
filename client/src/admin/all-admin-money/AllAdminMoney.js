@@ -40,7 +40,7 @@ const AllAdminMoney = (props) => {
                         </div>
                         <div className='btns-wrap'>
                             <button onClick={() => rejectCard(card._id)} >Rad etish</button>
-                            <button onClick={() => confirmCard(card.processId)} >Tasdiqlash</button>
+                            <button onClick={() => confirmCard(card._id)} >Tasdiqlash</button>
                         </div>
                     </div>
                 ))

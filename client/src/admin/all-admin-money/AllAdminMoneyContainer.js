@@ -46,7 +46,7 @@ const AllAdminMoneyContainer = () => {
         const processArr = activeCards.map(el => el.processId)
 
         activeCards.length && axios
-            .post('/api/processManager/manager', { processId: processArr }, {
+            .post('/api/processManager/adminIn', { processId: processArr }, {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(() => {
@@ -69,7 +69,7 @@ const AllAdminMoneyContainer = () => {
 
     const confirmCard = (processId) => {
         axios
-            .put('/api/process/managerIn', {}, {
+            .put('/api/processManager/adminIn', {}, {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
                 params: { id: processId }
             })
