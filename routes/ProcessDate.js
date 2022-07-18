@@ -66,7 +66,7 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
             $group: {
                 _id: '$_id',
                 count: {
-                    $addToSet: '$_id'
+                    $addToSet: '$cheques._id'
                 },
                 cash: {
                     $sum: '$cheques.cash'
