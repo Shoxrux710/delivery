@@ -69,4 +69,10 @@ router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
     session.endSession()
 })
 
+// admin tasdiqlash
+
+router.put('/adminIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req,res) => {
+
+})
+
 module.exports = router

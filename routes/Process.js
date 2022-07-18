@@ -125,13 +125,6 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
 
         const processOneId = await Process.findOne({_id: id})
         processOneId.status = 'inManager'
-        // Process.findById(id, (err, processOne) => {
-            
-        //     if (err) return res.status(200).json({ errorMessage: 'error server' })
-        //     processOne.status = 'inManager'
-        //     await processOne.save({ session })
-        //     console.log(processOne)
-        // })
 
         processOneId.save({session})
 

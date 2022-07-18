@@ -20,30 +20,34 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
             }
         }, {
             $lookup: {
-                from: 'processes',
-                localField: 'processId',
+                from: 'processmanagers',
+                localField: 'processManagerId',
                 foreignField: '_id',
-                as: 'processId'
+                as: 'processManagerId'
             }
         }, {
-            $unwind: '$processId'
+            $unwind: '$processManagerId'
         }, {
-            $unwind: '$processId.processId'
+            $match: {
+                'processManagerId.status': 'inManager'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
         }, {
             $lookup: {
                 from: 'processes',
-                localField: 'processId.processId',
+                localField: 'processManagerId.processId',
                 foreignField: '_id',
-                as: 'processId.processId'
+                as: 'processManagerId.processId'
             }
         }, {
-            $unwind: '$processId.processId'
+            $unwind: '$processManagerId.processId'
         }, {
-            $unwind: '$processId.processId.cheques'
+            $unwind: '$processManagerId.processId.cheques'
         }, {
             $lookup: {
                 from: 'cheques',
-                localField: 'processId.processId.cheques',
+                localField: 'processManagerId.processId.cheques',
                 foreignField: '_id',
                 as: 'cheques'
             }
@@ -52,12 +56,12 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
         }, {
             $lookup: {
                 from: 'users',
-                localField: 'processId.courierId',
+                localField: 'processManagerId.managerId',
                 foreignField: '_id',
-                as: 'processId.courierId'
+                as: 'processManagerId.managerId'
             }
         }, {
-            $unwind: '$processId.courierId'
+            $unwind: '$processManagerId.managerId'
         }, {
             $group: {
                 _id: '$_id',
@@ -71,7 +75,7 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
                     $addToSet: '$date'
                 },
                 fullname: {
-                    $addToSet: '$processId.courierId.fullname'
+                    $addToSet: '$processManagerId.managerId.fullname'
                 }
             }
         }, {
@@ -103,30 +107,34 @@ router.get('/adminSumm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
             }
         }, {
             $lookup: {
-                from: 'processes',
-                localField: 'processId',
+                from: 'processmanagers',
+                localField: 'processManagerId',
                 foreignField: '_id',
-                as: 'processId'
+                as: 'processManagerId'
             }
         }, {
-            $unwind: '$processId'
+            $unwind: '$processManagerId'
         }, {
-            $unwind: '$processId.processId'
+            $match: {
+                'processManagerId.status': 'inManager'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
         }, {
             $lookup: {
                 from: 'processes',
-                localField: 'processId.processId',
+                localField: 'processManagerId.processId',
                 foreignField: '_id',
-                as: 'processId.processId'
+                as: 'processManagerId.processId'
             }
         }, {
-            $unwind: '$processId.processId'
+            $unwind: '$processManagerId.processId'
         }, {
-            $unwind: '$processId.processId.cheques'
+            $unwind: '$processManagerId.processId.cheques'
         }, {
             $lookup: {
                 from: 'cheques',
-                localField: 'processId.processId.cheques',
+                localField: 'processManagerId.processId.cheques',
                 foreignField: '_id',
                 as: 'cheques'
             }
@@ -180,12 +188,12 @@ router.get('/asset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
             chequeAll = [...chequeAll, ...value]
         })
 
-    console.log(processOne)
+    console.log(chequeAll)
+    //_id: { $nin: chequeAll },
 
     const managerCashAsset = await ProcessDate.aggregate(
         [{
             $match: {
-                _id: { $nin: chequeAll },
                 isRefusal: false,
                 toStatus: 'inManager'
             }
@@ -198,6 +206,10 @@ router.get('/asset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
             }
         }, {
             $unwind: '$processId'
+        }, {
+            $match: {
+                'processId._id': { $nin: chequeAll }
+            }
         }, {
             $unwind: '$processId.cheques'
         }, {
