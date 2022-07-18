@@ -50,7 +50,8 @@ const AllManagerMoney = (props) => {
     const active = (
         <div className='confirm-datas'>
         {
-            activeCards && activeCards.map((card, index) => (
+            activeCards 
+            ? activeCards.map((card, index) => (
                 <div className='one' key = { card._id }>
                     <div className='top'>
                         <h3>{ index + 1 }. <span>{ card.fullname }</span></h3>
@@ -69,9 +70,9 @@ const AllManagerMoney = (props) => {
                         <span>{ formatString(card.cash) } so’m</span>
                     </div>
                 </div>
-            ))
+            )) 
+            : <button onClick={() => giveProcessToAdmin()}>Adminga berish</button>
         }
-            <button onClick={() => giveProcessToAdmin()}>Adminga berish</button>
         </div>
     )
 
