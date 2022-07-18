@@ -49,30 +49,35 @@ const AllManagerMoney = (props) => {
 
     const active = (
         <div className='confirm-datas'>
-        {
-            activeCards 
-            ? activeCards.map((card, index) => (
-                <div className='one' key = { card._id }>
-                    <div className='top'>
-                        <h3>{ index + 1 }. <span>{ card.fullname }</span></h3>
-                        {/* <BsThreeDotsVertical className='icon' /> */}
-                    </div>
-                    <div className='qator'>
-                        <p>Berilgan vaqti</p>
-                        <span>{ getDateInMonthString(card.date) }</span>
-                    </div>
-                    <div className='qator'>
-                        <p>Buyurtmalar soni</p>
-                        <span>{ formatString(card.count) } ta</span>
-                    </div>
-                    <div className='qator'>
-                        <p>Qo’ldagi pul</p>
-                        <span>{ formatString(card.cash) } so’m</span>
-                    </div>
-                </div>
-            )) 
-            : <button onClick={() => giveProcessToAdmin()}>Adminga berish</button>
-        }
+            {
+                activeCards.length 
+                ? ( <>
+                    { 
+                        activeCards.map((card, index) => (
+                            <div className='one' key = { card._id }>
+                                <div className='top'>
+                                    <h3>{ index + 1 }. <span>{ card.fullname }</span></h3>
+                                    {/* <BsThreeDotsVertical className='icon' /> */}
+                                </div>
+                                <div className='qator'>
+                                    <p>Berilgan vaqti</p>
+                                    <span>{ getDateInMonthString(card.date) }</span>
+                                </div>
+                                <div className='qator'>
+                                    <p>Buyurtmalar soni</p>
+                                    <span>{ formatString(card.count) } ta</span>
+                                </div>
+                                <div className='qator'>
+                                    <p>Qo’ldagi pul</p>
+                                    <span>{ formatString(card.cash) } so’m</span>
+                                </div>
+                            </div>
+                        )) 
+                    }
+                    <button onClick={() => giveProcessToAdmin()}>Adminga berish</button>
+                </> )
+                : ""
+            }
         </div>
     )
 
