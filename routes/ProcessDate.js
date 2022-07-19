@@ -674,7 +674,7 @@ router.get('/eachManager', isAuthMiddleware, attachUserMiddleware, checkRoleMidd
             $unwind: '$processManagerId'
         }, {
             $match: {
-                'processManagerId.managerId': mongoose.Types.ObjectId(id),
+                'processManagerId.managerId': ObjectId('62be7d3468979bd8753d76ec'),
                 'processManagerId.status': 'admin'
             }
         }, {
@@ -699,6 +699,7 @@ router.get('/eachManager', isAuthMiddleware, attachUserMiddleware, checkRoleMidd
             $unwind: '$processManagerId.processDates.processId'
         }, {
             $project: {
+                _id: '$processManagerId._id',
                 date: '$date',
                 toStatus: '$toStatus',
                 dateTwo: '$processManagerId.processDates.date',
@@ -708,7 +709,7 @@ router.get('/eachManager', isAuthMiddleware, attachUserMiddleware, checkRoleMidd
             }
         }, {
             $group: {
-                _id: 'sfsdf',
+                _id: '$_id',
                 dates: {
                     $addToSet: '$date'
                 },
@@ -741,7 +742,7 @@ router.get('/eachManager', isAuthMiddleware, attachUserMiddleware, checkRoleMidd
             $unwind: '$cheques'
         }, {
             $group: {
-                _id: 'fsdfsdf',
+                _id: '$_id',
                 cash: {
                     $sum: '$cheques.cash'
                 },
