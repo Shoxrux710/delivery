@@ -1,8 +1,9 @@
-const {Router} = require('express')
+const { Router } = require('express')
 const isAuthMiddleware = require('../middleware/isAuth');
 const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
 const ProcessManager = require('../models/ProcessManager')
+const Process = require('../models/Process')
 const ProcessDate = require('../models/ProcessDate')
 const mongoose = require('mongoose')
 const nowDate = require('../utils/nowDate')
@@ -21,36 +22,35 @@ router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
 
     try {
 
-        const { processId } = req.body
+        const { processDates } = req.body
 
-        const processOne = await ProcessDate
+        const processDateIds = await ProcessDate
             .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
-            .populate('processManagerId', 'processId')
+            .populate({ path: 'processManagerId', select: '', populate: { path: 'processDates', select: 'processId' } })
             .select('processManagerId')
 
-        let chequeAll = []
+        let proccessIds2 = []
 
-        processOne
-            .map((p) => p.processManagerId.processId)
+        processDateIds
             .forEach((value) => {
-                chequeAll = [...chequeAll, ...value]
+                proccessIds2 = [...proccessIds2, ...value.processManagerId?.processDates]
             })
+        const processIds = proccessIds2.map((pid) => pid.processId);
 
-        console.log(chequeAll)
+        const isProcessIds = await Process.findOne({_id: {$in: processIds}})
 
-        const isCheque = await ProcessManager.findOne({_id: {$in: chequeAll}})
-        if (isCheque) 
-                return res.status(500).json({errorMessage: 'Yuborilgan buyurtma qayta yuborilmasin'})
+        if (isProcessIds)
+           return res.status(500).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'})
 
         const processManager = new ProcessManager({
             managerId: id,
-            processId,
+            processDates,
         })
 
         const { _id: newProcessId } = await processManager.save({ session })
 
         const dataProcess = new ProcessDate({
-            fromStatus: 'inManager',    
+            fromStatus: 'inManager',
             toStatus: 'processAdmin',
             date: date,
             userId: id,
@@ -71,20 +71,20 @@ router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
 
 // admin tasdiqlash
 
-router.put('/adminIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req,res) => {
+router.put('/adminIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
 
-    const {id} = req.query
-    const {id: userId} = req.user
-    const {date} = nowDate()
+    const { id } = req.query
+    const { id: userId } = req.user
+    const { date } = nowDate()
 
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
-        const managerOne = await ProcessManager.findOne({_id: id})
+        const managerOne = await ProcessManager.findOne({ _id: id })
         managerOne.status = 'admin'
 
-        await managerOne.save({session})
+        await managerOne.save({ session })
 
         const dateManager = new ProcessDate({
             fromStatus: 'processAdmin',
@@ -94,13 +94,13 @@ router.put('/adminIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlewa
             processManagerId: id
         })
 
-        await dateManager.save({session})
+        await dateManager.save({ session })
         await session.commitTransaction()
-        res.status(200).json({successMessage: 'Admin tasdiqlash'})
+        res.status(200).json({ successMessage: 'Admin tasdiqlash' })
 
     } catch (err) {
         await session.abortTransaction()
-        res.status(200).json({errorMessage: 'error'})
+        res.status(200).json({ errorMessage: 'error' })
     }
 
     session.endSession()

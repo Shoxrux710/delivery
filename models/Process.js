@@ -18,6 +18,10 @@ const processSchema = new Schema({
         enum: ['inCour', 'process-Cour', 'inManager'],
         required: true,
         default: 'inCour'
+    },
+    date: {
+        type: Date,
+        required: true
     }
 })
 

@@ -6,10 +6,10 @@ const processManagerSchema = new Schema({
         ref: 'User',
         required: true
     },
-    processId: [
+    processDates: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Process',
+            ref: 'ProcessDate',
             required: true
         }
     ],

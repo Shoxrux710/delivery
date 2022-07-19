@@ -42,10 +42,10 @@ const AllManagerMoneyContainer = () => {
     }
 
     const giveProcessToAdmin = () => {
-        const processArr = activeCards.map(el => el.processId)
+        const processArr = activeCards.map(el => el._id)
 
         activeCards.length && axios
-            .post('/api/processManager/manager', { processId: processArr }, {
+            .post('/api/processManager/manager', { processDates: processArr }, {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(() => {

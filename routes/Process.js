@@ -74,11 +74,12 @@ router.post('/cour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
 
         const isCheque = await Cheque.findOne({ _id: { $in: chequeAll } });
         if (isCheque)
-            return res.status(400).json('Yuborilgan buyurtma qaytadan yuborilmasin');
+            return res.status(400).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'});
 
         const process = new Process({
             courierId: id,
-            cheques
+            cheques,
+            date: date
         })
 
         const { _id: newProcessId } = await process.save({ session })
