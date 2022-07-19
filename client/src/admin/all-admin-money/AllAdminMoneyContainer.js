@@ -33,12 +33,12 @@ const AllAdminMoneyContainer = () => {
     const [ activeCards, setActiveCards ] = useState([])
     const getActiveCards = () => {
         axios
-            .get('/api/processDate/asset', {
+            .get('/api/processDate/adminAsset', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(({ data }) => {
                 console.log(data)
-                setActiveCards(data.managerCashAsset)
+                setActiveCards(data.adminAsset)
             })
     }
 

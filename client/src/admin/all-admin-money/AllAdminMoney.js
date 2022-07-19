@@ -75,7 +75,7 @@ const AllAdminMoney = (props) => {
                             </div>
                         )) 
                     }
-                    <button onClick={() => giveProcessToAdmin()}>Adminga berish</button>
+                    <button onClick={() => giveProcessToAdmin()}>Tugatish</button>
                 </> )
                 : ""
             }
