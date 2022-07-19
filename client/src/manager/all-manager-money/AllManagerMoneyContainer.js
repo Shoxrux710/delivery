@@ -37,7 +37,19 @@ const AllManagerMoneyContainer = () => {
             })
             .then(({ data }) => {
                 console.log(data)
-                setActiveCards(data.managerCashAsset)
+                setActiveCards(data.length ? data.managerCashAsset : [])
+            })
+    }
+
+    const [ archiveCards, setArchiveCards ] = useState([])
+    const getArchiveCards = () => {
+        axios
+            .get('/api/processDate/eachManager', {
+                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
+            })
+            .then(({ data }) => {
+                console.log(data.eachManager)
+                setArchiveCards(data.eachManager)
             })
     }
 
@@ -81,6 +93,7 @@ const AllManagerMoneyContainer = () => {
     useEffect(() => {
         getCash()
         getCards()
+        getArchiveCards()
     }, [])
 
     return (
@@ -89,6 +102,7 @@ const AllManagerMoneyContainer = () => {
             setH2={setH2}
             cards = { cards }
             activeCards = { activeCards }
+            archiveCards = { archiveCards }
             cash = { cash }
             rejectCard = { rejectCard }
             confirmCard = { confirmCard }

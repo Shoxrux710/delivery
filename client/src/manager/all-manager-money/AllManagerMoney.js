@@ -2,16 +2,17 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
-// import { BsThreeDotsVertical } from 'react-icons/bs'
 
-import { getDateInMonthString } from '../../utils/date'
+import { getDateInMonthString, getFullDateTime } from '../../utils/date'
 import { formatString } from '../../utils/number'
 
 import './allManagerMoney.css'
 
 const AllManagerMoney = (props) => {
 
-    const { h2, setH2, cards, activeCards, cash, rejectCard, confirmCard, getActiveCards, giveProcessToAdmin } = props
+    const { h2, setH2, cards, activeCards, archiveCards, cash, rejectCard, confirmCard, getActiveCards, giveProcessToAdmin } = props
+
+    console.log(archiveCards.length);
 
     const confirm = (
         <div className='confirm-datas'>
@@ -83,40 +84,44 @@ const AllManagerMoney = (props) => {
 
     const archive = (
         <div className='archive-datas'>
-            <div className='archived'>
-                <div className='qator1'>
-                    <div>
-                        <p>30.04.2022 10:35</p>
-                        <span>Kuryer bergan vaqt</span>
+        {
+            archiveCards.length && archiveCards.map((card) => (
+                    <div className='archived' key={ card.cash }>
+                        <div className='qator1'>
+                            <div>
+                                <p>{ getFullDateTime(card.dateOne[0][0]) }</p>
+                                <span>Kuryer bergan vaqt</span>
+                            </div>
+                            <div>
+                                <p>{ getFullDateTime(card.dateTwo[0][0]) }</p>
+                                <span>Qabul qilingan vaqt</span>
+                            </div>
+                        </div>
+                        <div className='qator1 last'>
+                            <div>
+                                <p>{ getFullDateTime(card.dates[0][0]) }</p>
+                                <span>Adminga berilgan vaqt</span>
+                            </div>
+                            <div>
+                                <p>{ getFullDateTime(card.dates[0][1]) }</p>
+                                <span>Qabul qilingan vaqt</span>
+                            </div>
+                        </div>
+                        <div className='qator2'>
+                            <p>Umumiy summa</p>
+                            <span>{ formatString(card.cash) } so’m</span>
+                        </div>
+                        <div className='qator2'>
+                            <p>Kuryerlar soni</p>
+                            <span>{ formatString(card.courId.length) }</span>
+                        </div>
+                        <div className='qator2'>
+                            <p>Buyurtmalar soni</p>
+                            <span>{ formatString(card.count) }</span>
+                        </div>
                     </div>
-                    <div>
-                        <p>30.04.2022 10:30</p>
-                        <span>Qabul qilingan vaqt</span>
-                    </div>
-                </div>
-                <div className='qator1 last'>
-                    <div>
-                        <p>30.04.2022 10:35</p>
-                        <span>Adminga berilgan vaqt</span>
-                    </div>
-                    <div>
-                        <p>30.04.2022 10:30</p>
-                        <span>Qabul qilingan vaqt</span>
-                    </div>
-                </div>
-                <div className='qator2'>
-                    <p>Umumiy summa</p>
-                    <span>100 000 000 so’m</span>
-                </div>
-                <div className='qator2'>
-                    <p>Kuryerlar soni</p>
-                    <span>12</span>
-                </div>
-                <div className='qator2'>
-                    <p>Buyurtmalar soni</p>
-                    <span>120</span>
-                </div>
-            </div>
+            ))
+        }
         </div>
     )
 
