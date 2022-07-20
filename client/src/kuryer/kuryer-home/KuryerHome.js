@@ -1,5 +1,5 @@
 import React from 'react'
-import { HiFilter } from 'react-icons/hi'
+// import { HiFilter } from 'react-icons/hi'
 import { IoIosArrowUp } from 'react-icons/io'
 import { Link } from 'react-router-dom'
 import userPng from '../../img/user.png'

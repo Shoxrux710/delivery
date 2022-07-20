@@ -12,7 +12,7 @@ import './allAdminMoney.css'
 
 const AllAdminMoney = (props) => {
 
-    const { h2, setH2, cards, activeCards, cash, rejectCard, confirmCard, getActiveCards, giveProcessToAdmin } = props
+    const { h2, setH2, cards, activeCards, cash, rejectCard, confirmCard, getActiveCards, finishProcess } = props
 
     const confirm = (
         <div className='confirm-datas'>
@@ -75,7 +75,8 @@ const AllAdminMoney = (props) => {
                             </div>
                         )) 
                     }
-                    <button onClick={() => giveProcessToAdmin()}>Tugatish</button>
+
+                    { activeCards.length ? <button onClick={() => finishProcess()}>Tugatish</button> : "" }
                 </> )
                 : ""
             }
@@ -122,7 +123,6 @@ const AllAdminMoney = (props) => {
     )
 
     const isConfirm = h2 === 'confirm' ? confirm : null
-    const isActive = h2 === 'active' ? active : null
     const isArchive = h2 === 'archive' ? archive : null
 
     return (
@@ -143,15 +143,10 @@ const AllAdminMoney = (props) => {
                 <h2 className={h2 === 'confirm' ? 'act-h2' : ''} onClick={() => {
                     setH2('confirm')
                 }}>Tasdiqlash</h2>
-                <h2 className={h2 === 'active' ? 'act-h2' : ''} onClick={() => {
-                    getActiveCards()
-                    setH2('active')
-                }}>Aktiv</h2>
                 <h2 className={h2 === 'archive' ? 'act-h2' : ''} onClick={() => setH2('archive')}>Arxiv</h2>
             </div>
 
             {isConfirm}
-            {isActive}
             {isArchive}
         </div>
     )

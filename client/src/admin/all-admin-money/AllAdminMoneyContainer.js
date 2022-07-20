@@ -42,19 +42,6 @@ const AllAdminMoneyContainer = () => {
             })
     }
 
-    const giveProcessToAdmin = () => {
-        const processArr = activeCards.map(el => el.processId)
-
-        activeCards.length && axios
-            .post('/api/processManager/adminIn', { processId: processArr }, {
-                headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
-            })
-            .then(() => {
-                console.log("sadas");
-                getActiveCards()
-            })
-    }
-
     const rejectCard = (id) => {
         axios
             .put('/api/processDate/rejectionAdmin', {}, {
@@ -78,6 +65,22 @@ const AllAdminMoneyContainer = () => {
                 getCards()
             })
     }
+
+    const finishProcess = () => {
+        if(activeCards.length) {
+            const processes = activeCards.map(el => el._id)
+    
+            axios
+                .post('/api/processAdmin/admin', {
+                    processManagers: processes
+                }, {
+                    headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
+                })
+                .then(() => {
+                    getActiveCards() 
+                })
+        }
+    }
         
     useEffect(() => {
         getCash()
@@ -93,8 +96,8 @@ const AllAdminMoneyContainer = () => {
             cash = { cash }
             rejectCard = { rejectCard }
             confirmCard = { confirmCard }
+            finishProcess = { finishProcess }
             getActiveCards = { getActiveCards }
-            giveProcessToAdmin = { giveProcessToAdmin }
         />
     )
 }

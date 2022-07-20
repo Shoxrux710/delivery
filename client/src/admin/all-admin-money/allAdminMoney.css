@@ -51,7 +51,7 @@
 }
 
 .all-manager-money-component .h2-wrap h2 {
-    width: calc(100% / 3);
+    width: calc(100% / 2);
     border-bottom: 1px solid #bfbfbf;
     text-align: center;
     font-family: 'Poppins-Regular';

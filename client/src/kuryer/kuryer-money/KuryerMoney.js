@@ -6,7 +6,7 @@ import { formatString } from '../../utils/number'
 
 import './kuryerMoney.css'
 
-import { HiFilter } from 'react-icons/hi'
+// import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
 import OneKuryerMoney from './OneKuryerMoney'
 
