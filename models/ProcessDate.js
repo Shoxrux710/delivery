@@ -23,10 +23,6 @@ const processDateSchema = new Schema({
     processManagerId: {
         type: Schema.Types.ObjectId,
         ref: 'ProcessManager',
-    },
-    processAdmin: {
-        type: Schema.Types.ObjectId,
-        ref: 'ProcessAdmin'
     }
 
 })

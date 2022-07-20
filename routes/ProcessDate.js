@@ -114,120 +114,119 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
 
 // admindagi aktivlar
 
-router.get('/adminAsset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
+// router.get('/adminAsset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
 
-    const processDateIds = await ProcessDate
-        .find({ isRefusal: false, toStatus: 'finish' })
-        .populate('processAdmin', 'processManagers')
-        .select('processAdmin')
+//     const processDateIds = await ProcessDate
+//         .find({ isRefusal: false, toStatus: 'finish' })
+//         .populate('processAdmin', 'processManagers')
+//         .select('processAdmin')
 
-    let arrayAdmin = [];
-    processDateIds
-        .map((p) => p.processAdmin.processManagers)
-        .forEach((value) => {
-            arrayAdmin = [...arrayAdmin, ...value]
-        });
-    console.log("one", arrayAdmin);
-    // 62d6e89f8e01b2b4e7ee4ed8
+//     let arrayAdmin = [];
+//     processDateIds
+//         .map((p) => p.processAdmin.processManagers)
+//         .forEach((value) => {
+//             arrayAdmin = [...arrayAdmin, ...value]
+//         });
+//     console.log("one", arrayAdmin);
 
 
-    const adminAsset = await ProcessDate.aggregate(
-        [{
-            $match: {
-                isRefusal: false,
-                toStatus: 'admin'
-            }
-        }, {
-            $match: {
-                processManagerId: {$nin: arrayAdmin}
-            }
-        }, {
-            $lookup: {
-                from: 'processmanagers',
-                localField: 'processManagerId',
-                foreignField: '_id',
-                as: 'processManagerId'
-            }
-        }, {
-            $unwind: '$processManagerId'
-        }, {
-            $match: {
-                'processManagerId.status': 'admin'
-            }
-        }, {
-            $unwind: '$processManagerId.processDates'
-        }, {
-            $lookup: {
-                from: 'processdates',
-                localField: 'processManagerId.processDates',
-                foreignField: '_id',
-                as: 'processManagerId.processDates'
-            }
-        }, {
-            $unwind: '$processManagerId.processDates'
-        }, {
-            $lookup: {
-                from: 'processes',
-                localField: 'processManagerId.processDates.processId',
-                foreignField: '_id',
-                as: 'processManagerId.processDates.processId'
-            }
-        }, {
-            $unwind: '$processManagerId.processDates.processId'
-        }, {
-            $unwind: '$processManagerId.processDates.processId.cheques'
-        }, {
-            $lookup: {
-                from: 'cheques',
-                localField: 'processManagerId.processDates.processId.cheques',
-                foreignField: '_id',
-                as: 'cheques'
-            }
-        }, {
-            $unwind: '$cheques'
-        }, {
-            $lookup: {
-                from: 'users',
-                localField: 'processManagerId.managerId',
-                foreignField: '_id',
-                as: 'processManagerId.managerId'
-            }
-        }, {
-            $unwind: '$processManagerId.managerId'
-        }, {
-            $group: {
-                _id: '$processManagerId._id',
-                count: {
-                    $addToSet: '$cheques._id'
-                },
-                cash: {
-                    $sum: '$cheques.cash'
-                },
-                date: {
-                    $addToSet: '$date'
-                },
-                fullname: {
-                    $addToSet: '$processManagerId.managerId.fullname'
-                }
-            }
-        }, {
-            $unwind: '$fullname'
-        }, {
-            $unwind: '$date'
-        }, {
-            $project: {
-                count: {
-                    $size: '$count'
-                },
-                fullname: '$fullname',
-                date: '$date',
-                cash: '$cash'
-            }
-        }]
-    )
+//     const adminAsset = await ProcessDate.aggregate(
+//         [{
+//             $match: {
+//                 isRefusal: false,
+//                 toStatus: 'admin'
+//             }
+//         }, {
+//             $match: {
+//                 processManagerId: {$nin: arrayAdmin}
+//             }
+//         }, {
+//             $lookup: {
+//                 from: 'processmanagers',
+//                 localField: 'processManagerId',
+//                 foreignField: '_id',
+//                 as: 'processManagerId'
+//             }
+//         }, {
+//             $unwind: '$processManagerId'
+//         }, {
+//             $match: {
+//                 'processManagerId.status': 'admin'
+//             }
+//         }, {
+//             $unwind: '$processManagerId.processDates'
+//         }, {
+//             $lookup: {
+//                 from: 'processdates',
+//                 localField: 'processManagerId.processDates',
+//                 foreignField: '_id',
+//                 as: 'processManagerId.processDates'
+//             }
+//         }, {
+//             $unwind: '$processManagerId.processDates'
+//         }, {
+//             $lookup: {
+//                 from: 'processes',
+//                 localField: 'processManagerId.processDates.processId',
+//                 foreignField: '_id',
+//                 as: 'processManagerId.processDates.processId'
+//             }
+//         }, {
+//             $unwind: '$processManagerId.processDates.processId'
+//         }, {
+//             $unwind: '$processManagerId.processDates.processId.cheques'
+//         }, {
+//             $lookup: {
+//                 from: 'cheques',
+//                 localField: 'processManagerId.processDates.processId.cheques',
+//                 foreignField: '_id',
+//                 as: 'cheques'
+//             }
+//         }, {
+//             $unwind: '$cheques'
+//         }, {
+//             $lookup: {
+//                 from: 'users',
+//                 localField: 'processManagerId.managerId',
+//                 foreignField: '_id',
+//                 as: 'processManagerId.managerId'
+//             }
+//         }, {
+//             $unwind: '$processManagerId.managerId'
+//         }, {
+//             $group: {
+//                 _id: '$processManagerId._id',
+//                 count: {
+//                     $addToSet: '$cheques._id'
+//                 },
+//                 cash: {
+//                     $sum: '$cheques.cash'
+//                 },
+//                 date: {
+//                     $addToSet: '$date'
+//                 },
+//                 fullname: {
+//                     $addToSet: '$processManagerId.managerId.fullname'
+//                 }
+//             }
+//         }, {
+//             $unwind: '$fullname'
+//         }, {
+//             $unwind: '$date'
+//         }, {
+//             $project: {
+//                 count: {
+//                     $size: '$count'
+//                 },
+//                 fullname: '$fullname',
+//                 date: '$date',
+//                 cash: '$cash'
+//             }
+//         }]
+//     )
 
-    res.status(200).json({ adminAsset })
-})
+//     res.status(200).json({ adminAsset })
+// })
 
 router.get('/adminSumm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
 
@@ -802,6 +801,113 @@ router.get('/eachManager', isAuthMiddleware, attachUserMiddleware, checkRoleMidd
     )
 
     res.status(200).json({ eachManager })
+})
+
+router.get('/eachAdmin', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
+
+    const eachAdmin = await ProcessDate.aggregate(
+        [{
+            $lookup: {
+                from: 'processmanagers',
+                localField: 'processManagerId',
+                foreignField: '_id',
+                as: 'processManagerId'
+            }
+        }, {
+            $unwind: '$processManagerId'
+        }, {
+            $unwind: '$processManagerId.processDates'
+        }, {
+            $lookup: {
+                from: 'processdates',
+                localField: 'processManagerId.processDates',
+                foreignField: '_id',
+                as: 'processManagerId.processDates'
+            }
+        }, {
+            $unwind: '$processManagerId.processDates'
+        }, {
+            $lookup: {
+                from: 'processes',
+                localField: 'processManagerId.processDates.processId',
+                foreignField: '_id',
+                as: 'processManagerId.processDates.processId'
+            }
+        }, {
+            $unwind: '$processManagerId.processDates.processId'
+        }, {
+            $project: {
+                _id: '$processManagerId._id',
+                date: '$date',
+                toStatus: '$toStatus',
+                dateTwo: '$processManagerId.processDates.date',
+                cheques: '$processManagerId.processDates.processId.cheques',
+                dateOne: '$processManagerId.processDates.processId.date',
+                courId: '$processManagerId.processDates.processId.courierId'
+            }
+        }, {
+            $group: {
+                _id: '$_id',
+                dates: {
+                    $addToSet: '$date'
+                },
+                dateOne: {
+                    $addToSet: '$dateOne'
+                },
+                dateTwo: {
+                    $addToSet: '$dateTwo'
+                },
+                cheques: {
+                    $addToSet: '$cheques'
+                },
+                toStatus: {
+                    $addToSet: '$toStatus'
+                }
+            }
+        }, {
+            $match: {
+                toStatus: {
+                    $elemMatch: {
+                        $in: [
+                            'admin'
+                        ]
+                    }
+                }
+            }
+        }, {
+            $unwind: '$cheques'
+        }, {
+            $lookup: {
+                from: 'cheques',
+                localField: 'cheques',
+                foreignField: '_id',
+                as: 'cheques'
+            }
+        }, {
+            $unwind: '$cheques'
+        }, {
+            $group: {
+                _id: '$_id',
+                cash: {
+                    $sum: '$cheques.cash'
+                },
+                count: {
+                    $sum: 1
+                },
+                dates: {
+                    $addToSet: '$dates'
+                },
+                dateOne: {
+                    $addToSet: '$dateOne'
+                },
+                dateTwo: {
+                    $addToSet: '$dateTwo'
+                }
+            }
+        }]
+    )
+
+    res.status(200).json({eachAdmin})
 })
 
 module.exports = router
