@@ -816,6 +816,10 @@ router.get('/eachAdmin', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
         }, {
             $unwind: '$processManagerId'
         }, {
+            $match: {
+                'processManagerId.status': 'admin'
+            }
+        }, {
             $unwind: '$processManagerId.processDates'
         }, {
             $lookup: {
@@ -907,7 +911,7 @@ router.get('/eachAdmin', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
         }]
     )
 
-    res.status(200).json({eachAdmin})
+    res.status(200).json({ eachAdmin })
 })
 
 module.exports = router
