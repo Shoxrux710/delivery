@@ -12,8 +12,6 @@ const AllManagerMoney = (props) => {
 
     const { h2, setH2, cards, activeCards, archiveCards, cash, rejectCard, confirmCard, getActiveCards, giveProcessToAdmin } = props
 
-    console.log(archiveCards.length);
-
     const confirm = (
         <div className='confirm-datas'>
             <div className='money'>
@@ -110,6 +108,7 @@ const AllManagerMoney = (props) => {
                         <div className='qator2'>
                             <p>Umumiy summa</p>
                             <span>{ formatString(card.cash) } so’m</span>
+
                         </div>
                         <div className='qator2'>
                             <p>Kuryerlar soni</p>

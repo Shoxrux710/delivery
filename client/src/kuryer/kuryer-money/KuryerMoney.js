@@ -31,7 +31,7 @@ export const KuryerMoney = (props) => {
                 ))
             }
 
-            <button onClick={ () => giveMoneyToManager() } >Boshqaruvchiga berish</button>
+            { cards.length ? <button onClick={ () => giveMoneyToManager() } >Boshqaruvchiga berish</button> : "" }
             
         </div>
     )
@@ -75,9 +75,10 @@ export const KuryerMoney = (props) => {
                     </Link>
                     <h2>Naqd pul</h2>
                 </div>
-                <div>
+                {/* Dizaynda kerakli funksionallik bo`lmagani uchun kommentga olindi */}
+                {/* <div>
                     <HiFilter className='iconn' />
-                </div>
+                </div> */}
             </div>
             <div className='h2-top'>
                 <div className={h2 === 'active' ? 'act-h2' : ''} onClick={() => setH2('active')}>

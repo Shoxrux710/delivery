@@ -77,9 +77,11 @@ const KuryerHome = (props) => {
                             <h5>Qarz: <span>{ debt } so’m</span></h5>
                         </div>
                     </Link>
-                    <div className='div2'>
+                    {/* Dizaynda kerakli funksionallik bo`lmagani uchun kommentga olindi */}
+
+                    {/* <div className='div2'>
                         <HiFilter className='icon' />
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
