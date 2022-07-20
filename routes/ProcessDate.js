@@ -85,6 +85,9 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
                 },
                 fullname: {
                     $addToSet: '$processManagerId.managerId.fullname'
+                },
+                proessDateId: {
+                    $addToSet: '$_id'
                 }
             }
         }, {
@@ -92,13 +95,16 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
         }, {
             $unwind: '$date'
         }, {
+            $unwind: '$proessDateId'
+        }, {
             $project: {
                 count: {
                     $size: '$count'
                 },
                 fullname: '$fullname',
                 date: '$date',
-                cash: '$cash'
+                cash: '$cash',
+                processDateId: '$proessDateId'
             }
         }]
     )
@@ -674,7 +680,7 @@ router.get('/eachManager', isAuthMiddleware, attachUserMiddleware, checkRoleMidd
             $unwind: '$processManagerId'
         }, {
             $match: {
-                'processManagerId.managerId': ObjectId('62be7d3468979bd8753d76ec'),
+                'processManagerId.managerId': mongoose.Types.ObjectId(id),
                 'processManagerId.status': 'admin'
             }
         }, {

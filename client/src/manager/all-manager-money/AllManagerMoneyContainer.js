@@ -37,7 +37,7 @@ const AllManagerMoneyContainer = () => {
             })
             .then(({ data }) => {
                 console.log(data)
-                setActiveCards(data.length ? data.managerCashAsset : [])
+                setActiveCards(data.managerCashAsset)
             })
     }
 

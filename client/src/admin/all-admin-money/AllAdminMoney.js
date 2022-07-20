@@ -39,7 +39,7 @@ const AllAdminMoney = (props) => {
                             <span>{ formatString(card.cash) } so’m</span>
                         </div>
                         <div className='btns-wrap'>
-                            <button onClick={() => rejectCard(card._id)} >Rad etish</button>
+                            <button onClick={() => rejectCard(card.processDateId)} >Rad etish</button>
                             <button onClick={() => confirmCard(card._id)} >Tasdiqlash</button>
                         </div>
                     </div>

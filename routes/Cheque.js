@@ -191,7 +191,7 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             $group: {
                 _id: 'static',
                 count: {
-                    $sum: '$debt'
+                    $sum: '$cash'
                 }
             }
         }]
