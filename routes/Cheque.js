@@ -183,7 +183,7 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 courierId: '$deliveryId.courierId',
                 managerId: '$agent.managerId',
                 agentId: '$order.agentId',
-                debt: '$debt'
+                cash: '$cash'
             }
         },
         ...filterCash 
