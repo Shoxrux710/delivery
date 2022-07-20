@@ -116,11 +116,30 @@ router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMid
 
 router.get('/adminAsset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
 
+    const processDateIds = await ProcessDate
+        .find({ isRefusal: false, toStatus: 'finish' })
+        .populate('processAdmin', 'processManagers')
+        .select('processAdmin')
+
+    let arrayAdmin = [];
+    processDateIds
+        .map((p) => p.processAdmin.processManagers)
+        .forEach((value) => {
+            arrayAdmin = [...arrayAdmin, ...value]
+        });
+    console.log("one", arrayAdmin);
+    // 62d6e89f8e01b2b4e7ee4ed8
+
+
     const adminAsset = await ProcessDate.aggregate(
         [{
             $match: {
                 isRefusal: false,
                 toStatus: 'admin'
+            }
+        }, {
+            $match: {
+                processManagerId: {$nin: arrayAdmin}
             }
         }, {
             $lookup: {
@@ -293,8 +312,6 @@ router.get('/confirm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlewa
 router.get('/asset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BB'), async (req, res) => {
 
     const { id } = req.user
-
-    // const processIds = await Process.find({})
 
     const processDateIds = await ProcessDate
         .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
@@ -668,6 +685,7 @@ router.get('/eachManager', isAuthMiddleware, attachUserMiddleware, checkRoleMidd
 
     const { id } = req.user
 
+
     const eachManager = await ProcessDate.aggregate(
         [{
             $lookup: {
@@ -733,6 +751,16 @@ router.get('/eachManager', isAuthMiddleware, attachUserMiddleware, checkRoleMidd
                 },
                 toStatus: {
                     $addToSet: '$toStatus'
+                }
+            }
+        }, {
+            $match: {
+                toStatus: {
+                    $elemMatch: {
+                        $in: [
+                            'admin'
+                        ]
+                    }
                 }
             }
         }, {
