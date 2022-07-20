@@ -1,24 +1,24 @@
 const { Schema, model } = require('mongoose');
 
-const processManagerSchema = new Schema({
-    managerId: {
+const processAdminSchema = new Schema({
+    adminId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    processDates: [
+    processManagers: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'ProcessDate',
+            ref: 'ProcessManager',
             required: true
         }
     ],
     status: {
         type: String,
-        enum: ['inManager', 'processAdmin', 'admin'],
+        enum: ['admin', 'finish'],
         required: true,
-        default: 'inManager'
+        default: 'admin'
     }
 })
 
-module.exports = model('ProcessManager', processManagerSchema)
+module.exports = model('ProcessAdmin', processAdminSchema)

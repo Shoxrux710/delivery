@@ -22,6 +22,7 @@ const orderRouter = require('./routes/Order')
 const processRouter = require('./routes/Process')
 const processDateRouter = require('./routes/ProcessDate')
 const processManagerRouter = require('./routes/ProcessManager')
+const processAdminRouter = require('./routes/ProcessAdmin')
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -60,6 +61,7 @@ app.use('/api/order', orderRouter)
 app.use('/api/process', processRouter)
 app.use('/api/processDate', processDateRouter)
 app.use('/api/processManager', processManagerRouter)
+app.use('/api/processAdmin', processAdminRouter)
 app.use(function(errorMessage, req,res, next){
     res.status(400).json(`server errors: ${errorMessage}`)
 })
