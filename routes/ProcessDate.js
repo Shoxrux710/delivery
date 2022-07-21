@@ -36,10 +36,12 @@ router.get('/asset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
     let proccessIds2 = []
 
     processDateIds
-        .map(p => p.processManagerId)
+        .map(p => p.processManagerId.processId)
         .forEach((value) => {
             proccessIds2 = [...proccessIds2, ...value]
         })
+
+        console.log(proccessIds2)
 
     const managerCashAsset = await ProcessDate.aggregate(
         [{

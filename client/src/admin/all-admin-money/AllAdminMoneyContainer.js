@@ -29,7 +29,7 @@ const AllAdminMoneyContainer = () => {
     }
 
     const [ archiveCards, setArchiveCards ] = useState([])
-    const getActiveCards = () => {
+    const getArchiveCards = () => {
         axios
             .get('/api/processManager/eachAdmin', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
@@ -66,7 +66,6 @@ const AllAdminMoneyContainer = () => {
     useEffect(() => {
         getCash()
         getCards()
-        getActiveCards()
     }, [])
 
     return (
@@ -78,6 +77,7 @@ const AllAdminMoneyContainer = () => {
             rejectCard = { rejectCard }
             confirmCard = { confirmCard }
             archiveCards = { archiveCards }
+            getArchiveCards = { getArchiveCards }
         />
     )
 }

@@ -11,7 +11,7 @@ import './allAdminMoney.css'
 
 const AllAdminMoney = (props) => {
 
-    const { h2, setH2, cards, archiveCards, cash, rejectCard, confirmCard } = props
+    const { h2, setH2, cards, archiveCards, cash, rejectCard, confirmCard, getArchiveCards } = props
 
     const confirm = (
         <div className='confirm-datas'>
@@ -23,11 +23,11 @@ const AllAdminMoney = (props) => {
                 cards && cards.map((card, index) => (
                     <div className='one' key = { card._id }>
                         <div className='top'>
-                            <h3>{ index + 1 }. <span>{ card.fullname }</span></h3>
+                            <h3>{ index + 1 }. <span>{ card.fullname[0] }</span></h3>
                         </div>
                         <div className='qator'>
                             <p>Berilgan vaqti</p>
-                            <span>{ getDateInMonthString(card.date) }</span>
+                            <span>{ getDateInMonthString(card.date[0]) }</span>
                         </div>
                         <div className='qator'>
                             <p>Buyurtmalar soni</p>
@@ -38,7 +38,7 @@ const AllAdminMoney = (props) => {
                             <span>{ formatString(card.cash) } so’m</span>
                         </div>
                         <div className='btns-wrap'>
-                            <button onClick={() => rejectCard(card.processDateId)} >Rad etish</button>
+                            <button onClick={() => rejectCard(card.processDates)} >Rad etish</button>
                             <button onClick={() => confirmCard(card._id)} >Tasdiqlash</button>
                         </div>
                     </div>
@@ -99,7 +99,10 @@ const AllAdminMoney = (props) => {
                 <h2 className={h2 === 'confirm' ? 'act-h2' : ''} onClick={() => {
                     setH2('confirm')
                 }}>Tasdiqlash</h2>
-                <h2 className={h2 === 'archive' ? 'act-h2' : ''} onClick={() => setH2('archive')}>Arxiv</h2>
+                <h2 className={h2 === 'archive' ? 'act-h2' : ''} onClick={() => {
+                    setH2('archive')
+                    getArchiveCards()    
+                }}>Arxiv</h2>
             </div>
 
             {isConfirm}

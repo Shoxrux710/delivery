@@ -83,18 +83,9 @@ const AllManagerMoney = (props) => {
     const archive = (
         <div className='archive-datas'>
         {
-            archiveCards.length && archiveCards.map((card) => (
+            archiveCards.length 
+                ? archiveCards.map((card) => (
                     <div className='archived' key={ card.cash }>
-                        {/* <div className='qator1'>
-                            <div>
-                                <p>{ getFullDateTime(card.dateOne[0][0]) }</p>
-                                <span>Kuryer bergan vaqt</span>
-                            </div>
-                            <div>
-                                <p>{ getFullDateTime(card.dateTwo[0][0]) }</p>
-                                <span>Qabul qilingan vaqt</span>
-                            </div>
-                        </div> */}
                         <div className='qator1 last'>
                             <div>
                                 <p>{ getFullDateTime(card.dates[0]) }</p>
@@ -119,7 +110,7 @@ const AllManagerMoney = (props) => {
                             <span>{ formatString(card.count) }</span>
                         </div>
                     </div>
-            ))
+            )) : ""
         }
         </div>
     )
