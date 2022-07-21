@@ -26,18 +26,26 @@ const ManagerHomeContainer = () => {
         axios.get(`/api/user/userId/${userId}`, ).then(res => {
             setUserData(res.data.userId)
 
-            axios.get(`/api/user/each?position=agent&regionId=${res.data.userId.regionId._id}`).then(res => {
-                setAgentsCount(res.data.count)
-            }).catch(err => {
-                console.log(err)
-            })
+            axios
+                .get(`/api/user/each?position=agent`, {
+                    headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+                })
+                .then(res => {
+                    setAgentsCount(res.data.count)
+                }).catch(err => {
+                    console.log(err)
+                })
 
-            axios.get(`/api/user/each?position=courier&regionId=${res.data.userId.regionId._id}`).then(res => {
-                setCouriers(res.data.userEach)
-                setKuryersCount(res.data.count)
-            }).catch(err => {
-                console.log(err)
-            })
+            axios
+                .get(`/api/user/each?position=courier`, {
+                    headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+                })
+                .then(res => {
+                    setCouriers(res.data.userEach)
+                    setKuryersCount(res.data.count)
+                }).catch(err => {
+                    console.log(err)
+                })
 
 
         }).catch(err => {

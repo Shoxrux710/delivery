@@ -381,13 +381,14 @@ router.put('/images/:id', (req, res) => {
  *          description: response 500 
  */
 
-router.get('/each', async (req, res) => {
+router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
 
-    const { position, regionId } = req.query
-    const filterId = regionId ? { regionId: regionId } : {}
+    const {id} = req.user
+    const { position } = req.query
+    const filterId = position === 'admin' || position === "super-admin" ? {} : {managerId: id}
 
-    const userEach = await User.find({ position: position, ...filterId })
-    const count = await User.find({ position: position, ...filterId }).countDocuments()
+    const userEach = await User.find({ position: position, ...filterId})
+    const count = await User.find({ position: position, ...filterId}).countDocuments()
     res.status(200).json({
         userEach,
         count

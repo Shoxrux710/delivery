@@ -4,6 +4,7 @@ const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
 const ProcessManager = require('../models/ProcessManager')
 const ProcessDate = require('../models/ProcessDate')
+const Process = require('../models/Process')
 const mongoose = require('mongoose')
 const nowDate = require('../utils/nowDate')
 const router = Router()
@@ -23,23 +24,23 @@ router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
 
         const { processId } = req.body
 
-        // const processDateIds = await ProcessDate
-        //     .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
-        //     .populate({ path: 'processManagerId', select: '', populate: { path: 'processDates', select: 'processId' } })
-        //     .select('processManagerId')
+        const processDateIds = await ProcessDate
+            .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
+            .populate('processManagerId', 'processId')
+            .select('processManagerId')
 
-        // let proccessIds2 = []
+        let proccessIds2 = []
 
-        // processDateIds
-        //     .forEach((value) => {
-        //         proccessIds2 = [...proccessIds2, ...value.processManagerId?.processDates]
-        //     })
-        // const processIds = proccessIds2.map((pid) => pid.processId);
+        processDateIds
+            .map(p => p.processManagerId.processId)
+            .forEach((value) => {
+                proccessIds2 = [...proccessIds2, ...value]
+            })
 
-        // const isProcessIds = await Process.findOne({_id: {$in: processIds}})
+        const isProcessId = await Process.findOne({_id: {$in: proccessIds2}})
 
-        // if (isProcessIds)
-        //    return res.status(500).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'})
+        if (isProcessId)
+            return res.status(400).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'});
 
         const processManager = new ProcessManager({
             managerId: id,

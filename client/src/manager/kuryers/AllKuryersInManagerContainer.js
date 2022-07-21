@@ -13,16 +13,21 @@ const AllKuryersInManagerContainer = () => {
     const [ allKuryers, setAllKuryers ] = useState([])
 
     const getUserData = () => {
-        axios.get(`/api/user/userId/${userId}`, ).then(res => {
-            setUserData(res.data.userId.regionId)
+        const headers = { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
+        axios
+            .get(`/api/user/userId/${userId}`, { headers })
+            .then(res => {
+                setUserData(res.data.userId.regionId)
 
-            axios.get(`/api/user/each?position=courier&regionId=${res.data.userId.regionId._id}`).then(res => {
-                setAllKuryers(res.data.userEach)
-                setLoading(false)
-            }).catch(err => {
-                console.log(err)
-                setLoading(false)
-            })
+                axios
+                    .get(`/api/user/each?position=courier`, { headers } )
+                    .then(res => {
+                        setAllKuryers(res.data.userEach)
+                        setLoading(false)
+                    }).catch(err => {
+                        console.log(err)
+                        setLoading(false)
+                    })
 
         }).catch(err => {
             console.log(err)

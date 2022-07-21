@@ -4,7 +4,6 @@ const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
 const ProcessDate = require('../models/ProcessDate')
 const mongoose = require('mongoose');
-const { managerAsset } = require('../utils/function')
 const router = Router()
 
 
@@ -15,7 +14,76 @@ router.get('/confirm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlewa
 
     const { id } = req.user
 
-    const managerCash = await ProcessDate.aggregate(managerAsset(id, true))
+    const managerCash = await ProcessDate.aggregate(
+        [{
+            $match: {
+                isRefusal: false,
+                toStatus: 'process-Cour',
+            }
+        }, {
+            $lookup: {
+                from: 'processes',
+                localField: 'processId',
+                foreignField: '_id',
+                as: 'processId'
+            }
+        }, {
+            $unwind: '$processId'
+        }, {
+            $match: {
+                'processId.status': 'inCour'
+            }
+        }, {
+            $unwind: '$processId.cheques'
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: 'processId.courierId',
+                foreignField: '_id',
+                as: 'courierId'
+            }
+        }, {
+            $unwind: '$courierId'
+        }, {
+            $lookup: {
+                from: 'cheques',
+                localField: 'processId.cheques',
+                foreignField: '_id',
+                as: 'processId.cheques'
+            }
+        }, {
+            $unwind: '$processId.cheques'
+        }, {
+            $match: {
+                'courierId.managerId': mongoose.Types.ObjectId(id)
+            }
+        }, {
+            $group: {
+                _id: '$_id',
+                cash: {
+                    $sum: '$processId.cheques.cash'
+                },
+                count: {
+                    $sum: 1
+                },
+                fullname: {
+                    $addToSet: '$courierId.fullname'
+                },
+                date: {
+                    $addToSet: '$date'
+                },
+                processId: {
+                    $addToSet: '$processId._id'
+                }
+            }
+        }, {
+            $unwind: '$fullname'
+        }, {
+            $unwind: '$date'
+        }, {
+            $unwind: '$processId'
+        }]
+    )
 
     res.status(200).json({ managerCash })
 
@@ -40,8 +108,6 @@ router.get('/asset', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
         .forEach((value) => {
             proccessIds2 = [...proccessIds2, ...value]
         })
-
-        console.log(proccessIds2)
 
     const managerCashAsset = await ProcessDate.aggregate(
         [{

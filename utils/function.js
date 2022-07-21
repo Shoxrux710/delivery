@@ -68,18 +68,18 @@ const func = (position, id, route = false) => {
         $unwind: '$order'
     }, {
         $lookup: {
-            from: 'users',
-            localField: 'order.agentId',
-            foreignField: '_id',
-            as: 'agent'
+            from: "users",
+            localField: "deliveryId.courierId",
+            foreignField: "_id",
+            as: "cour"
         }
     }, {
-        $unwind: '$agent'
+        $unwind: '$cour'
     },
     ...lookupUnwindOther, {
         $project: {
             courierId: '$deliveryId.courierId',
-            managerId: '$agent.managerId',
+            managerId: '$cour.managerId',
             agentId: '$order.agentId',
             debt: '$debt',
             ...projectOther
@@ -173,96 +173,9 @@ const funcDebt = (position, id, userId, route = false) => {
 }
 
 
-const managerAsset = (id, asset = false) => {
-
-    const matchStatus = asset ? {
-        toStatus: 'process-Cour',
-    } : {
-        toStatus: 'inManager',
-    }
-
-    const processStatus = asset ? {
-        'processId.status': 'inCour'
-    } : {
-        'processId.status': 'inManager'
-    }
-
-    const pipelineCash = [{
-        $match: {
-            isRefusal: false,
-            ...matchStatus
-        }
-    }, {
-        $lookup: {
-            from: 'processes',
-            localField: 'processId',
-            foreignField: '_id',
-            as: 'processId'
-        }
-    }, {
-        $unwind: '$processId'
-    }, {
-        $match: {
-            ...processStatus
-        }
-    }, {
-        $unwind: '$processId.cheques'
-    }, {
-        $lookup: {
-            from: 'users',
-            localField: 'processId.courierId',
-            foreignField: '_id',
-            as: 'courierId'
-        }
-    }, {
-        $unwind: '$courierId'
-    }, {
-        $lookup: {
-            from: 'cheques',
-            localField: 'processId.cheques',
-            foreignField: '_id',
-            as: 'processId.cheques'
-        }
-    }, {
-        $unwind: '$processId.cheques'
-    }, {
-        $match: {
-            'courierId.managerId': mongoose.Types.ObjectId(id)
-        }
-    }, {
-        $group: {
-            _id: '$_id',
-            cash: {
-                $sum: '$processId.cheques.cash'
-            },
-            count: {
-                $sum: 1
-            },
-            fullname: {
-                $addToSet: '$courierId.fullname'
-            },
-            date: {
-                $addToSet: '$date'
-            },
-            processId: {
-                $addToSet: '$processId._id'
-            }
-        }
-    }, {
-        $unwind: '$fullname'
-    }, {
-        $unwind: '$date'
-    }, {
-        $unwind: '$processId'
-    }]
-
-    return pipelineCash
-}
-
 
 
 module.exports = {
     func,
-    funcDebt,
-    managerAsset
+    funcDebt
 }

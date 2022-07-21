@@ -16,13 +16,17 @@ const AllAgentsInManegerContainer = () => {
         axios.get(`/api/user/userId/${userId}`, ).then(res => {
             setUserData(res.data.userId.regionId)
 
-            axios.get(`/api/user/each?position=agent&regionId=${res.data.userId.regionId._id}`).then(res => {
-                setAllAgents(res.data.userEach)
-                setLoading(false)
-            }).catch(err => {
-                console.log(err)
-                setLoading(false)
-            })
+            axios
+                .get(`/api/user/each?position=agent`, {
+                    headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
+                })
+                .then(res => {
+                    setAllAgents(res.data.userEach)
+                    setLoading(false)
+                }).catch(err => {
+                    console.log(err)
+                    setLoading(false)
+                })
 
         }).catch(err => {
             console.log(err)

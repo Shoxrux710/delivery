@@ -171,13 +171,13 @@ router.get('/cash', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             $unwind: '$order'
         }, {
             $lookup: {
-                from: 'users',
-                localField: 'order.agentId',
-                foreignField: '_id',
-                as: 'agent'
+                from: "users",
+                localField: "deliveryId.courierId",
+                foreignField: "_id",
+                as: "cour"
             }
         }, {
-            $unwind: '$agent'
+            $unwind: '$cour'
         }, {
             $project: {
                 courierId: '$deliveryId.courierId',
