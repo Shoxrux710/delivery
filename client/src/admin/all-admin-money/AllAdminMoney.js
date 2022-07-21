@@ -3,16 +3,15 @@ import { Link } from 'react-router-dom'
 
 import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
-// import { BsThreeDotsVertical } from 'react-icons/bs'
 
-import { getDateInMonthString } from '../../utils/date'
+import { getDateInMonthString, getFullDateTime } from '../../utils/date'
 import { formatString } from '../../utils/number'
 
 import './allAdminMoney.css'
 
 const AllAdminMoney = (props) => {
 
-    const { h2, setH2, cards, activeCards, cash, rejectCard, confirmCard, getActiveCards, finishProcess } = props
+    const { h2, setH2, cards, archiveCards, cash, rejectCard, confirmCard } = props
 
     const confirm = (
         <div className='confirm-datas'>
@@ -48,77 +47,34 @@ const AllAdminMoney = (props) => {
         </div>
     )
 
-    const active = (
-        <div className='confirm-datas'>
-            {
-                activeCards.length 
-                ? ( <>
-                    { 
-                        activeCards.map((card, index) => (
-                            <div className='one' key = { card._id }>
-                                <div className='top'>
-                                    <h3>{ index + 1 }. <span>{ card.fullname }</span></h3>
-                                    {/* <BsThreeDotsVertical className='icon' /> */}
-                                </div>
-                                <div className='qator'>
-                                    <p>Berilgan vaqti</p>
-                                    <span>{ getDateInMonthString(card.date) }</span>
-                                </div>
-                                <div className='qator'>
-                                    <p>Buyurtmalar soni</p>
-                                    <span>{ formatString(card.count) } ta</span>
-                                </div>
-                                <div className='qator'>
-                                    <p>Qo’ldagi pul</p>
-                                    <span>{ formatString(card.cash) } so’m</span>
-                                </div>
-                            </div>
-                        )) 
-                    }
-
-                    { activeCards.length ? <button onClick={() => finishProcess()}>Tugatish</button> : "" }
-                </> )
-                : ""
-            }
-        </div>
-    )
-
     const archive = (
         <div className='archive-datas'>
-            <div className='archived'>
-                <div className='qator1'>
-                    <div>
-                        <p>30.04.2022 10:35</p>
-                        <span>Kuryer bergan vaqt</span>
-                    </div>
-                    <div>
-                        <p>30.04.2022 10:30</p>
-                        <span>Qabul qilingan vaqt</span>
-                    </div>
-                </div>
-                <div className='qator1 last'>
-                    <div>
-                        <p>30.04.2022 10:35</p>
-                        <span>Adminga berilgan vaqt</span>
-                    </div>
-                    <div>
-                        <p>30.04.2022 10:30</p>
-                        <span>Qabul qilingan vaqt</span>
-                    </div>
-                </div>
-                <div className='qator2'>
-                    <p>Umumiy summa</p>
-                    <span>100 000 000 so’m</span>
-                </div>
-                <div className='qator2'>
-                    <p>Kuryerlar soni</p>
-                    <span>12</span>
-                </div>
-                <div className='qator2'>
-                    <p>Buyurtmalar soni</p>
-                    <span>120</span>
-                </div>
-            </div>
+            {
+                archiveCards.length
+                    ? archiveCards.map((card) => (
+                        <div className='archived' key = { card._id }>
+                            <div className='qator1 last'>
+                                <div>
+                                    <p>{ getFullDateTime(card.dates[0]) }</p>
+                                    <span>Adminga berilgan vaqt</span>
+                                </div>
+                                <div>
+                                    <p>{ getFullDateTime(card.dates[1]) }</p>
+                                    <span>Qabul qilingan vaqt</span>
+                                </div>
+                            </div>
+                            <div className='qator2'>
+                                <p>Umumiy summa</p>
+                                <span>{ formatString(card.cash) } so’m</span>
+                            </div>
+                            <div className='qator2'>
+                                <p>Buyurtmalar soni</p>
+                                <span>{ formatString(card.count) }</span>
+                            </div>
+                        </div>
+                    )) : ""
+            }
+
         </div>
     )
 

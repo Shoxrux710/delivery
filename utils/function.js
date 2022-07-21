@@ -23,26 +23,6 @@ const func = (position, id, route = false) => {
         }
     ] : [];
 
-    // const cashOther = cash ? {
-    //     cash: {
-    //         $gt: 0
-    //     }
-    // } : {
-    //     debt: {
-    //         $gt: 0
-    //     }
-    // }
-
-    // const countOther = cash ? {
-    //     count: {
-    //         $sum: '$cash'
-    //     }
-    // } : {
-    //     count: {
-    //         $sum: '$debt'
-    //     }
-    // }
-
     const groupOther = !route ? [
         {
             $group: {
@@ -62,8 +42,6 @@ const func = (position, id, route = false) => {
             id: '$order.customerId._id'
         }
     } : {};
-
-    // const price = cash ? { cash: '$cash' } : { debt: '$debt' }
 
 
     const pipeline = [{

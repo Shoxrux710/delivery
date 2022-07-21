@@ -152,5 +152,18 @@ router.put('/managerIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddle
 })
 
 
+// boshqaruvchi rad etishi
+
+router.put('/rejectionCour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('BB'), async (req, res) => {
+
+    const { id } = req.query
+
+    ProcessDate.findById(id, async (err, processDateOne) => {
+        if (err) return res.status(400).json({ errorMessage: 'error server' })
+        processDateOne.isRefusal = true
+        await processDateOne.save()
+        res.status(200).json({ successMessage: 'Bashqaruvchi rad etish' })
+    })
+})
 
 module.exports = router

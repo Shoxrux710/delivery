@@ -85,7 +85,7 @@ const AllManagerMoney = (props) => {
         {
             archiveCards.length && archiveCards.map((card) => (
                     <div className='archived' key={ card.cash }>
-                        <div className='qator1'>
+                        {/* <div className='qator1'>
                             <div>
                                 <p>{ getFullDateTime(card.dateOne[0][0]) }</p>
                                 <span>Kuryer bergan vaqt</span>
@@ -94,14 +94,14 @@ const AllManagerMoney = (props) => {
                                 <p>{ getFullDateTime(card.dateTwo[0][0]) }</p>
                                 <span>Qabul qilingan vaqt</span>
                             </div>
-                        </div>
+                        </div> */}
                         <div className='qator1 last'>
                             <div>
-                                <p>{ getFullDateTime(card.dates[0][0]) }</p>
+                                <p>{ getFullDateTime(card.dates[0]) }</p>
                                 <span>Adminga berilgan vaqt</span>
                             </div>
                             <div>
-                                <p>{ getFullDateTime(card.dates[0][1]) }</p>
+                                <p>{ getFullDateTime(card.dates[1]) }</p>
                                 <span>Qabul qilingan vaqt</span>
                             </div>
                         </div>
@@ -112,7 +112,7 @@ const AllManagerMoney = (props) => {
                         </div>
                         <div className='qator2'>
                             <p>Kuryerlar soni</p>
-                            <span>{ formatString(card.courId.length) }</span>
+                            <span>{ formatString(card.courId) }</span>
                         </div>
                         <div className='qator2'>
                             <p>Buyurtmalar soni</p>

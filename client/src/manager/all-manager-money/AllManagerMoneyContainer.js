@@ -48,7 +48,6 @@ const AllManagerMoneyContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(({ data }) => {
-                console.log(data.eachManager)
                 setArchiveCards(data.eachManager)
             })
     }
@@ -100,7 +99,7 @@ const AllManagerMoneyContainer = () => {
         <AllManagerMoney
             h2={h2}
             setH2={setH2}
-            cards = { cards }
+            cards = { [] }
             activeCards = { activeCards }
             archiveCards = { archiveCards }
             cash = { cash }

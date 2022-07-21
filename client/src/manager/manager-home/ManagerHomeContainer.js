@@ -135,7 +135,8 @@ const ManagerHomeContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
             .then(({data}) => {
-                setDebt(data.chequeDebt[0].count)
+                console.log(data);
+                setDebt(data.chequeDebt.length ? data.chequeDebt[0].count : 0)
             })
     }
 

@@ -3,7 +3,6 @@ const isAuthMiddleware = require('../middleware/isAuth');
 const attachUserMiddleware = require('../middleware/attachUser');
 const checkRoleMiddleware = require('../middleware/checkRole');
 const ProcessManager = require('../models/ProcessManager')
-const Process = require('../models/Process')
 const ProcessDate = require('../models/ProcessDate')
 const mongoose = require('mongoose')
 const nowDate = require('../utils/nowDate')
@@ -22,29 +21,29 @@ router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
 
     try {
 
-        const { processDates } = req.body
+        const { processId } = req.body
 
-        const processDateIds = await ProcessDate
-            .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
-            .populate({ path: 'processManagerId', select: '', populate: { path: 'processDates', select: 'processId' } })
-            .select('processManagerId')
+        // const processDateIds = await ProcessDate
+        //     .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
+        //     .populate({ path: 'processManagerId', select: '', populate: { path: 'processDates', select: 'processId' } })
+        //     .select('processManagerId')
 
-        let proccessIds2 = []
+        // let proccessIds2 = []
 
-        processDateIds
-            .forEach((value) => {
-                proccessIds2 = [...proccessIds2, ...value.processManagerId?.processDates]
-            })
-        const processIds = proccessIds2.map((pid) => pid.processId);
+        // processDateIds
+        //     .forEach((value) => {
+        //         proccessIds2 = [...proccessIds2, ...value.processManagerId?.processDates]
+        //     })
+        // const processIds = proccessIds2.map((pid) => pid.processId);
 
-        const isProcessIds = await Process.findOne({_id: {$in: processIds}})
+        // const isProcessIds = await Process.findOne({_id: {$in: processIds}})
 
-        if (isProcessIds)
-           return res.status(500).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'})
+        // if (isProcessIds)
+        //    return res.status(500).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'})
 
         const processManager = new ProcessManager({
             managerId: id,
-            processDates,
+            processId,
         })
 
         const { _id: newProcessId } = await processManager.save({ session })
@@ -104,6 +103,271 @@ router.put('/adminIn', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlewa
     }
 
     session.endSession()
+})
+
+
+// admin rad etish
+
+router.put('/rejectionAdmin', (req, res) => {
+
+    const { id } = req.query
+
+    ProcessDate.findById(id, async (err, processDateOne) => {
+        if (err) return res.status(400).json({ errorMessage: 'error server' })
+        processDateOne.isRefusal = true
+        await processDateOne.save()
+        res.status(200).json({ successMessage: 'admin rad etish' })
+    })
+})
+
+// admindagi arxivlar
+
+router.get('/eachAdmin', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
+
+    const eachAdmin = await ProcessDate.aggregate(
+        [{
+            $lookup: {
+                from: 'processmanagers',
+                localField: 'processManagerId',
+                foreignField: '_id',
+                as: 'processManagerId'
+            }
+        }, {
+            $unwind: '$processManagerId'
+        }, {
+            $match: {
+                'processManagerId.status': 'admin'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
+        }, {
+            $lookup: {
+                from: 'processes',
+                localField: 'processManagerId.processId',
+                foreignField: '_id',
+                as: 'processManagerId.processId'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
+        }, {
+            $project: {
+                _id: '$processManagerId._id',
+                date: '$date',
+                toStatus: '$toStatus',
+                cheques: '$processManagerId.processId.cheques',
+                courId: '$processManagerId.processId.courierId'
+            }
+        }, {
+            $unwind: '$cheques'
+        }, {
+            $lookup: {
+                from: 'cheques',
+                localField: 'cheques',
+                foreignField: '_id',
+                as: 'cheques'
+            }
+        }, {
+            $unwind: '$cheques'
+        }, {
+            $group: {
+                _id: '$_id',
+                cash: {
+                    $sum: '$cheques.cash'
+                },
+                count: {
+                    $sum: 1
+                },
+                status: {
+                    $addToSet: '$toStatus'
+                },
+                dates: {
+                    $addToSet: '$date'
+                },
+                courId: {
+                    $addToSet: '$courId'
+                }
+            }
+        }, {
+            $match: {
+                status: {
+                    $elemMatch: {
+                        $in: [
+                            'admin'
+                        ]
+                    }
+                }
+            }
+        }, {
+            $project: {
+                courId: {
+                    $size: '$courId'
+                },
+                cash: {
+                    $divide: [
+                        '$cash',
+                        2
+                    ]
+                },
+                count: {
+                    $divide: [
+                        '$count',
+                        2
+                    ]
+                },
+                dates: '$dates'
+            }
+        }]
+    )
+
+    res.status(200).json({ eachAdmin })
+})
+
+// adminda red etish va tasdiqlash
+
+router.get('/adminConfirm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
+
+    const adminCash = await ProcessDate.aggregate(
+        [{
+            $match: {
+                isRefusal: false,
+                toStatus: 'processAdmin'
+            }
+        }, {
+            $lookup: {
+                from: 'processmanagers',
+                localField: 'processManagerId',
+                foreignField: '_id',
+                as: 'processManagerId'
+            }
+        }, {
+            $unwind: '$processManagerId'
+        }, {
+            $match: {
+                'processManagerId.status': 'inManager'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
+        }, {
+            $lookup: {
+                from: 'processes',
+                localField: 'processManagerId.processId',
+                foreignField: '_id',
+                as: 'processManagerId.processId'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
+        }, {
+            $unwind: '$processManagerId.processId.cheques'
+        }, {
+            $lookup: {
+                from: 'cheques',
+                localField: 'processManagerId.processId.cheques',
+                foreignField: '_id',
+                as: 'cheques'
+            }
+        }, {
+            $unwind: '$cheques'
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: 'processManagerId.managerId',
+                foreignField: '_id',
+                as: 'processManagerId.managerId'
+            }
+        }, {
+            $unwind: '$processManagerId.managerId'
+        }, {
+            $group: {
+                _id: '$processManagerId._id',
+                count: {
+                    $addToSet: '$cheques._id'
+                },
+                cash: {
+                    $sum: '$cheques.cash'
+                },
+                date: {
+                    $addToSet: '$date'
+                },
+                fullname: {
+                    $addToSet: '$processManagerId.managerId.fullname'
+                },
+                processDates: {
+                    $addToSet: '$_id'
+                }
+            }
+        }, {
+            $unwind: '$processDates'
+        }, {
+            $project: {
+                count: {
+                    $size: '$count'
+                },
+                fullname: '$fullname',
+                date: '$date',
+                cash: '$cash',
+                processDates: '$processDates'
+            }
+        }]
+    )
+
+    res.status(200).json({ adminCash })
+})
+
+// admindagi summa
+
+router.get('/adminSumm', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('AA'), async (req, res) => {
+
+    const adminSumm = await ProcessDate.aggregate(
+        [{
+            $match: {
+                isRefusal: false,
+                toStatus: 'processAdmin'
+            }
+        }, {
+            $lookup: {
+                from: 'processmanagers',
+                localField: 'processManagerId',
+                foreignField: '_id',
+                as: 'processManagerId'
+            }
+        }, {
+            $unwind: '$processManagerId'
+        }, {
+            $match: {
+                'processManagerId.status': 'inManager'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
+        }, {
+            $lookup: {
+                from: 'processes',
+                localField: 'processManagerId.processId',
+                foreignField: '_id',
+                as: 'processManagerId.processId'
+            }
+        }, {
+            $unwind: '$processManagerId.processId'
+        }, {
+            $unwind: '$processManagerId.processId.cheques'
+        }, {
+            $lookup: {
+                from: 'cheques',
+                localField: 'processManagerId.processId.cheques',
+                foreignField: '_id',
+                as: 'cheques'
+            }
+        }, {
+            $unwind: '$cheques'
+        }, {
+            $group: {
+                _id: '$_id',
+                cash: {
+                    $sum: '$cheques.cash'
+                }
+            }
+        }]
+    )
+    res.status(200).json({ adminSumm })
 })
 
 module.exports = router

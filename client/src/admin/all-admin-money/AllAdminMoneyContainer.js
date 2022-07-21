@@ -9,11 +9,10 @@ const AllAdminMoneyContainer = () => {
     const [ cash, setCash ] = useState(0)
     const getCash = () => {
         axios
-            .get('/api/processDate/adminSumm', {
+            .get('/api/processManager/adminSumm', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
             })
             .then(({data}) => {
-                console.log(data)
                 setCash(data.adminSumm.length ? data.adminSumm[0].cash : 0)
             })
     }
@@ -21,30 +20,28 @@ const AllAdminMoneyContainer = () => {
     const [ cards, setCards ] = useState([])
     const getCards = () => {
         axios
-            .get('/api/processDate/adminConfirm', {
+            .get('/api/processManager/adminConfirm', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(({ data }) => {
                 setCards(data.adminCash)
-                console.log(data)
             })
     }
 
-    const [ activeCards, setActiveCards ] = useState([])
+    const [ archiveCards, setArchiveCards ] = useState([])
     const getActiveCards = () => {
         axios
-            .get('/api/processDate/adminAsset', {
+            .get('/api/processManager/eachAdmin', {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
             })
             .then(({ data }) => {
-                console.log(data)
-                setActiveCards(data.adminAsset)
+                setArchiveCards(data.eachAdmin)
             })
     }
 
     const rejectCard = (id) => {
         axios
-            .put('/api/processDate/rejectionAdmin', {}, {
+            .put('/api/processManager/rejectionAdmin', {}, {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token },
                 params: { id }
             })
@@ -66,25 +63,10 @@ const AllAdminMoneyContainer = () => {
             })
     }
 
-    const finishProcess = () => {
-        if(activeCards.length) {
-            const processes = activeCards.map(el => el._id)
-    
-            axios
-                .post('/api/processAdmin/admin', {
-                    processManagers: processes
-                }, {
-                    headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
-                })
-                .then(() => {
-                    getActiveCards() 
-                })
-        }
-    }
-        
     useEffect(() => {
         getCash()
         getCards()
+        getActiveCards()
     }, [])
 
     return (
@@ -92,12 +74,10 @@ const AllAdminMoneyContainer = () => {
             h2={h2}
             setH2={setH2}
             cards = { cards }
-            activeCards = { activeCards }
             cash = { cash }
             rejectCard = { rejectCard }
             confirmCard = { confirmCard }
-            finishProcess = { finishProcess }
-            getActiveCards = { getActiveCards }
+            archiveCards = { archiveCards }
         />
     )
 }
