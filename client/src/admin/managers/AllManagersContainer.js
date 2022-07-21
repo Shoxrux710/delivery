@@ -6,7 +6,7 @@ import AllManagers from './AllManagers'
 
 const AllManagersContainer = () => {
 
-    const token = JSON.parse(window.localStorage.getItem('user'))?.token
+    const headers = { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user"))?.token }
 
     const [ loading, setLoading ] = useState(true)
     const loader = loading ? <Loader /> : ''
@@ -31,7 +31,7 @@ const AllManagersContainer = () => {
     const [ employeers, setEmployeers ] = useState([])
     const getEmployee = () => {
         if( regionId ) {
-            axios.get(`/api/user/each?position=${radio}&regionId=${regionId}`).then(res => {
+            axios.get(`/api/user/each?position=${radio}&regionId=${regionId}`, { headers }).then(res => {
                 setEmployeers(res.data.userEach)
             }).catch(err => {
                 console.log(err)
@@ -58,7 +58,7 @@ const AllManagersContainer = () => {
 
     const [ allManagers, setAllManagers ] = useState([])
     const getAllManagers = () => {
-        axios.get('/api/user/each?position=manager').then(res => {
+        axios.get('/api/user/each?position=manager', { headers }).then(res => {
             setAllManagers(res.data.userEach)
             setLoading(false)
         }).catch(err => {
@@ -79,11 +79,7 @@ const AllManagersContainer = () => {
             worker: allEmployeersId,
             phone: phone
         }
-        axios.post('/api/user/register', managerData, {
-            headers: {
-                'authorization': `Bearer ${token}`
-            }
-        }).then(res => {
+        axios.post('/api/user/register', managerData, { headers }).then(res => {
             toast.success("Muvaffaqqiyatli qo'shildi!", {
                 position: toast.POSITION.BOTTOM_RIGHT
             })

@@ -383,9 +383,9 @@ router.put('/images/:id', (req, res) => {
 
 router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('ALL'), async (req, res) => {
 
-    const {id} = req.user
+    const {id, position: userPosition} = req.user
     const { position } = req.query
-    const filterId = position === 'admin' || position === "super-admin" ? {} : {managerId: id}
+    const filterId = (userPosition === 'admin' || userPosition === "super-admin") ? {} : {managerId: id}
 
     const userEach = await User.find({ position: position, ...filterId})
     const count = await User.find({ position: position, ...filterId}).countDocuments()

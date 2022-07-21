@@ -6,7 +6,7 @@ import AllKuryers from './AllKuryers';
 
 const AllKuryersContainer = () => {
 
-    const token = JSON.parse(window.localStorage.getItem('user'))?.token
+    const headers = { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user"))?.token }
 
     const [ loading, setLoading ] = useState(true)
     const loader = loading ? <Loader /> : ''
@@ -29,7 +29,7 @@ const AllKuryersContainer = () => {
 
     const [ allKuryers, setAllKuryers ] = useState([])
     const getAllKuryers = () => {
-        axios.get('/api/user/each?position=courier').then(res => {
+        axios.get('/api/user/each?position=courier', { headers }).then(res => {
             setAllKuryers(res.data.userEach)
             setLoading(false)
         }).catch(err => {
@@ -48,11 +48,7 @@ const AllKuryersContainer = () => {
             regionId,
             phone
         }
-        axios.post('/api/user/register', kuryerData, {
-            headers: {
-                'authorization': `Bearer ${token}`
-            }
-        }).then(res => {
+        axios.post('/api/user/register', kuryerData, { headers }).then(res => {
             toast.success("Muvaffaqqiyatli qo'shildi!", {
                 position: toast.POSITION.BOTTOM_RIGHT
             })

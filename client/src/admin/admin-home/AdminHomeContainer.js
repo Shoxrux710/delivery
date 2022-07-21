@@ -6,13 +6,15 @@ const AdminHomeContainer = () => {
 
     const userId = JSON.parse(window.localStorage.getItem('user'))?.id
     const userRole = JSON.parse(window.localStorage.getItem('user'))?.position
+    const headers = { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
+ 
 
     const [ userBody, setUserBody ] = useState(false)
     const [ orderType, setOrderType ] = useState('active')
 
     const [ adminsCount, setAdminsCount ] = useState('')
     const getAdminsCount = () => {
-        axios.get('/api/user/each?position=admin').then(res => {
+        axios.get('/api/user/each?position=admin', { headers }).then(res => {
             setAdminsCount(res.data.count)
         }).catch(err => {
             console.log(err)
@@ -21,7 +23,7 @@ const AdminHomeContainer = () => {
 
     const [ managersCount, setManagersCount ] = useState('')
     const getManagersCount = () => {
-        axios.get('/api/user/each?position=manager').then(res => {
+        axios.get('/api/user/each?position=manager', { headers }).then(res => {
             setManagersCount(res.data.count)
         }).catch(err => {
             console.log(err)
@@ -30,7 +32,7 @@ const AdminHomeContainer = () => {
 
     const [ agentsCount, setAgentsCount ] = useState('')
     const getAgentsCount = () => {
-        axios.get('/api/user/each?position=agent').then(res => {
+        axios.get('/api/user/each?position=agent', { headers }).then(res => {
             setAgentsCount(res.data.count)
         }).catch(err => {
             console.log(err)
@@ -39,7 +41,7 @@ const AdminHomeContainer = () => {
 
     const [ kuryersCount, setKuryersCount ] = useState('')
     const getKuryersCount = () => {
-        axios.get('/api/user/each?position=courier').then(res => {
+        axios.get('/api/user/each?position=courier', { headers }).then(res => {
             setKuryersCount(res.data.count)
         }).catch(err => {
             console.log(err)

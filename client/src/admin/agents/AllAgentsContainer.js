@@ -6,7 +6,7 @@ import AllAgents from './AllAgents';
 
 const AllAgentsContainer = () => {
 
-    const token = JSON.parse(window.localStorage.getItem('user'))?.token
+    const headers = { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user"))?.token }
 
     const [ loading, setLoading ] = useState(true)
     const loader = loading ? <Loader /> : ''
@@ -29,7 +29,7 @@ const AllAgentsContainer = () => {
 
     const [ allAgents, setAllAgents ] = useState([])
     const getAllAgents = () => {
-        axios.get('/api/user/each?position=agent').then(res => {
+        axios.get('/api/user/each?position=agent', { headers }).then(res => {
             setAllAgents(res.data.userEach)
             setLoading(false)
         }).catch(err => {
@@ -48,11 +48,7 @@ const AllAgentsContainer = () => {
             regionId,
             phone
         }
-        axios.post('/api/user/register', agentData, {
-            headers: {
-                'authorization': `Bearer ${token}`
-            }
-        }).then(res => {
+        axios.post('/api/user/register', agentData, { headers }).then(res => {
             toast.success("Muvaffaqqiyatli qo'shildi!", {
                 position: toast.POSITION.BOTTOM_RIGHT
             })
