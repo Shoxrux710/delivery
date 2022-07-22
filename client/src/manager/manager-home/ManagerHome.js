@@ -234,6 +234,7 @@ const ManagerHome = (props) => {
                                 setIsModalVisible={setIsModalVisible} 
                                 key={index} 
                                 item={item} 
+                                price={item.orderPrice}
                                 products={item.products} 
                                 index={index} 
                                 date={date} 

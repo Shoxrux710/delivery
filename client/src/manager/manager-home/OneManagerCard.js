@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs';
 
 const OneManagerCard = (props) => {
 
-    const { item, products, index, date, getCurOrder } = props
+    const { item, products, index, date, getCurOrder, price } = props
 
     const [ orderMenu, setOrderMenu ] = useState(false)
     const [ leftNames, setLeftNames ] = useState(false)
-    const [ price, setPrice ] = useState(0)
-
-    useEffect(() => {
-        if( products ) {
-            setPrice(item.orderPrice)
-        }
-        //eslint-disable-next-line
-    }, [])
 
     return (
         <div className='one-order'>
