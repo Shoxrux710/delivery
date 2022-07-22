@@ -124,7 +124,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
     const { status } = req.query
     console.log(position)
 
-    const filter = position === 'manager' ? 'agent.managerId' : '_id.agentId._id'
+    const filter = position === 'manager' ? 'agentId.managerId' : 'agentId._id'
 
     const filterAgent = (position === 'admin' || position === 'super-admin') ? [] : ([{
         '$match': {
@@ -136,86 +136,122 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
 
     if (position === 'admin' || position === 'super-admin') {
         const orderAdmin = await Order.aggregate(
-            [
-                {
-                    $match: {
-                        status: status
-                    }
-                },
-                {
-                    $unwind: {
-                        path: '$products'
-                    }
-                }, {
-                    $lookup: {
-                        from: 'products',
-                        localField: 'products.productId',
-                        foreignField: '_id',
-                        as: 'products.productId'
-                    }
-                }, {
-                    $unwind: {
-                        path: '$products.productId'
-                    }
-                }, {
-                    $group: {
-                        _id: '$_id',
-                        orderPrice: {
-                            $sum: {
-                                $multiply: [
-                                    '$products.count',
-                                    '$products.productId.price'
-                                ]
-                            }
+            [{
+                $match: {
+                    status: status
+                }
+            }, {
+                $lookup: {
+                    from: 'customers',
+                    localField: 'customerId',
+                    foreignField: '_id',
+                    as: 'customerId'
+                }
+            }, {
+                $unwind: '$customerId'
+            }, {
+                $unwind: {
+                    path: '$products'
+                }
+            }, {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.productId',
+                    foreignField: '_id',
+                    as: 'products.productId'
+                }
+            }, {
+                $unwind: {
+                    path: '$products.productId'
+                }
+            }, {
+                $lookup: {
+                    from: 'users',
+                    localField: 'agentId',
+                    foreignField: '_id',
+                    as: 'agentId'
+                }
+            }, {
+                $unwind: '$agentId'
+            }, {
+                $lookup: {
+                    from: 'users',
+                    localField: 'agentId.managerId',
+                    foreignField: '_id',
+                    as: 'agent'
+                }
+            }, {
+                $unwind: '$agent'
+            }, {
+                $lookup: {
+                    from: 'regions',
+                    localField: 'agentId.regionId',
+                    foreignField: '_id',
+                    as: 'regionId'
+                }
+            }, {
+                $unwind: '$regionId'
+            }, {
+                $group: {
+                    _id: '$agent._id',
+                    orderPrice: {
+                        $sum: {
+                            $multiply: [
+                                '$products.count',
+                                '$products.productId.price'
+                            ]
                         }
+                    },
+                    count: {
+                        $sum: 1
+                    },
+                    fullname: {
+                        $push: '$agent.fullname'
+                    },
+                    region: {
+                        $push: '$regionId.name'
+                    },
+                    phone: {
+                        $push: '$customerId.phone'
+                    },
+                    date: {
+                        $push: '$date'
                     }
-                }, {
-                    $lookup: {
-                        from: 'orders',
-                        localField: '_id',
-                        foreignField: '_id',
-                        as: '_id'
+                }
+            }, {
+                $project: {
+                    count: '$count',
+                    orderPrice: '$orderPrice',
+                    fullname: {
+                        $arrayElemAt: [
+                            '$fullname',
+                            0
+                        ]
+                    },
+                    region: {
+                        $arrayElemAt: [
+                            '$region',
+                            0
+                        ]
+                    },
+                    phone: {
+                        $arrayElemAt: [
+                            '$phone',
+                            0
+                        ]
+                    },
+                    date: {
+                        $arrayElemAt: [
+                            '$date',
+                            0
+                        ]
                     }
-                }, {
-                    $unwind: '$_id'
-                }, {
-                    $lookup: {
-                        from: 'users',
-                        localField: '_id.agentId',
-                        foreignField: '_id',
-                        as: 'agent'
-                    }
-                }, {
-                    $unwind: '$agent'
-                }, {
-                    $group: {
-                        _id: '$agent.managerId',
-                        orderCount: {
-                            $sum: 1
-                        },
-                        orderPrice: {
-                            $sum: '$orderPrice'
-                        }
-                    }
-                }, {
-                    $lookup: {
-                        from: 'users',
-                        localField: '_id',
-                        foreignField: '_id',
-                        as: 'manager'
-                    }
-                }, {
-                    $unwind: '$manager'
-                }, {
-                    $lookup: {
-                        from: 'regions',
-                        localField: 'manager.regionId',
-                        foreignField: '_id',
-                        as: 'manager.regionId'
-                    }
-                }, {
-                    $unwind: '$manager.regionId'
-                }]
+                }
+            }, {
+                $sort: {
+                    date: -1
+                }
+            }]
         )
 
         return res.status(200).json({ orderAdmin })
@@ -237,6 +273,26 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }, {
                 $unwind: '$products.productId'
             }, {
+                $lookup: {
+                    from: 'customers',
+                    localField: 'customerId',
+                    foreignField: '_id',
+                    as: 'customerId'
+                }
+            }, {
+                $unwind: '$customerId'
+            }, {
+                $lookup: {
+                    from: 'users',
+                    localField: 'agentId',
+                    foreignField: '_id',
+                    as: 'agentId'
+                }
+            }, {
+                $unwind: '$agentId'
+            },
+            ...filterAgent
+                , {
                 $group: {
                     _id: '$_id',
                     orderPrice: {
@@ -247,62 +303,68 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                             ]
                         }
                     },
-                    products: {
-                        $push: '$products'
+                    date: {
+                        $push: '$date'
+                    },
+                    fullname: {
+                        $push: '$customerId.fullname'
+                    },
+                    phone: {
+                        $push: '$customerId.phone'
+                    },
+                    address: {
+                        $push: '$customerId.address'
+                    },
+                    code: {
+                        $push: '$code'
+                    },
+                    name: {
+                        $push: '$products.productId.name'
                     }
                 }
             }, {
-                $lookup: {
-                    from: 'orders',
-                    localField: '_id',
-                    foreignField: '_id',
-                    as: '_id'
-                }
-            }, {
-                $unwind: '$_id'
-            }, {
-                $lookup: {
-                    from: 'users',
-                    localField: '_id.agentId',
-                    foreignField: '_id',
-                    as: 'agent'
-                }
-            }, {
-                $unwind: '$agent'
-            }, {
-                $lookup: {
-                    from: 'customers',
-                    localField: '_id.customerId',
-                    foreignField: '_id',
-                    as: '_id.customerId'
-                }
-            }, {
-                $unwind: '$_id.customerId'
-            }, {
-                $lookup: {
-                    from: 'users',
-                    localField: '_id.agentId',
-                    foreignField: '_id',
-                    as: '_id.agentId'
-                }
-            }, {
-                $unwind: '$_id.agentId'
-            }, {
-                $lookup: {
-                    from: 'regions',
-                    localField: '_id.agentId.regionId',
-                    foreignField: '_id',
-                    as: '_id.agentId.regionId'
-                }
-            }, {
-                $unwind: '$_id.agentId.regionId'
-            },
-            ...filterAgent,
-            {
                 $project: {
-                    orderPrice: '$orderPrice',
-                    products: '$products',
-                    _id: '$_id'
+                    date: {
+                        $arrayElemAt: [
+                            '$date',
+                            0
+                        ]
+                    },
+                    fullname: {
+                        $arrayElemAt: [
+                            '$fullname',
+                            0
+                        ]
+                    },
+                    phone: {
+                        $arrayElemAt: [
+                            '$phone',
+                            0
+                        ]
+                    },
+                    address: {
+                        $arrayElemAt: [
+                            '$address',
+                            0
+                        ]
+                    },
+                    code: {
+                        $arrayElemAt: [
+                            '$code',
+                            0
+                        ]
+                    },
+                    name: {
+                        $arrayElemAt: [
+                            '$name',
+                            0
+                        ]
+                    },
+                    orderPrice: '$orderPrice'
+                }
+            }, {
+                $sort: {
+                    date: -1
                 }
             }]
         )
