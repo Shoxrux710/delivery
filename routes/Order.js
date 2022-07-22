@@ -214,6 +214,9 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                     phone: {
                         $push: '$customerId.phone'
                     },
+                    products: {
+                        $push: '$products'
+                    },
                     date: {
                         $push: '$date'
                     }
@@ -245,7 +248,8 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                             '$date',
                             0
                         ]
-                    }
+                    },
+                    products: '$products'
                 }
             }, {
                 $sort: {
@@ -259,7 +263,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         orderManger = await Order.aggregate(
             [{
                 $match: {
-                    status: 'active'
+                    status: 'completed'
                 }
             }, {
                 $unwind: '$products'
@@ -291,8 +295,8 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }, {
                 $unwind: '$agentId'
             },
-            ...filterAgent,
-            {
+            ...filterAgent
+                , {
                 $group: {
                     _id: '$_id',
                     orderPrice: {
@@ -323,6 +327,9 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                     },
                     status: {
                         $push: '$status'
+                    },
+                    products: {
+                        $push: '$products'
                     }
                 }
             }, {
@@ -369,6 +376,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                             0
                         ]
                     },
+                    products: '$products',
                     orderPrice: '$orderPrice'
                 }
             }, {
