@@ -18,7 +18,7 @@ const OneManagerCard = (props) => {
 
     return (
         <div className='one-order'>
-                <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} />
+                <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} style={{display: item.status === 'active' ? 'flex': 'none'}} />
                 <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>
                     {
                         products && Array.isArray(products) ? products.map((item, index) => {
