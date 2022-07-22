@@ -263,7 +263,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         orderManger = await Order.aggregate(
             [{
                 $match: {
-                    status: 'completed'
+                    status: status
                 }
             }, {
                 $unwind: '$products'
