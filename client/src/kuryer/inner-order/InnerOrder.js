@@ -159,15 +159,31 @@ const InnerOrder = (props) => {
                     </div>
                     <div>
                         <label>Naqt pul</label>
-                        <input type='number' value={cash} onChange={(e) => setCash(e.target.value)} required />
+                        <input type='number' value={cash} onChange={(e) => {
+                            setCash(e.target.value)
+                            if(price - e.target.value - card > 0) {
+                                setDebt(price - card - e.target.value)
+                                console.log(price - card - e.target.value)
+                            } else {
+                                setDebt(0)
+                            }
+                        }} required max={price} />
                     </div>
                     <div>
                         <label>Perechisleniya</label>
-                        <input type='number' value={card} onChange={(e) => setCard(e.target.value)} required />
+                        <input type='number' value={card} onChange={(e) => {
+                            setCard(e.target.value)
+                            if(price - cash - e.target.value > 0) {
+                                setDebt(price - cash - e.target.value)
+                                console.log(price - cash - e.target.value)
+                            } else {
+                                setDebt(0)
+                            }
+                        }} required max={ price - cash } />
                     </div>
                     <div>
                         <label>Qarz</label>
-                        <input type='number' value={debt} onChange={(e) => setDebt(e.target.value)} required />
+                        <input type='number' value={debt} disabled required />
                     </div>
                     <div>
                         <label>Izoh</label>
