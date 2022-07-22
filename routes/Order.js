@@ -259,7 +259,7 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
         orderManger = await Order.aggregate(
             [{
                 $match: {
-                    status: status
+                    status: 'active'
                 }
             }, {
                 $unwind: '$products'
@@ -291,8 +291,8 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
             }, {
                 $unwind: '$agentId'
             },
-            ...filterAgent
-                , {
+            ...filterAgent,
+            {
                 $group: {
                     _id: '$_id',
                     orderPrice: {
@@ -320,6 +320,9 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                     },
                     name: {
                         $push: '$products.productId.name'
+                    },
+                    status: {
+                        $push: '$status'
                     }
                 }
             }, {
@@ -357,6 +360,12 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                     name: {
                         $arrayElemAt: [
                             '$name',
+                            0
+                        ]
+                    },
+                    status: {
+                        $arrayElemAt: [
+                            '$status',
                             0
                         ]
                     },
