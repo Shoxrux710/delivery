@@ -58,12 +58,12 @@ const OneAgentCard = (props) => {
                             </div>
                             <div>
                                 <span>Yetkazish manzili</span>
-                                <p>{item && item._id.customerId ? item._id.customerId.address : ''}</p>
+                                <p>{ item?.address }</p>
                             </div>
                         </div>
                     </div>
                     <div className='qator'>
-                        <p>ID {item ? item._id.code : ''}</p>
+                        <p>ID {item?.code}</p>
                         <span>{date ? date.getDate() : ''}-{date ? date.getMonth() + 1 : ''}-{date ? date.getFullYear() : ''} {date ? date.getHours() : ''}:{date ? date.getMinutes() : ''}</span>
                     </div>
                     <div className='qator'>
@@ -76,11 +76,11 @@ const OneAgentCard = (props) => {
                     </div> */}
                     <div className='bottom'>
                         <div className='ust'>
-                            <h3>{item && item._id.customerId ? item._id.customerId.fullname : ''}</h3>
+                            <h3>{item?.fullname}</h3>
                             <p>Mijoz</p>
                         </div>
                         <div className='ust'>
-                            <h3>{item && item._id.customerId ? item._id.customerId.phone : ''}</h3>
+                            <h3>{item?.phone}</h3>
                             <p>Telefon raqam</p>
                         </div>
                     </div>

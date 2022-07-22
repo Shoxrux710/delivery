@@ -228,7 +228,7 @@ const ManagerHome = (props) => {
                 {loader}
                 {
                     allOrders ? allOrders.map((item, index) => {
-                        const date =  new Date(new Date(item._id.date) - new Date(18000000))
+                        const date =  new Date(new Date(item?.date) - new Date(18000000))
                         return (
                             <OneManagerCard 
                                 setIsModalVisible={setIsModalVisible} 

@@ -195,8 +195,8 @@ const AdminHome = (props) => {
                                     <div className='left'>
                                         <h1>{ index + 1 }</h1>
                                         <div>
-                                            <h3>{ order.manager.fullname }</h3>
-                                            <p>{ order.manager.regionId.name }</p> 
+                                            <h3>{ order?.fullname }</h3>
+                                            <p>{ order?.region }</p> 
                                         </div>
                                     </div>
                                 </div>
@@ -209,8 +209,8 @@ const AdminHome = (props) => {
                                     <h6>{ order.orderPrice } so’m</h6>
                                 </div>
                                 <div className='qator'>
-                                    <h5>{ order.manager.regionId.name }</h5>
-                                    <h5>{ order.manager.phone }</h5>
+                                    <h5>{ order?.region }</h5>
+                                    <h5>{ order?.phone }</h5>
                                 </div>
                             </div>
                         </Link>
