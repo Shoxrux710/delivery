@@ -24,7 +24,7 @@ const OneManagerCard = (props) => {
                     }
                 </h2>
 
-                <div className={orderMenu ? 'menu-active menu' : 'menu'}>
+                <div className={orderMenu && item._id?.status === 'active' ? 'menu-active menu' : 'menu'}>
                     <div>
                         <div className='bg'>
                             <div></div>
