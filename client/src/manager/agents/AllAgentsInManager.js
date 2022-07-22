@@ -1,8 +1,8 @@
 import React from 'react'
 import { Modal } from 'antd'
 import { MdArrowBack } from 'react-icons/md'
-import { HiFilter } from 'react-icons/hi'
-import { BsThreeDotsVertical } from 'react-icons/bs'
+// import { HiFilter } from 'react-icons/hi'
+// import { BsThreeDotsVertical } from 'react-icons/bs'
 import ReactInputMask from 'react-input-mask'
 import './allAgentsInManager.css'
 import { Link } from 'react-router-dom'
@@ -56,7 +56,7 @@ const AllAgentsInManager = (props) => {
                     <h2>Agentlar</h2>
                 </div>
                 <div>
-                    <HiFilter className='icon' />
+                    {/* <HiFilter className='icon' /> */}
                 </div>
             </div>
             <div className='btn-wrap'>
@@ -74,7 +74,7 @@ const AllAgentsInManager = (props) => {
                                     <h1>{item.fullname}</h1>
                                     <p>{item.position}</p>
                                 </div>
-                                <BsThreeDotsVertical className='icon' />
+                                {/* <BsThreeDotsVertical className='icon' /> */}
                                 <span>20:30</span>
                             </div>
                         )

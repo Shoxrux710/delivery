@@ -21,15 +21,12 @@ const OneKuryerCard = (props) => {
 
     return (
         <div className='one-order'>
-            {/* <BsThreeDotsVertical className='icon' onClick={() => {setOrderMenu(!orderMenu); setLeftNames(false)}} /> */}
             <h2 className='h2' onClick={() => {setLeftNames(!leftNames); setOrderMenu(false)}}>
                 {
-                    products && Array.isArray(products) ? products.map((item, index) => {
-                        // setPrice(price + (item.count * item.productId.price))
-                        return (
+                    products && Array.isArray(products) ? products.map((item, index) => (
                             <span key={index}>{item.productId ? item.productId.name : ''}; </span>
                         )
-                    }) : ''
+                    ) : ''
                 }
             </h2>
 

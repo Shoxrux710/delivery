@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { getDateWithDash } from '../../utils/date'
 import { formatString } from '../../utils/number.js'
 
-import { HiFilter } from 'react-icons/hi'
+// import { HiFilter } from 'react-icons/hi'
 import { MdArrowBack } from 'react-icons/md'
 
 import './innerDebt.css'
@@ -29,7 +29,7 @@ const InnerDebt = (props) => {
                     </div>
                 </div>
                 <div>
-                    <HiFilter className='iconn' />
+                    {/* <HiFilter className='iconn' /> */}
                 </div>
             </div>
             <div className='debt'>
