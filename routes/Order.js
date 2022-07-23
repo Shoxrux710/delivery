@@ -294,9 +294,18 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                 }
             }, {
                 $unwind: '$agentId'
+            }, {
+                $lookup: {
+                    from: 'regions',
+                    localField: 'agentId.regionId',
+                    foreignField: '_id',
+                    as: 'region'
+                }
+            }, {
+                $unwind: '$region'
             },
-            ...filterAgent
-                , {
+            ...filterAgent 
+            , {
                 $group: {
                     _id: '$_id',
                     orderPrice: {
@@ -331,8 +340,8 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                     products: {
                         $push: '$products'
                     },
-                    regionId: {
-                        $push: '$agentId.regionId'
+                    region: {
+                        $push: '$region.name'
                     }
                 }
             }, {
@@ -379,9 +388,9 @@ router.get('/each', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware(
                             0
                         ]
                     },
-                    regionId: {
+                    region: {
                         $arrayElemAt: [
-                            '$regionId',
+                            '$region',
                             0
                         ]
                     },
