@@ -737,7 +737,7 @@
     margin-bottom: 5px;
 }
 
-.add-modal .buyurtma .select-input-wrap .right input {
+.add-modal .buyurtma .select-input-wrap .right span {
     height: 48px;
     background: #FAFAFA;
     border: 0.5px solid #C8C8C8;
@@ -750,6 +750,8 @@
     line-height: 24px;
     color: #D6D7E3;
     outline: none;
+    display: flex;
+    align-items: center;
 }
 
 .add-modal .buyurtma .inp-w {
@@ -768,7 +770,7 @@
     margin-bottom: 5px;
 }
 
-.add-modal .buyurtma .inp-w input {
+.add-modal .buyurtma .inp-w span {
     height: 48px;
     background: #FAFAFA;
     border: 0.5px solid #C8C8C8;
@@ -781,6 +783,8 @@
     line-height: 24px;
     color: #D6D7E3;
     outline: none;
+    display: flex;
+    align-items: center;
 }
 
 .add-modal .buyurtma .inp-w select {

@@ -14,7 +14,7 @@ const ManagerHome = (props) => {
         setIsModalVisible, allOrders, loader, activePrice,
         activeCount, courierCount, courierPrice, completedCount, completedPrice, rejectedCount, rejectedPrice,
         curOrder, getCurOrder, couriers, setSelectedCourier, giveOrderToCourier,
-        debt 
+        debt, rejectCard 
     } = props
 
     return (
@@ -202,23 +202,23 @@ const ManagerHome = (props) => {
                         </div>
                         <div className='right' >
                             <label>Id</label>
-                            <input type='text' disabled defaultValue={curOrder ? curOrder._id.code : "ID"}  />
+                            <span>{curOrder?.code}</span>
                         </div>
                     </div>
                     <div className='inp-w'>
                         <label>Narxi</label>
-                        <input type='text' disabled defaultValue={curOrder ? curOrder.orderPrice : 'Narxi'} />
+                        <span>{curOrder?.orderPrice}</span>
                     </div>
                     <div className='inp-w'>
                         <label>Viloyat</label>
                         <select>
-                            <option>{ curOrder ? curOrder._id.agentId.regionId.name : "Viloyat" }</option>
+                            <option>{ curOrder?.region }</option>
                         </select>
                     </div>
                     <div className='bottom'>
                         <div>
                             <p>Agent</p>
-                            <h5>{ curOrder ? curOrder._id.agentId.fullname : "Agent" }</h5>
+                            <h5>{ curOrder?.fullname }</h5>
                         </div>
                         <button onClick={() => giveOrderToCourier()}>Yuborish</button>
                     </div>
@@ -239,6 +239,7 @@ const ManagerHome = (props) => {
                                 index={index} 
                                 date={date} 
                                 getCurOrder={getCurOrder}
+                                rejectCard={rejectCard}
                             />
                         )
                     }) : ''

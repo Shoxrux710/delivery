@@ -33,7 +33,7 @@ const OneAgentCard = (props) => {
                 }
             </div>
 
-            <Link to={`order/${item ? item._id._id : ''}`}>
+            <Link to={`order/${item?._id}`}>
                 <div className='order' onClick={() => {setOrderMenu(false); setLeftNames(false)}}>
                     <div className='topp'>
                         <div>
@@ -70,10 +70,6 @@ const OneAgentCard = (props) => {
                         <p>Umumiy narxi</p>
                         <h4>{item.orderPrice} so’m</h4>
                     </div>
-                    {/* <div className='qator lst'>
-                        <p>To’landi</p>
-                        <h5>236 540 so’m</h5>
-                    </div> */}
                     <div className='bottom'>
                         <div className='ust'>
                             <h3>{item?.fullname}</h3>

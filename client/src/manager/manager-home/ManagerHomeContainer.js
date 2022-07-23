@@ -136,6 +136,21 @@ const ManagerHomeContainer = () => {
         } 
     }
 
+    const rejectCard = (id) => {    
+        axios
+            .put(`/api/order/${id}`, {}, {
+                headers: { "Authorization": "Bearer " + token },
+                params: { id }
+            })
+            .then(() => {
+                toast.success("Buyurtma bekor qilindi!", {
+                    position: toast.POSITION.BOTTOM_RIGHT
+                })
+                getAllOrders()
+                getOrderStatusData()
+            })
+    }
+
     const [ debt, setDebt ] = useState(0)
     const getDebt = () => {
         axios
@@ -188,6 +203,7 @@ const ManagerHomeContainer = () => {
             rejectedCount={rejectedCount}
             rejectedPrice={rejectedPrice}
             debt={ debt }
+            rejectCard={ rejectCard }
         />
     )
 }
