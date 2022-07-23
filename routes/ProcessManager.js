@@ -24,23 +24,38 @@ router.post('/manager', isAuthMiddleware, attachUserMiddleware, checkRoleMiddlew
 
         const { processId } = req.body
 
-        const processDateIds = await ProcessDate
-            .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
-            .populate('processManagerId', 'processId')
-            .select('processManagerId')
+        const test = await ProcessManager.aggregate(
+            [{
+                $match: {
+                    managerId: mongoose.Types.ObjectId(id)
+                }
+            }, {
+                $unwind: '$processId'
+            }, {
+                $match: {
+                    processId: {
+                        $in: processId
+                    }
+                }
+            }]
+        )
 
-        let proccessIds2 = []
+        // const processDateIds = await ProcessDate
+        //     .find({ isRefusal: false, userId: id, toStatus: 'processAdmin' })
+        //     .populate('processManagerId', 'processId')
+        //     .select('processManagerId')
 
-        processDateIds
-            .map(p => p.processManagerId.processId)
-            .forEach((value) => {
-                proccessIds2 = [...proccessIds2, ...value]
-            })
+        // let proccessIds2 = []
 
-        const isProcessId = await Process.findOne({_id: {$in: proccessIds2}})
+        // processDateIds
+        //     .map(p => p.processManagerId.processId)
+        //     .forEach((value) => {
+        //         proccessIds2 = [...proccessIds2, ...value]
+        //     })
 
-        if (isProcessId)
-            return res.status(400).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'});
+        // const isProcessId = await Process.findOne({_id: {$in: proccessIds2}})
+        if (test.length)
+            return res.status(400).json({ errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin' });
 
         const processManager = new ProcessManager({
             managerId: id,

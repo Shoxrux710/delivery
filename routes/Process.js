@@ -50,7 +50,6 @@ const router = Router()
 
 router.post('/cour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware('COUR'), async (req, res) => {
 
-    console.log(req.body)
     const { id } = req.user
     const { date } = nowDate()
     const session = await mongoose.startSession()
@@ -58,28 +57,45 @@ router.post('/cour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
 
     try {
         const { cheques } = req.body
+        
+        const test = await Process.aggregate([
+            {
+                '$match': {
+                  'courierId': mongoose.Types.ObjectId(id)
+                }
+            },
+            {
+              '$unwind': '$cheques'
+            }, {
+              '$match': {
+                'cheques': { '$in': cheques }
+              }
+            }
+          ])
 
-        const processOne = await ProcessDate
-            .find({ isRefusal: false, userId: id, toStatus: 'process-Cour' })
-            .populate('processId', 'cheques')
-            .select('processId')
+        console.log(test); 
 
-        let chequeAll = [];
+        // const processOne = await ProcessDate
+        //     .find({ isRefusal: false, userId: id, toStatus: 'process-Cour' })
+        //     .populate('processId', 'cheques')
+        //     .select('processId')
 
-        processOne
-            .map((p) => p.processId.cheques)
-            .forEach((value) => {
-                chequeAll = [...chequeAll, ...value]
-            });
-
-        const isCheque = await Cheque.findOne({ _id: { $in: chequeAll } });
-        if (isCheque)
+        // let chequeAll = [];
+        // console.log(processOne);
+        // processOne
+        //     .map((p) => p.processId.cheques)
+        //     .forEach((value) => {
+        //         chequeAll = [...chequeAll, ...value]
+        //     });
+        // console.log(chequeAll);
+        // const isCheque = await Cheque.findOne({ _id: { $in: chequeAll } });
+        // console.log(isCheque);
+        if (test.length)
             return res.status(400).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'});
 
         const process = new Process({
             courierId: id,
-            cheques,
-            date: date
+            cheques
         })
 
         const { _id: newProcessId } = await process.save({ session })
