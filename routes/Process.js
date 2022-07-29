@@ -52,45 +52,18 @@ router.post('/cour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
 
     const { id } = req.user
     const { date } = nowDate()
+
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
         const { cheques } = req.body
+
+        const test2 = await Process.findOne({courierId: id, cheques: {$elemMatch: {$in: [cheques]}}})
+        console.log("sfdsfsdf",test2); 
+
         
-        const test = await Process.aggregate([
-            {
-                '$match': {
-                  'courierId': mongoose.Types.ObjectId(id)
-                }
-            },
-            {
-              '$unwind': '$cheques'
-            }, {
-              '$match': {
-                'cheques': { '$in': cheques }
-              }
-            }
-          ])
-
-        console.log(test); 
-
-        // const processOne = await ProcessDate
-        //     .find({ isRefusal: false, userId: id, toStatus: 'process-Cour' })
-        //     .populate('processId', 'cheques')
-        //     .select('processId')
-
-        // let chequeAll = [];
-        // console.log(processOne);
-        // processOne
-        //     .map((p) => p.processId.cheques)
-        //     .forEach((value) => {
-        //         chequeAll = [...chequeAll, ...value]
-        //     });
-        // console.log(chequeAll);
-        // const isCheque = await Cheque.findOne({ _id: { $in: chequeAll } });
-        // console.log(isCheque);
-        if (test.length)
+        if (test2)
             return res.status(400).json({errorMessage: 'Yuborilgan buyurtma qaytadan yuborilmasin'});
 
         const process = new Process({
@@ -103,6 +76,7 @@ router.post('/cour', isAuthMiddleware, attachUserMiddleware, checkRoleMiddleware
         const dateProcess = new ProcessDate({
             fromStatus: 'inCour',
             toStatus: 'process-Cour',
+
             date: date,
             userId: id,
             processId: newProcessId
