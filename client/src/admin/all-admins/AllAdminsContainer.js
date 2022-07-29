@@ -6,7 +6,7 @@ import Loader from '../../components/loader/Loader'
 
 const AllAdminsContainer = () => {
 
-    const token = JSON.parse(window.localStorage.getItem('user'))?.token
+    const headers = { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token }
 
     const [ loading, setLoading ] = useState(true)
     const loader = loading ? <Loader /> : ''
@@ -20,7 +20,7 @@ const AllAdminsContainer = () => {
 
     const [ regions, setRegions ] = useState([])
     const getRegions = () => {
-        axios.get('/api/region/all').then(res => {
+        axios.get('/api/region/all', { headers }).then(res => {
             setRegions(res.data.region)
         }).catch(err => {
             console.log(err)
@@ -29,7 +29,7 @@ const AllAdminsContainer = () => {
 
     const [ allAdmins, setAllAdmins ] = useState([])
     const getAllAdmins = () => {
-        axios.get('/api/user/each?position=admin').then(res => {
+        axios.get('/api/user/each?position=admin', { headers }).then(res => {
             setAllAdmins(res.data.userEach)
             setLoading(false)
         }).catch(err => {
@@ -49,11 +49,7 @@ const AllAdminsContainer = () => {
             regionId,
             phone: phone
         }
-        axios.post('/api/user/register', managerData, {
-            headers: {
-                'authorization': `Bearer ${token}`
-            }
-        }).then(res => {
+        axios.post('/api/user/register', managerData, { headers }).then(res => {
             toast.success("Muvaffaqqiyatli qo'shildi!", {
                 position: toast.POSITION.BOTTOM_RIGHT
             })
