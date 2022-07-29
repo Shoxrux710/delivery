@@ -74,6 +74,7 @@ const ManagerHomeContainer = () => {
         }).then(res => {
             setAllOrders(res.data.orderManger)
             setLoading(false)
+            getUserData()
         }).catch(err => {
             console.log(err)
             setLoading(false)
@@ -93,6 +94,10 @@ const ManagerHomeContainer = () => {
                 headers: { "Authorization": "Bearer " + JSON.parse(localStorage.getItem("user")).token } })
             .then(({ data }) => {
                 data.orderCount.map(order => {
+                    if(activeCount === 1) {
+                        setActiveCount(0)
+                        setActivePrice(0)
+                    }
                     if(order._id === "active") {
                         setActiveCount(order.count)
                         setActivePrice(order.totalPrice)
@@ -109,6 +114,7 @@ const ManagerHomeContainer = () => {
                         setCompletedCount(order.count)
                         setCompletedPrice(order.totalPrice)
                     }
+
                     return null
                 })
             })
